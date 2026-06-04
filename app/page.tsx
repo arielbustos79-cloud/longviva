@@ -72,7 +72,7 @@ export default function Home() {
           <p className={s.heroDesc}>LongVivIA es tu plataforma de salud, bienestar y experiencias — con VIVIAN, la IA que te acompaña en tu etapa más libre y poderosa.</p>
           <div className={s.heroCtas}>
             <a href="#registro" className={s.btnPrimary}>Comenzar gratis →</a>
-            <a href="#vivian" className={s.btnGhost}>Conocer a VIVIAN ↓</a>
+            <a href="/vivian" className={s.btnGhost}>Conocer a VIVIAN ↓</a>
           </div>
           <div className={s.heroProof}>
             <div><div className={s.proofNum}>3.5M</div><div className={s.proofLabel}>personas en su prime en Chile</div></div>
