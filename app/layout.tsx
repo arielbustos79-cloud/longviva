@@ -14,7 +14,7 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "LongViva — Tu prime, tu plataforma",
+  title: "LongVivIA — Tu prime, tu plataforma",
   description:
     "Plataforma digital de salud, bienestar y experiencias para personas en su prime en Chile.",
 };

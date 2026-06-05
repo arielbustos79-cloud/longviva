@@ -4,6 +4,17 @@ import { useState, useRef, useEffect } from "react";
 
 type Message = { role: "user" | "assistant"; content: string };
 
+// ID de sesión simple para mantener contexto
+function getSessionId() {
+  if (typeof window === "undefined") return "anon";
+  let id = localStorage.getItem("vivian_session_id");
+  if (!id) {
+    id = "user_" + Math.random().toString(36).slice(2, 11);
+    localStorage.setItem("vivian_session_id", id);
+  }
+  return id;
+}
+
 export default function VivianPage() {
   const [messages, setMessages] = useState<Message[]>([
     { role: "assistant", content: "¡Hola! Soy VIVIAN, tu asistente personal. ¿En qué puedo ayudarte hoy? 🌿" },
@@ -11,6 +22,7 @@ export default function VivianPage() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const userId = getSessionId();
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -31,6 +43,7 @@ export default function VivianPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           message: input,
+          userId,
           history: messages,
         }),
       });
