@@ -1,28 +1,58 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { createClient } from "@/lib/supabase-browser";
 
 type Message = { role: "user" | "assistant"; content: string };
 
-// ID de sesión simple para mantener contexto
-function getSessionId() {
-  if (typeof window === "undefined") return "anon";
-  let id = localStorage.getItem("vivian_session_id");
-  if (!id) {
-    id = "user_" + Math.random().toString(36).slice(2, 11);
-    localStorage.setItem("vivian_session_id", id);
-  }
-  return id;
-}
-
 export default function VivianPage() {
-  const [messages, setMessages] = useState<Message[]>([
-    { role: "assistant", content: "¡Hola! Soy VIVIAN, tu asistente personal. ¿En qué puedo ayudarte hoy? 🌿" },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [nombre, setNombre] = useState("");
+  const [historialCargado, setHistorialCargado] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
-  const userId = getSessionId();
+  const supabase = createClient();
+
+  // Cargar usuario y su historial real al montar
+  useEffect(() => {
+    async function init() {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+
+      const user = session.user;
+      setUserId(user.id);
+
+      // Nombre del perfil
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("nombre")
+        .eq("id", user.id)
+        .single();
+      if (profile?.nombre) setNombre(profile.nombre);
+
+      // Historial real de Supabase
+      const { data: historial, error: histError } = await supabase
+        .from("chat_messages")
+        .select("role, content")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: true })
+        .limit(30);
+
+
+      if (historial && historial.length > 0) {
+        setMessages(historial as Message[]);
+      } else {
+        setMessages([
+          { role: "assistant", content: "¡Hola! Soy VIVIAN, tu asistente personal. ¿En qué puedo ayudarte hoy? 🌿" },
+        ]);
+      }
+
+      setHistorialCargado(true);
+    }
+    init();
+  }, []);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -44,7 +74,7 @@ export default function VivianPage() {
         body: JSON.stringify({
           message: input,
           userId,
-          history: messages,
+          history: messages.slice(-20), // últimos 20 mensajes como contexto
         }),
       });
       const data = await res.json();
@@ -68,11 +98,23 @@ export default function VivianPage() {
           <div style={{ color: "white", fontWeight: 700, fontSize: "1.1rem", fontFamily: "Cormorant Garamond, serif" }}>VIVIAN</div>
           <div style={{ color: "#B7E4C7", fontSize: "0.8rem" }}>● En línea · Tu asistente LongVivIA</div>
         </div>
-        <a href="/" style={{ marginLeft: "auto", color: "rgba(255,255,255,0.6)", textDecoration: "none", fontSize: "0.9rem" }}>← Inicio</a>
+        {nombre && (
+          <div style={{ color: "rgba(255,255,255,0.6)", fontSize: "0.85rem", marginLeft: 8 }}>
+            Hola, {nombre}
+          </div>
+        )}
+        <a href="/dashboard" style={{ marginLeft: "auto", color: "rgba(255,255,255,0.6)", textDecoration: "none", fontSize: "0.9rem" }}>
+          ← Dashboard
+        </a>
       </div>
 
       {/* Mensajes */}
       <div style={{ flex: 1, overflowY: "auto", padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1rem", maxWidth: 700, width: "100%", margin: "0 auto" }}>
+        {!historialCargado && (
+          <div style={{ textAlign: "center", color: "var(--gris)", fontSize: 14, padding: "20px 0" }}>
+            Cargando tu historial...
+          </div>
+        )}
         {messages.map((msg, i) => (
           <div key={i} style={{ display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start" }}>
             {msg.role === "assistant" && (
