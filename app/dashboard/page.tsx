@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase-browser";
 import { useRouter } from "next/navigation";
+import OliveBranch from "@/components/OliveBranch";
 
 type Profile = {
   nombre: string | null;
@@ -74,14 +75,17 @@ export default function DashboardPage() {
 
       {/* Header */}
       <header style={{
-        background: "var(--v2)", padding: "18px 48px",
+        background: "var(--v2)", padding: "16px 40px",
         display: "flex", alignItems: "center", justifyContent: "space-between",
       }}>
-        <div style={{
-          fontFamily: "Cormorant Garamond, serif",
-          fontSize: 26, fontWeight: 700, color: "white",
-        }}>
-          LongViv<span style={{ color: "var(--d2)" }}>IA</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <OliveBranch size={36} variant="light" />
+          <div style={{
+            fontFamily: "Cormorant Garamond, serif",
+            fontSize: 34, fontWeight: 700, color: "white", letterSpacing: "-0.5px",
+          }}>
+            LongViv<span style={{ color: "var(--d2)" }}>IA</span>
+          </div>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
           <span style={{ color: "rgba(255,255,255,.7)", fontSize: 15 }}>{email}</span>
@@ -100,7 +104,7 @@ export default function DashboardPage() {
       </header>
 
       {/* Contenido */}
-      <main style={{ maxWidth: 1100, margin: "0 auto", padding: "60px 32px" }}>
+      <main style={{ maxWidth: 860, margin: "0 auto", padding: "48px 24px" }}>
 
         {/* Saludo */}
         <div style={{ marginBottom: 48 }}>
@@ -204,26 +208,27 @@ export default function DashboardPage() {
 
         {/* Banner VIVIAN */}
         <div style={{
-          background: "var(--v6)", border: "2px solid var(--v5)",
-          borderRadius: 20, padding: "28px 32px",
+          background: "var(--v2)",
+          borderRadius: 24, padding: "32px 40px",
           display: "flex", alignItems: "center", justifyContent: "space-between",
           flexWrap: "wrap", gap: 20,
+          boxShadow: "0 8px 32px rgba(27,94,59,.2)",
         }}>
           <div>
-            <div style={{ fontSize: 14, fontWeight: 700, color: "var(--v3)", marginBottom: 4, letterSpacing: 1, textTransform: "uppercase" }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "var(--v4)", marginBottom: 6, letterSpacing: 1.5, textTransform: "uppercase" }}>
               VIVIAN te está esperando
             </div>
-            <p style={{ fontSize: 18, color: "var(--n2)", margin: 0 }}>
+            <p style={{ fontSize: 22, color: "white", margin: 0, fontFamily: "Cormorant Garamond, serif", fontWeight: 600 }}>
               ¿En qué puedo ayudarte hoy?
             </p>
           </div>
           <a
             href="/vivian"
             style={{
-              background: "var(--v2)", color: "white",
-              padding: "14px 28px", borderRadius: 50,
-              fontSize: 16, fontWeight: 600, textDecoration: "none",
-              whiteSpace: "nowrap",
+              background: "white", color: "var(--v2)",
+              padding: "16px 32px", borderRadius: 50,
+              fontSize: 16, fontWeight: 700, textDecoration: "none",
+              whiteSpace: "nowrap", boxShadow: "0 4px 12px rgba(0,0,0,.1)",
             }}
           >
             Hablar con VIVIAN →
