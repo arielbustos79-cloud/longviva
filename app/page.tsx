@@ -396,8 +396,76 @@ export default function Home() {
         </div>
       </section>
 
+      {/* CÓMO FUNCIONA */}
+      <section id="como" style={{ background: "var(--crema)", padding: "96px 24px" }}>
+        <div style={{ maxWidth: 860, margin: "0 auto" }}>
+          <div className={`${s.secLabel} ${s.fadeIn}`} style={{ color: "var(--v3)", textAlign: "center" }}>Sin complicaciones</div>
+          <h2 className={`${s.secTitle} ${s.fadeIn}`} style={{ textAlign: "center", marginBottom: 64 }}>
+            Tres pasos para empezar tu prime
+          </h2>
+          <div className={s.fadeIn} style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+            gap: 32,
+          }}>
+            {[
+              {
+                num: "01",
+                icon: "✉️",
+                title: "Regístrate gratis",
+                desc: "Solo tu nombre y correo. Sin contraseña — te llegará un enlace mágico al instante.",
+              },
+              {
+                num: "02",
+                icon: "🌿",
+                title: "Entra a tu plataforma",
+                desc: "Haz clic en el enlace y accede directo a tu dashboard personal.",
+              },
+              {
+                num: "03",
+                icon: "✨",
+                title: "Vive tu prime",
+                desc: "Habla con VIVIAN, agenda clases, consultas médicas y descubre experiencias hechas para ti.",
+              },
+            ].map((paso) => (
+              <div key={paso.num} style={{
+                background: "white",
+                borderRadius: 24,
+                padding: "36px 28px",
+                border: "1.5px solid var(--v5)",
+                boxShadow: "0 4px 16px rgba(27,94,59,.06)",
+                position: "relative",
+              }}>
+                <div style={{
+                  fontSize: 13, fontWeight: 800, color: "var(--v4)",
+                  letterSpacing: 2, marginBottom: 16,
+                }}>
+                  {paso.num}
+                </div>
+                <div style={{ fontSize: 36, marginBottom: 16 }}>{paso.icon}</div>
+                <h3 style={{
+                  fontFamily: "Cormorant Garamond, serif",
+                  fontSize: 24, fontWeight: 700,
+                  color: "var(--n2)", marginBottom: 10,
+                }}>
+                  {paso.title}
+                </h3>
+                <p style={{ fontSize: 16, color: "var(--gris)", lineHeight: 1.7, margin: 0 }}>
+                  {paso.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+          <div className={s.fadeIn} style={{ textAlign: "center", marginTop: 48 }}>
+            <a href="/registro" className={s.btnPrimary}>
+              Comenzar gratis →
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* TESTIMONIOS */}
-      <section className={s.testimonials} id="como">
+      <section className={s.testimonials}>
         <div style={{ textAlign: "center", marginBottom: 64 }}>
           <div className={`${s.secLabel} ${s.fadeIn}`} style={{ color: "var(--v3)", textAlign: "center" }}>Lo que dicen quienes ya viven su prime</div>
           <h2 className={`${s.secTitle} ${s.fadeIn}`} style={{ color: "var(--n2)", textAlign: "center" }}>Historias <em>reales</em></h2>
