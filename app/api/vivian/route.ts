@@ -8,34 +8,35 @@ const anthropic = new Anthropic({
 
 export async function POST(request: Request) {
   try {
-    const { message, userId, history } = await request.json();
-
-    console.log("userId recibido:", userId);
+    const { message, userId, history, hiddenHistory } = await request.json();
 
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     );
 
-    // Cargar historial de Supabase
-    let contextHistory = history || [];
-    if (userId) {
-      const { data, error: fetchError } = await supabase
-        .from("chat_messages")
-        .select("role, content")
-        .eq("user_id", userId)
-        .order("created_at", { ascending: true })
-        .limit(20);
+    // history = solo mensajes de la sesión actual (van en messages[])
+    const sessionHistory = history || [];
 
-      console.log("Historial cargado:", data?.length, "error:", fetchError);
-      if (data && data.length > 0) contextHistory = data;
-    }
+    // Fecha actual
+    const hoy = new Date().toLocaleDateString("es-CL", {
+      weekday: "long", year: "numeric", month: "long", day: "numeric",
+    });
+
+    // hiddenHistory = memoria de sesiones pasadas → va en system prompt, no en messages[]
+    const memoriaAnterior = hiddenHistory && hiddenHistory.length > 0
+      ? `\n\nFECHA DE HOY: ${hoy}\n\nTU MEMORIA (conversaciones reales anteriores con este usuario — son tus recuerdos, úsalos con naturalidad):\n${
+          hiddenHistory.slice(-30).map((m: { role: string; content: string }) =>
+            `${m.role === "user" ? "Usuario" : "Tú"}: ${m.content}`
+          ).join("\n")
+        }\n\nUSO DE LA MEMORIA: retoma naturalmente lo que ya hablaron si el usuario lo menciona. Nunca digas que no tienes acceso a conversaciones anteriores — sí las recuerdas. Respeta siempre las fechas: si algo es para el futuro, no lo trates como si fuera hoy.`
+      : `\n\nFECHA DE HOY: ${hoy}`;
 
     const response = await anthropic.messages.create({
       model: "claude-sonnet-4-6",
       max_tokens: 500,
-      system: VIVIAN_SYSTEM_PROMPT,
-      messages: [...contextHistory, { role: "user", content: message }],
+      system: VIVIAN_SYSTEM_PROMPT + memoriaAnterior,
+      messages: [...sessionHistory, { role: "user", content: message }],
     });
 
     const reply =
@@ -43,11 +44,10 @@ export async function POST(request: Request) {
 
     // Guardar en Supabase
     if (userId) {
-      const { error: insertError } = await supabase.from("chat_messages").insert([
+      await supabase.from("chat_messages").insert([
         { user_id: userId, role: "user", content: message, canal: "web" },
         { user_id: userId, role: "assistant", content: reply, canal: "web" },
       ]);
-      console.log("Insert error:", insertError);
     }
 
     return Response.json({ reply });

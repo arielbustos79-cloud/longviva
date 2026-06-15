@@ -6,16 +6,18 @@ import { createClient } from "@/lib/supabase-browser";
 type Message = { role: "user" | "assistant"; content: string };
 
 export default function VivianPage() {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [sessionMessages, setSessionMessages] = useState<Message[]>([]);
+  const [hiddenHistory, setHiddenHistory] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
   const [nombre, setNombre] = useState("");
-  const [historialCargado, setHistorialCargado] = useState(false);
+  const [lupaOpen, setLupaOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
   const supabase = createClient();
 
-  // Cargar usuario y su historial real al montar
   useEffect(() => {
     async function init() {
       const { data: { session } } = await supabase.auth.getSession();
@@ -24,7 +26,6 @@ export default function VivianPage() {
       const user = session.user;
       setUserId(user.id);
 
-      // Nombre del perfil
       const { data: profile } = await supabase
         .from("profiles")
         .select("nombre")
@@ -32,38 +33,40 @@ export default function VivianPage() {
         .single();
       if (profile?.nombre) setNombre(profile.nombre);
 
-      // Historial real de Supabase
-      const { data: historial, error: histError } = await supabase
+      // Cargar historial completo — oculto, solo para contexto
+      const { data: historial } = await supabase
         .from("chat_messages")
-        .select("role, content")
+        .select("role, content, created_at")
         .eq("user_id", user.id)
         .order("created_at", { ascending: true })
-        .limit(30);
-
+        .limit(60);
 
       if (historial && historial.length > 0) {
-        setMessages(historial as Message[]);
-      } else {
-        setMessages([
-          { role: "assistant", content: "¡Hola! Soy VIVIAN, tu asistente personal. ¿En qué puedo ayudarte hoy? 🌿" },
-        ]);
+        setHiddenHistory(historial as Message[]);
       }
 
-      setHistorialCargado(true);
+      // Siempre arranca con saludo fresco
+      setSessionMessages([
+        { role: "assistant", content: `¡Hola${nombre ? ", " + nombre : ""}! Soy VIVIAN, tu asistente personal. ¿En qué puedo ayudarte hoy? 🌿` },
+      ]);
     }
     init();
   }, []);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [sessionMessages]);
+
+  useEffect(() => {
+    if (lupaOpen) searchRef.current?.focus();
+  }, [lupaOpen]);
 
   async function sendMessage() {
     if (!input.trim() || loading) return;
 
     const userMsg: Message = { role: "user", content: input };
-    const newMessages = [...messages, userMsg];
-    setMessages(newMessages);
+    const newMessages = [...sessionMessages, userMsg];
+    setSessionMessages(newMessages);
     setInput("");
     setLoading(true);
 
@@ -74,17 +77,25 @@ export default function VivianPage() {
         body: JSON.stringify({
           message: input,
           userId,
-          history: messages.slice(-20), // últimos 20 mensajes como contexto
+          history: sessionMessages, // solo mensajes de esta sesión
+          hiddenHistory: hiddenHistory.slice(-30), // memoria anterior, va al system prompt
         }),
       });
       const data = await res.json();
-      setMessages([...newMessages, { role: "assistant", content: data.reply }]);
+      setSessionMessages([...newMessages, { role: "assistant", content: data.reply }]);
     } catch {
-      setMessages([...newMessages, { role: "assistant", content: "Lo siento, hubo un error. ¿Intentamos de nuevo? 🙏" }]);
+      setSessionMessages([...newMessages, { role: "assistant", content: "Lo siento, hubo un error. ¿Intentamos de nuevo? 🙏" }]);
     } finally {
       setLoading(false);
     }
   }
+
+  // Búsqueda en historial
+  const resultados = searchQuery.trim().length > 1
+    ? hiddenHistory.filter(m =>
+        m.content.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : [];
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--crema)", display: "flex", flexDirection: "column", fontFamily: "DM Sans, sans-serif" }}>
@@ -103,19 +114,77 @@ export default function VivianPage() {
             Hola, {nombre}
           </div>
         )}
-        <a href="/dashboard" style={{ marginLeft: "auto", color: "rgba(255,255,255,0.6)", textDecoration: "none", fontSize: "0.9rem" }}>
-          ← Dashboard
-        </a>
+        <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 16 }}>
+          {/* Lupa */}
+          <button
+            onClick={() => setLupaOpen(!lupaOpen)}
+            title="Buscar en historial"
+            style={{
+              background: lupaOpen ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.1)",
+              border: "1px solid rgba(255,255,255,0.2)",
+              color: "white", borderRadius: "50%",
+              width: 36, height: 36, cursor: "pointer",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: "1rem", transition: "background .2s",
+            }}
+          >
+            🔍
+          </button>
+          <a href="/dashboard" style={{ color: "rgba(255,255,255,0.6)", textDecoration: "none", fontSize: "0.9rem" }}>
+            ← Dashboard
+          </a>
+        </div>
       </div>
 
-      {/* Mensajes */}
+      {/* Panel de búsqueda */}
+      {lupaOpen && (
+        <div style={{
+          background: "white", borderBottom: "2px solid var(--v5)",
+          padding: "16px 24px", maxWidth: 700, width: "100%", margin: "0 auto",
+          boxShadow: "0 4px 16px rgba(27,94,59,.08)",
+        }}>
+          <input
+            ref={searchRef}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Buscar en conversaciones anteriores..."
+            style={{
+              width: "100%", padding: "10px 16px", borderRadius: 50,
+              border: "1.5px solid var(--v5)", fontSize: "0.95rem",
+              fontFamily: "DM Sans, sans-serif", outline: "none",
+              background: "var(--v6)", color: "var(--n2)", boxSizing: "border-box",
+            }}
+          />
+          {searchQuery.trim().length > 1 && (
+            <div style={{ marginTop: 12, maxHeight: 260, overflowY: "auto", display: "flex", flexDirection: "column", gap: 8 }}>
+              {resultados.length === 0 ? (
+                <p style={{ fontSize: 14, color: "var(--gris)", padding: "8px 4px" }}>
+                  Sin resultados para "{searchQuery}"
+                </p>
+              ) : (
+                resultados.map((m, i) => (
+                  <div key={i} style={{
+                    background: m.role === "user" ? "var(--v6)" : "var(--d4)",
+                    border: `1px solid ${m.role === "user" ? "var(--v5)" : "var(--d3)"}`,
+                    borderRadius: 12, padding: "10px 14px",
+                  }}>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: m.role === "user" ? "var(--v3)" : "var(--d2)", marginBottom: 4, textTransform: "uppercase", letterSpacing: 0.8 }}>
+                      {m.role === "user" ? "Tú" : "VIVIAN"}
+                    </div>
+                    <div style={{ fontSize: 14, color: "var(--n2)", lineHeight: 1.5 }}>
+                      {m.content}
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Mensajes de sesión actual */}
       <div style={{ flex: 1, overflowY: "auto", padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1rem", maxWidth: 700, width: "100%", margin: "0 auto" }}>
-        {!historialCargado && (
-          <div style={{ textAlign: "center", color: "var(--gris)", fontSize: 14, padding: "20px 0" }}>
-            Cargando tu historial...
-          </div>
-        )}
-        {messages.map((msg, i) => (
+        {sessionMessages.map((msg, i) => (
           <div key={i} style={{ display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start" }}>
             {msg.role === "assistant" && (
               <div style={{ width: 32, height: 32, borderRadius: "50%", background: "#1B5E3B", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.9rem", marginRight: 8, flexShrink: 0, alignSelf: "flex-end" }}>
@@ -127,9 +196,7 @@ export default function VivianPage() {
               color: msg.role === "user" ? "white" : "#1A2E22",
               padding: "0.75rem 1rem",
               borderRadius: msg.role === "user" ? "18px 18px 4px 18px" : "18px 18px 18px 4px",
-              maxWidth: "75%",
-              fontSize: "0.97rem",
-              lineHeight: 1.6,
+              maxWidth: "75%", fontSize: "0.97rem", lineHeight: 1.6,
               boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
             }}>
               {msg.content}
