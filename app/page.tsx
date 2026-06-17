@@ -150,6 +150,13 @@ const STRIP = [
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
 
+  // Restaurar preferencia de tamaño de texto
+  useEffect(() => {
+    if (localStorage.getItem("textSize") === "grande") {
+      document.documentElement.classList.add("text-grande");
+    }
+  }, []);
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 80);
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -177,8 +184,14 @@ export default function Home() {
       <div className={s.a11yBar}>
         <span>📞 ¿Necesitas ayuda? Llámanos al <strong>600 LongVivIA</strong></span>
         <div style={{ display: "flex", gap: 10 }}>
-          <button className={s.a11yBtn} onClick={() => { document.body.style.fontSize = "120%"; }}>A+ Texto grande</button>
-          <button className={s.a11yBtn} onClick={() => { document.body.style.fontSize = "100%"; }}>A Normal</button>
+          <button className={s.a11yBtn} onClick={() => {
+            document.documentElement.classList.add("text-grande");
+            localStorage.setItem("textSize", "grande");
+          }}>A+ Texto grande</button>
+          <button className={s.a11yBtn} onClick={() => {
+            document.documentElement.classList.remove("text-grande");
+            localStorage.setItem("textSize", "normal");
+          }}>A Normal</button>
         </div>
       </div>
 

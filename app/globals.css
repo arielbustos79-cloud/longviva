@@ -21,3 +21,8 @@ body {
   color: var(--n2);
   font-family: 'DM Sans', Arial, sans-serif;
 }
+
+/* Modo texto grande — accesibilidad */
+:root { --text-scale: 1; }
+html.text-grande { --text-scale: 1.2; }
+html.text-grande body { zoom: 1.15; }
