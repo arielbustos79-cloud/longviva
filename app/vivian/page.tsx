@@ -14,8 +14,10 @@ export default function VivianPage() {
   const [nombre, setNombre] = useState("");
   const [lupaOpen, setLupaOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [escuchando, setEscuchando] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
   const supabase = createClient();
 
   useEffect(() => {
@@ -60,6 +62,39 @@ export default function VivianPage() {
   useEffect(() => {
     if (lupaOpen) searchRef.current?.focus();
   }, [lupaOpen]);
+
+  function toggleMic() {
+    const SpeechRecognition = window.SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("Tu navegador no soporta el micrófono. Usa Chrome o Edge.");
+      return;
+    }
+
+    if (escuchando) {
+      recognitionRef.current?.stop();
+      setEscuchando(false);
+      return;
+    }
+
+    const rec = new SpeechRecognition();
+    rec.lang = "es-CL";
+    rec.interimResults = false;
+    rec.maxAlternatives = 1;
+
+    rec.onstart = () => setEscuchando(true);
+
+    rec.onresult = (e) => {
+      const texto = e.results[0][0].transcript;
+      setInput(texto);
+      setEscuchando(false);
+    };
+
+    rec.onerror = () => setEscuchando(false);
+    rec.onend = () => setEscuchando(false);
+
+    recognitionRef.current = rec;
+    rec.start();
+  }
 
   async function sendMessage() {
     if (!input.trim() || loading) return;
@@ -216,17 +251,34 @@ export default function VivianPage() {
 
       {/* Input */}
       <div style={{ padding: "1rem 1.5rem", background: "white", borderTop: "1px solid #EAFAF0", maxWidth: 700, width: "100%", margin: "0 auto", display: "flex", gap: "0.75rem", alignItems: "center" }}>
+        {/* Botón micrófono */}
+        <button
+          onClick={toggleMic}
+          title={escuchando ? "Detener" : "Hablarle a VIVIAN"}
+          style={{
+            width: 48, height: 48, borderRadius: "50%", flexShrink: 0,
+            background: escuchando ? "#c0392b" : "#EAFAF0",
+            border: escuchando ? "2px solid #c0392b" : "2px solid #B7E4C7",
+            cursor: "pointer", fontSize: "1.2rem",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            transition: "all .2s",
+            boxShadow: escuchando ? "0 0 0 6px rgba(192,57,43,.15)" : "none",
+          }}
+        >
+          {escuchando ? "⏹" : "🎤"}
+        </button>
+
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-          placeholder="Escríbele a VIVIAN..."
-          style={{ flex: 1, padding: "0.85rem 1.25rem", borderRadius: "50px", border: "1.5px solid #B7E4C7", fontSize: "1rem", fontFamily: "DM Sans, sans-serif", outline: "none", background: "#EAFAF0" }}
+          placeholder={escuchando ? "Escuchando... habla ahora" : "Escríbele o háblale a VIVIAN..."}
+          style={{ flex: 1, padding: "0.85rem 1.25rem", borderRadius: "50px", border: `1.5px solid ${escuchando ? "#c0392b" : "#B7E4C7"}`, fontSize: "1rem", fontFamily: "DM Sans, sans-serif", outline: "none", background: escuchando ? "#fff5f5" : "#EAFAF0", transition: "all .2s" }}
         />
         <button
           onClick={sendMessage}
           disabled={loading || !input.trim()}
-          style={{ background: loading || !input.trim() ? "#B7E4C7" : "#1B5E3B", color: "white", border: "none", borderRadius: "50px", padding: "0.85rem 1.5rem", fontWeight: 600, fontSize: "0.95rem", cursor: loading ? "not-allowed" : "pointer", transition: "background 0.2s" }}
+          style={{ background: loading || !input.trim() ? "#B7E4C7" : "#1B5E3B", color: "white", border: "none", borderRadius: "50px", padding: "0.85rem 1.5rem", fontWeight: 600, fontSize: "0.95rem", cursor: loading ? "not-allowed" : "pointer", transition: "background 0.2s", whiteSpace: "nowrap" }}
         >
           Enviar →
         </button>
