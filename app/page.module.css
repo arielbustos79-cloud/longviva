@@ -54,7 +54,7 @@
 /* ─── HERO ──────────────────────────────────────────────── */
 .hero {
   min-height:100vh;display:grid;grid-template-columns:1fr 1fr;
-  align-items:center;padding:180px 80px 90px;gap:60px;
+  align-items:center;padding:100px 80px 48px;gap:40px;
   position:relative;overflow:hidden;
 }
 
@@ -105,7 +105,7 @@
 /* Word reveal */
 .h1 {
   font-family:'Cormorant Garamond',serif;
-  font-size:clamp(50px,5.8vw,76px);line-height:1.07;color:var(--n2);margin-bottom:32px;
+  font-size:clamp(44px,5.2vw,68px);line-height:1.07;color:var(--n2);margin-bottom:24px;
 }
 .h1 em { font-style:italic;color:var(--v2); }
 .break { display:block; }
@@ -127,7 +127,7 @@
   to { opacity:1;transform:translateY(0); }
 }
 
-.heroDesc { font-size:20px;line-height:1.8;color:var(--gris);max-width:500px;margin-bottom:48px;font-weight:400; }
+.heroDesc { font-size:19px;line-height:1.7;color:var(--gris);max-width:500px;margin-bottom:24px;font-weight:400; }
 .heroCtas { display:flex;gap:18px;align-items:center;flex-wrap:wrap; }
 .btnPrimary {
   background:var(--v2);color:white;padding:19px 42px;border-radius:50px;
@@ -143,16 +143,18 @@
 }
 .btnGhost:hover { gap:14px; }
 .heroProof {
-  display:flex;gap:40px;margin-top:56px;padding-top:40px;border-top:1.5px solid rgba(27,94,59,.14);
+  display:flex;gap:28px;margin-top:20px;padding-top:20px;border-top:1.5px solid rgba(27,94,59,.14);
 }
+.proofNum { font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:700;color:var(--v2);line-height:1; }
+.proofLabel { font-size:14px;color:var(--gris);margin-top:4px;font-weight:400; }
 .proofNum { font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:700;color:var(--v2);line-height:1; }
 .proofLabel { font-size:15px;color:var(--gris);margin-top:4px;font-weight:400; }
 
 /* ─── HERO VISUAL ───────────────────────────────────────── */
-.heroVisual { position:relative;z-index:2;display:flex;justify-content:center;align-items:center; }
+.heroVisual { position:relative;z-index:2;display:flex;justify-content:center;align-items:flex-start;padding-top:20px; }
 .phoneWrap { position:relative; }
 .phoneFrame {
-  width:300px;background:var(--n1);border-radius:46px;padding:10px;
+  width:280px;background:var(--n1);border-radius:46px;padding:10px;
   box-shadow:0 40px 80px rgba(15,61,36,.32),0 0 0 1px rgba(255,255,255,.05);
 }
 .phoneScreen { background:var(--crema);border-radius:38px;overflow:hidden; }
