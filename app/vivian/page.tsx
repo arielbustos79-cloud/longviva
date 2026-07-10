@@ -17,7 +17,7 @@ export default function VivianPage() {
   const [escuchando, setEscuchando] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
-  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const recognitionRef = useRef<InstanceType<typeof window.SpeechRecognition> | null>(null);
   const supabase = createClient();
 
   useEffect(() => {
