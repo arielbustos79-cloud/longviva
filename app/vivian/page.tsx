@@ -65,7 +65,7 @@ export default function VivianPage() {
   }, [lupaOpen]);
 
   function toggleMic() {
-    const SpeechRecognition = window.SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SpeechRecognition) {
       alert("Tu navegador no soporta el micrófono. Usa Chrome o Edge.");
       return;
