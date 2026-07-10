@@ -84,7 +84,7 @@ export default function VivianPage() {
 
     rec.onstart = () => setEscuchando(true);
 
-    rec.onresult = (e) => {
+    rec.onresult = (e: any) => {
       const texto = e.results[0][0].transcript;
       setInput(texto);
       setEscuchando(false);
