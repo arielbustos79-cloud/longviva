@@ -17,7 +17,8 @@ export default function VivianPage() {
   const [escuchando, setEscuchando] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
-  const recognitionRef = useRef<InstanceType<typeof window.SpeechRecognition> | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const recognitionRef = useRef<any>(null);
   const supabase = createClient();
 
   useEffect(() => {
