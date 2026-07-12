@@ -230,6 +230,7 @@ export default function Home() {
           <li><a href="/vivian">VIVIAN IA</a></li>
           <li><a href="#como">¿Cómo funciona?</a></li>
           <li><a href="#contacto">Contacto</a></li>
+          <li><a href="/login" className={s.btnNavOutline}>Ingresar</a></li>
           <li><span className={s.freeBadge}>GRATIS</span><a href="/registro" className={s.btnNav}>Comenzar →</a></li>
         </ul>
       </nav>
@@ -508,8 +509,8 @@ export default function Home() {
         <div className={s.ctaTagline}>Para una vida larga y activa.</div>
         <h2 className={s.ctaPhrase}>Tu prime,<br /><em>tu plataforma Viva.</em></h2>
         <div className={s.ctaInputGroup}>
-          <input type="email" className={s.ctaInput} placeholder="tu@correo.cl" />
-          <button className={s.btnGold}>Comenzar gratis →</button>
+          <a href="/registro" className={s.btnGold}>Comenzar gratis →</a>
+          <a href="/login" className={s.btnGoldOutline}>Ya tengo cuenta →</a>
         </div>
         <p className={s.ctaNote}>Sin tarjeta de crédito. Sin letra chica. O llámanos al <strong>600 LongVivIA</strong></p>
       </section>

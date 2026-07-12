@@ -46,6 +46,12 @@
   transition:background .2s !important;min-height:48px;display:inline-flex;align-items:center;
 }
 .btnNav:hover { background:var(--v3) !important; }
+.btnNavOutline {
+  background:transparent;color:var(--v2) !important;border:2px solid var(--v4);
+  padding:11px 24px;border-radius:50px;font-size:15px;font-weight:600;
+  transition:all .2s;min-height:44px;display:inline-flex;align-items:center;
+}
+.btnNavOutline:hover { background:var(--v6);border-color:var(--v2); }
 .freeBadge {
   background:var(--v6);color:var(--v2);border:2px solid var(--v5);
   padding:5px 13px;border-radius:20px;font-size:13px;font-weight:700;margin-right:6px;
@@ -327,6 +333,13 @@
 }
 .btnGold:hover { background:var(--d1);transform:translateY(-2px); }
 .btnGold:focus-visible { outline:4px solid var(--d3);outline-offset:3px; }
+.btnGoldOutline {
+  background:transparent;color:white;border:2px solid rgba(255,255,255,.5);
+  padding:18px 30px;border-radius:50px;font-size:17px;font-weight:600;
+  white-space:nowrap;transition:all .25s;font-family:'DM Sans',sans-serif;min-height:58px;
+  display:inline-flex;align-items:center;
+}
+.btnGoldOutline:hover { background:rgba(255,255,255,.1);border-color:white; }
 .ctaNote { font-size:15px;color:rgba(255,255,255,.45);position:relative;z-index:1; }
 .ctaNote strong { color:var(--v4); }
 
