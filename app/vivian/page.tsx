@@ -5,6 +5,21 @@ import { createClient } from "@/lib/supabase-browser";
 
 type Message = { role: "user" | "assistant"; content: string };
 
+function renderConLinks(text: string) {
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  const partes = text.split(urlRegex);
+  return partes.map((parte, i) =>
+    urlRegex.test(parte) ? (
+      <a key={i} href={parte} target="_blank" rel="noopener noreferrer"
+        style={{ color: "#2D8A5F", textDecoration: "underline", wordBreak: "break-all" }}>
+        {parte.includes("youtube.com") || parte.includes("youtu.be") ? "▶ Ver video en YouTube" : parte}
+      </a>
+    ) : (
+      <span key={i}>{parte}</span>
+    )
+  );
+}
+
 export default function VivianPage() {
   const [sessionMessages, setSessionMessages] = useState<Message[]>([]);
   const [hiddenHistory, setHiddenHistory] = useState<Message[]>([]);
@@ -235,7 +250,7 @@ export default function VivianPage() {
               maxWidth: "75%", fontSize: "0.97rem", lineHeight: 1.6,
               boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
             }}>
-              {msg.content}
+              {renderConLinks(msg.content)}
             </div>
           </div>
         ))}
