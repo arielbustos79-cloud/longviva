@@ -227,7 +227,7 @@ export default function Home() {
         </a>
         <ul className={s.navLinks}>
           <li><a href="#servicios">Servicios</a></li>
-          <li><a href="#vivian">VIVIAN IA</a></li>
+          <li><a href="/vivian">VIVIAN IA</a></li>
           <li><a href="#como">¿Cómo funciona?</a></li>
           <li><a href="#contacto">Contacto</a></li>
           <li><span className={s.freeBadge}>GRATIS</span><a href="/registro" className={s.btnNav}>Comenzar →</a></li>
