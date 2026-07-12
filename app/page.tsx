@@ -136,13 +136,13 @@ function VivianChat() {
 
 /* ─── Marquee items ───────────────────────────────────────────── */
 const STRIP = [
-  "✦ Telemedicina gratis",
-  "✦ Yoga & Pilates",
-  "✦ Tours exclusivos",
-  "✦ VIVIAN 24/7",
-  "✦ Nutrición personalizada",
-  "✦ Comunidad activa",
-  "✦ Bienestar pleno",
+  "✦ VIVIAN IA 24/7",
+  "✦ Yoga & Pilates próximamente",
+  "✦ Tours exclusivos próximamente",
+  "✦ Telemedicina próximamente",
+  "✦ Nutrición próximamente",
+  "✦ Comunidad activa próximamente",
+  "✦ Bienestar pleno próximamente",
   "✦ 100% gratuito",
 ];
 
@@ -393,18 +393,18 @@ export default function Home() {
         </p>
         <div className={s.servicesGrid}>
           {[
-            { icon: "🏥", title: "Telemedicina", desc: "Consultas online con médicos y especialistas. Sin esperas. Compatible con Fonasa e Isapres.", link: "Agendar →" },
-            { icon: "🧘", title: "Bienestar activo", desc: "Clases de yoga, pilates y funcional. En vivo y grabadas. Instructores especializados.", link: "Ver clases →" },
-            { icon: "✈️", title: "Ocio y experiencias", desc: "Tours con grupos pequeños, tu ritmo y precios exclusivos. Natura, gastronomía, cultura.", link: "Explorar →" },
-            { icon: "🍽️", title: "Nutrición", desc: "Planes personalizados con nutricionistas. Seguimiento y recetas pensadas para ti.", link: "Consultar →" },
-            { icon: "👥", title: "Comunidad", desc: "Grupos por intereses, talleres y actividades sociales con personas que comparten tu energía.", link: "Unirme →" },
-            { icon: "💊", title: "Gestión de salud", desc: "Recordatorios, historial de citas y seguimiento de indicadores. VIVIAN lo organiza todo.", link: "Mi salud →" },
+            { icon: "🤖", title: "VIVIAN IA", desc: "Tu asistente personal de salud, bienestar y ocio. Disponible 24/7, te conoce y te acompaña.", link: "Hablar con VIVIAN →", href: "/vivian", activo: true },
+            { icon: "💊", title: "Gestión de salud", desc: "Recordatorios de medicamentos, historial de citas y seguimiento de indicadores.", link: "Próximamente", href: "#", activo: false },
+            { icon: "🏥", title: "Telemedicina", desc: "Consultas online con médicos y especialistas. Sin esperas. Compatible con Fonasa e Isapres.", link: "Próximamente", href: "#", activo: false },
+            { icon: "🧘", title: "Bienestar activo", desc: "Clases de yoga, pilates y funcional. En vivo y grabadas. Instructores especializados.", link: "Próximamente", href: "#", activo: false },
+            { icon: "✈️", title: "Ocio y experiencias", desc: "Tours con grupos pequeños, tu ritmo y precios exclusivos. Natura, gastronomía, cultura.", link: "Próximamente", href: "#", activo: false },
+            { icon: "🍽️", title: "Nutrición", desc: "Planes personalizados con nutricionistas. Seguimiento y recetas pensadas para ti.", link: "Próximamente", href: "#", activo: false },
           ].map((srv, i) => (
-            <div key={srv.title} className={`${s.srvCard} ${s.fadeIn}`} style={{ transitionDelay: `${i * 80}ms` }}>
+            <div key={srv.title} className={`${s.srvCard} ${s.fadeIn}`} style={{ transitionDelay: `${i * 80}ms`, opacity: srv.activo ? 1 : 0.75 }}>
               <div className={s.srvIcon}>{srv.icon}</div>
-              <h3>{srv.title}</h3>
+              <h3>{srv.title}{!srv.activo && <span style={{ fontSize: "11px", background: "var(--d3)", color: "var(--d1)", borderRadius: "20px", padding: "2px 10px", marginLeft: "8px", fontWeight: 600 }}>Próximamente</span>}</h3>
               <p>{srv.desc}</p>
-              <a href="#" className={s.srvLink}>{srv.link}</a>
+              <a href={srv.href} className={s.srvLink} style={{ pointerEvents: srv.activo ? "auto" : "none", opacity: srv.activo ? 1 : 0.5 }}>{srv.link}</a>
             </div>
           ))}
         </div>
