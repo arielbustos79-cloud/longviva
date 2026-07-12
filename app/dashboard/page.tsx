@@ -129,79 +129,94 @@ export default function DashboardPage() {
         }}>
           {[
             {
-              icon: "🤖", title: "Hablar con VIVIAN",
-              desc: "Tu asistente IA disponible ahora",
-              bg: "var(--v2)", color: "white",
-              href: "/vivian",
+              svg: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>,
+              title: "Hablar con VIVIAN", desc: "Tu asistente IA disponible ahora",
+              activo: true, href: "/vivian", destacado: true,
             },
             {
-              icon: "🏥", title: "Telemedicina",
-              desc: "Agenda una consulta online",
-              bg: "white", color: "var(--n2)",
-              href: "#",
+              svg: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>,
+              title: "Mi agenda", desc: "Citas y recordatorios",
+              activo: false, href: "#", destacado: false,
             },
             {
-              icon: "🧘", title: "Clases de bienestar",
-              desc: "Yoga, pilates y funcional",
-              bg: "white", color: "var(--n2)",
-              href: "#",
+              svg: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2v-4M9 21H5a2 2 0 01-2-2v-4m0 0h18"/></svg>,
+              title: "Mis medicamentos", desc: "Recordatorios y seguimiento",
+              activo: false, href: "#", destacado: false,
             },
             {
-              icon: "✈️", title: "Tours y experiencias",
-              desc: "Actividades para tu prime",
-              bg: "white", color: "var(--n2)",
-              href: "#",
+              svg: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>,
+              title: "Telemedicina", desc: "Consultas online con especialistas",
+              activo: false, href: "#", destacado: false,
             },
             {
-              icon: "📅", title: "Mi agenda",
-              desc: "Citas y recordatorios",
-              bg: "white", color: "var(--n2)",
-              href: "#",
+              svg: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>,
+              title: "Bienestar activo", desc: "Yoga, pilates y funcional",
+              activo: false, href: "#", destacado: false,
             },
             {
-              icon: "💊", title: "Mis medicamentos",
-              desc: "Recordatorios y seguimiento",
-              bg: "white", color: "var(--n2)",
-              href: "#",
+              svg: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>,
+              title: "Tours y experiencias", desc: "Actividades para tu prime",
+              activo: false, href: "#", destacado: false,
             },
           ].map((card) => (
             <a
               key={card.title}
               href={card.href}
               style={{
-                background: card.bg,
+                background: card.destacado ? "var(--v2)" : "white",
                 borderRadius: 20,
                 padding: "28px 26px",
                 textDecoration: "none",
-                border: card.bg === "white" ? "1.5px solid var(--v5)" : "none",
-                boxShadow: "0 4px 16px rgba(27,94,59,.08)",
+                border: card.destacado ? "none" : "1.5px solid #E8EDE9",
+                boxShadow: card.destacado ? "0 8px 32px rgba(27,94,59,.2)" : "0 2px 8px rgba(27,94,59,.05)",
                 transition: "transform .2s, box-shadow .2s",
                 display: "block",
+                opacity: !card.activo && !card.destacado ? 0.8 : 1,
+                cursor: card.activo ? "pointer" : "default",
               }}
               onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.transform = "translateY(-4px)";
-                (e.currentTarget as HTMLElement).style.boxShadow = "0 12px 28px rgba(27,94,59,.14)";
+                if (!card.activo) return;
+                (e.currentTarget as HTMLElement).style.transform = "translateY(-3px)";
+                (e.currentTarget as HTMLElement).style.boxShadow = "0 16px 40px rgba(27,94,59,.18)";
               }}
               onMouseLeave={(e) => {
                 (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-                (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 16px rgba(27,94,59,.08)";
+                (e.currentTarget as HTMLElement).style.boxShadow = card.destacado ? "0 8px 32px rgba(27,94,59,.2)" : "0 2px 8px rgba(27,94,59,.05)";
               }}
             >
-              <div style={{ fontSize: 32, marginBottom: 14 }}>{card.icon}</div>
+              <div style={{
+                color: card.destacado ? "rgba(255,255,255,.9)" : "var(--v3)",
+                marginBottom: 18,
+              }}>
+                {card.svg}
+              </div>
               <div style={{
                 fontFamily: "Cormorant Garamond, serif",
-                fontSize: 22, fontWeight: 600,
-                color: card.bg === "var(--v2)" ? "white" : "var(--n2)",
-                marginBottom: 6,
+                fontSize: 21, fontWeight: 600,
+                color: card.destacado ? "white" : "var(--n2)",
+                marginBottom: 6, lineHeight: 1.2,
               }}>
                 {card.title}
               </div>
               <div style={{
-                fontSize: 15,
-                color: card.bg === "var(--v2)" ? "rgba(255,255,255,.75)" : "var(--gris)",
+                fontSize: 14,
+                color: card.destacado ? "rgba(255,255,255,.65)" : "var(--gris)",
+                lineHeight: 1.5,
               }}>
                 {card.desc}
               </div>
+              {!card.activo && (
+                <div style={{
+                  display: "inline-block", marginTop: 14,
+                  fontSize: 11, fontWeight: 700, letterSpacing: 0.8,
+                  color: "var(--d1)", background: "var(--d4)",
+                  border: "1px solid var(--d3)",
+                  borderRadius: 20, padding: "3px 10px",
+                  textTransform: "uppercase",
+                }}>
+                  Próximamente
+                </div>
+              )}
             </a>
           ))}
         </div>

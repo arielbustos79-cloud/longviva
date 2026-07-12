@@ -11,17 +11,17 @@
 
 /* ─── BARRA ACCESIBILIDAD ───────────────────────────────── */
 .a11yBar {
-  background:var(--d4);border-bottom:1px solid var(--d3);
-  padding:10px 48px;display:flex;align-items:center;justify-content:space-between;
-  font-size:15px;color:var(--n2);font-weight:500;
+  background:var(--crema);border-bottom:1px solid rgba(27,94,59,.08);
+  padding:7px 48px;display:flex;align-items:center;justify-content:space-between;
+  font-size:13px;color:var(--gris);
 }
 .a11yBtn {
-  background:white;border:2px solid var(--d2);padding:8px 20px;border-radius:24px;
-  font-size:15px;font-weight:600;cursor:pointer;transition:all .2s;
-  font-family:'DM Sans',sans-serif;color:var(--n2);min-height:40px;
+  background:transparent;border:1px solid rgba(27,94,59,.2);padding:4px 12px;border-radius:20px;
+  font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;
+  font-family:'DM Sans',sans-serif;color:var(--v2);min-height:28px;
 }
-.a11yBtn:hover { background:var(--d2);border-color:var(--d2);color:white; }
-.a11yBtn:focus-visible { outline:3px solid var(--d2);outline-offset:3px; }
+.a11yBtn:hover { background:var(--v6);border-color:var(--v4); }
+.a11yBtn:focus-visible { outline:2px solid var(--v4);outline-offset:2px; }
 
 /* ─── NAV ───────────────────────────────────────────────── */
 .nav {

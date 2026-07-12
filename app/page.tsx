@@ -180,18 +180,19 @@ export default function Home() {
 
   return (
     <>
-      {/* A11Y BAR */}
+      {/* A11Y BAR — discreta, solo texto */}
       <div className={s.a11yBar}>
-        <span>📞 ¿Necesitas ayuda? Llámanos al <strong>600 LongVivIA</strong></span>
-        <div style={{ display: "flex", gap: 10 }}>
+        <span>¿Necesitas ayuda? <strong>600 LongVivIA</strong></span>
+        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          <span style={{ fontSize: 13, color: "var(--gris)", marginRight: 4 }}>Tamaño de texto:</span>
           <button className={s.a11yBtn} onClick={() => {
             document.documentElement.classList.add("text-grande");
             localStorage.setItem("textSize", "grande");
-          }}>A+ Texto grande</button>
+          }}>A+</button>
           <button className={s.a11yBtn} onClick={() => {
             document.documentElement.classList.remove("text-grande");
             localStorage.setItem("textSize", "normal");
-          }}>A Normal</button>
+          }}>A</button>
         </div>
       </div>
 
@@ -231,7 +232,7 @@ export default function Home() {
           <li><a href="#como">¿Cómo funciona?</a></li>
           <li><a href="#contacto">Contacto</a></li>
           <li><a href="/login" className={s.btnNavOutline}>Ingresar</a></li>
-          <li><span className={s.freeBadge}>GRATIS</span><a href="/registro" className={s.btnNav}>Comenzar →</a></li>
+          <li><a href="/registro" className={s.btnNav}>Comenzar gratis →</a></li>
         </ul>
       </nav>
 
