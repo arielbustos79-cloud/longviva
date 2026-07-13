@@ -149,12 +149,22 @@ const STRIP = [
 /* ─── Home ────────────────────────────────────────────────────── */
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
+  const [sesionActiva, setSesionActiva] = useState(false);
 
   // Restaurar preferencia de tamaño de texto
   useEffect(() => {
     if (localStorage.getItem("textSize") === "grande") {
       document.documentElement.classList.add("text-grande");
     }
+  }, []);
+
+  // Detectar sesión activa
+  useEffect(() => {
+    import("@/lib/supabase-browser").then(({ createClient }) => {
+      createClient().auth.getSession().then(({ data: { session } }) => {
+        setSesionActiva(!!session);
+      });
+    });
   }, []);
 
   useEffect(() => {
@@ -231,8 +241,17 @@ export default function Home() {
           <li><a href="/vivian">VIVIAN IA</a></li>
           <li><a href="#como">¿Cómo funciona?</a></li>
           <li><a href="#contacto">Contacto</a></li>
-          <li><a href="/login" className={s.btnNavOutline}>Ingresar</a></li>
-          <li><a href="/registro" className={s.btnNav}>Comenzar gratis →</a></li>
+          {sesionActiva ? (
+            <>
+              <li><a href="/dashboard" className={s.btnNavOutline}>Mi dashboard</a></li>
+              <li><a href="/vivian" className={s.btnNav}>Hablar con VIVIAN →</a></li>
+            </>
+          ) : (
+            <>
+              <li><a href="/login" className={s.btnNavOutline}>Ingresar</a></li>
+              <li><a href="/registro" className={s.btnNav}>Comenzar gratis →</a></li>
+            </>
+          )}
         </ul>
       </nav>
 

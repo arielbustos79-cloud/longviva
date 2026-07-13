@@ -181,8 +181,8 @@ export default function VivianPage() {
           >
             🔍
           </button>
-          <a href="/" style={{ color: "rgba(255,255,255,0.6)", textDecoration: "none", fontSize: "0.9rem" }}>
-            ← Inicio
+          <a href={userId ? "/dashboard" : "/"} style={{ color: "rgba(255,255,255,0.6)", textDecoration: "none", fontSize: "0.9rem" }}>
+            {userId ? "← Dashboard" : "← Inicio"}
           </a>
         </div>
       </div>
