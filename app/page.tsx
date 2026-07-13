@@ -276,6 +276,7 @@ export default function Home() {
               <a href="/vivian" className={s.mobileLink} onClick={() => setMenuOpen(false)}>VIVIAN IA</a>
               <a href="#como" className={s.mobileLink} onClick={() => setMenuOpen(false)}>¿Cómo funciona?</a>
               <a href="#contacto" className={s.mobileLink} onClick={() => setMenuOpen(false)}>Contacto</a>
+              <a href="/quienes-somos" className={s.mobileLink} onClick={() => setMenuOpen(false)}>Quiénes somos</a>
               <div style={{ height: 1, background: "var(--v5)", margin: "8px 0" }} />
               {sesionActiva ? (
                 <>
