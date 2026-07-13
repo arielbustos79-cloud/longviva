@@ -239,9 +239,10 @@ export default function Home() {
           <div className={s.logoText}>LongViv<span>IA</span></div>
         </a>
         <ul className={s.navLinks}>
+          <li><a href="/quienes-somos">Quiénes somos</a></li>
+          <li><a href="#como">¿Cómo funciona?</a></li>
           <li><a href="#servicios">Servicios</a></li>
           <li><a href="/vivian">VIVIAN IA</a></li>
-          <li><a href="#como">¿Cómo funciona?</a></li>
           <li><a href="#contacto">Contacto</a></li>
           {sesionActiva ? (
             <>
