@@ -272,11 +272,11 @@ export default function Home() {
           <div className={s.mobileMenuInner} onClick={(e) => e.stopPropagation()}>
             <button className={s.mobileClose} onClick={() => setMenuOpen(false)}>✕</button>
             <nav style={{ display: "flex", flexDirection: "column", gap: 8, width: "100%" }}>
+              <a href="/quienes-somos" className={s.mobileLink} onClick={() => setMenuOpen(false)}>Quiénes somos</a>
+              <a href="#como" className={s.mobileLink} onClick={() => setMenuOpen(false)}>¿Cómo funciona?</a>
               <a href="#servicios" className={s.mobileLink} onClick={() => setMenuOpen(false)}>Servicios</a>
               <a href="/vivian" className={s.mobileLink} onClick={() => setMenuOpen(false)}>VIVIAN IA</a>
-              <a href="#como" className={s.mobileLink} onClick={() => setMenuOpen(false)}>¿Cómo funciona?</a>
               <a href="#contacto" className={s.mobileLink} onClick={() => setMenuOpen(false)}>Contacto</a>
-              <a href="/quienes-somos" className={s.mobileLink} onClick={() => setMenuOpen(false)}>Quiénes somos</a>
               <div style={{ height: 1, background: "var(--v5)", margin: "8px 0" }} />
               {sesionActiva ? (
                 <>
