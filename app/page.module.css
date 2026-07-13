@@ -360,6 +360,92 @@
 .fadeIn { opacity:0;transform:translateY(20px);transition:opacity .65s ease,transform .65s ease; }
 .visible { opacity:1 !important;transform:translateY(0) !important; }
 
+/* ─── HAMBURGER / MOBILE MENU ───────────────────────────── */
+.hamburger {
+  display: none;
+  background: none;
+  border: 2px solid rgba(27,94,59,.2);
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 8px 12px;
+  color: var(--v2);
+  font-size: 20px;
+  line-height: 1;
+  transition: background .2s;
+}
+.hamburger:hover { background: var(--v6); }
+
+.mobileMenu {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(10,21,13,.45);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+}
+
+.mobileMenuInner {
+  background: var(--crema);
+  width: min(320px, 88vw);
+  min-height: 100vh;
+  padding: 24px 28px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+  box-shadow: -8px 0 40px rgba(0,0,0,.18);
+}
+
+.mobileClose {
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: var(--gris);
+  cursor: pointer;
+  align-self: flex-end;
+  padding: 4px 8px;
+  margin-bottom: 12px;
+}
+
+.mobileLink {
+  display: block;
+  padding: 14px 0;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--n2);
+  text-decoration: none;
+  border-bottom: 1px solid var(--gris2);
+  transition: color .2s;
+}
+.mobileLink:hover { color: var(--v2); }
+
+.mobileLinkBtn {
+  display: block;
+  padding: 14px 0;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--v2);
+  text-decoration: none;
+  transition: color .2s;
+}
+
+.mobileLinkPrimary {
+  display: block;
+  margin-top: 8px;
+  background: var(--v2);
+  color: white;
+  text-align: center;
+  padding: 16px 24px;
+  border-radius: 50px;
+  font-size: 17px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background .2s;
+}
+.mobileLinkPrimary:hover { background: var(--v3); }
+
 /* ─── RESPONSIVE ────────────────────────────────────────── */
 @media(max-width:960px) {
   .hero,.vivianSection { grid-template-columns:1fr;padding:90px 28px 64px; }
@@ -373,6 +459,7 @@
   .a11yBar { display:none; }
   .footerGrid { grid-template-columns:1fr 1fr;gap:32px; }
   .navLinks { display:none; }
+  .hamburger { display:flex;align-items:center;justify-content:center; }
   .heroDesc { font-size:18px; }
   .btnPrimary { font-size:18px;padding:18px 34px; }
   .h1 { font-size:clamp(42px,8vw,62px); }

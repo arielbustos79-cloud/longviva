@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase-browser";
 import { useRouter } from "next/navigation";
 import OliveBranch from "@/components/OliveBranch";
+import s from "./page.module.css";
 
 type Profile = {
   nombre: string | null;
@@ -74,11 +75,8 @@ export default function DashboardPage() {
     <div style={{ minHeight: "100vh", background: "var(--crema)", fontFamily: "DM Sans, sans-serif" }}>
 
       {/* Header */}
-      <header style={{
-        background: "var(--v2)", padding: "16px 40px",
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-      }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+      <header className={s.header}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
           <OliveBranch size={36} variant="light" />
           <div style={{
             fontFamily: "Cormorant Garamond, serif",
@@ -87,19 +85,9 @@ export default function DashboardPage() {
             LongViv<span style={{ color: "var(--d2)" }}>IA</span>
           </div>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
-          <span style={{ color: "rgba(255,255,255,.7)", fontSize: 15 }}>{email}</span>
-          <button
-            onClick={handleLogout}
-            style={{
-              background: "rgba(255,255,255,.12)", border: "1px solid rgba(255,255,255,.25)",
-              color: "white", padding: "8px 20px", borderRadius: 50,
-              fontSize: 14, fontWeight: 600, cursor: "pointer",
-              transition: "background .2s",
-            }}
-          >
-            Salir
-          </button>
+        <div className={s.headerRight}>
+          <span className={s.headerEmail}>{email}</span>
+          <button onClick={handleLogout} className={s.logoutBtn}>Salir</button>
         </div>
       </header>
 

@@ -150,6 +150,7 @@ const STRIP = [
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
   const [sesionActiva, setSesionActiva] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   // Restaurar preferencia de tamaño de texto
   useEffect(() => {
@@ -253,7 +254,43 @@ export default function Home() {
             </>
           )}
         </ul>
+
+        {/* Hamburger — solo mobile */}
+        <button
+          className={s.hamburger}
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
+        >
+          {menuOpen ? "✕" : "☰"}
+        </button>
       </nav>
+
+      {/* Menú mobile */}
+      {menuOpen && (
+        <div className={s.mobileMenu} onClick={() => setMenuOpen(false)}>
+          <div className={s.mobileMenuInner} onClick={(e) => e.stopPropagation()}>
+            <button className={s.mobileClose} onClick={() => setMenuOpen(false)}>✕</button>
+            <nav style={{ display: "flex", flexDirection: "column", gap: 8, width: "100%" }}>
+              <a href="#servicios" className={s.mobileLink} onClick={() => setMenuOpen(false)}>Servicios</a>
+              <a href="/vivian" className={s.mobileLink} onClick={() => setMenuOpen(false)}>VIVIAN IA</a>
+              <a href="#como" className={s.mobileLink} onClick={() => setMenuOpen(false)}>¿Cómo funciona?</a>
+              <a href="#contacto" className={s.mobileLink} onClick={() => setMenuOpen(false)}>Contacto</a>
+              <div style={{ height: 1, background: "var(--v5)", margin: "8px 0" }} />
+              {sesionActiva ? (
+                <>
+                  <a href="/dashboard" className={s.mobileLinkBtn} onClick={() => setMenuOpen(false)}>Mi dashboard</a>
+                  <a href="/vivian" className={s.mobileLinkPrimary} onClick={() => setMenuOpen(false)}>Hablar con VIVIAN →</a>
+                </>
+              ) : (
+                <>
+                  <a href="/login" className={s.mobileLinkBtn} onClick={() => setMenuOpen(false)}>Ingresar</a>
+                  <a href="/registro" className={s.mobileLinkPrimary} onClick={() => setMenuOpen(false)}>Comenzar gratis →</a>
+                </>
+              )}
+            </nav>
+          </div>
+        </div>
+      )}
 
       {/* HERO */}
       <section className={s.hero}>
@@ -557,7 +594,7 @@ export default function Home() {
               </svg>
               <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 22, fontWeight: 700, color: "white", marginLeft: 8 }}>LongViv<span style={{ color: "#C9973A" }}>IA</span></div>
             </a>
-            <p className={s.footerDesc}>Plataforma digital gratuita de salud, bienestar y experiencias para personas en su prime en Chile. Financiada por publicidad y alianzas — nunca por tus datos.</p>
+            <p className={s.footerDesc}>Plataforma digital gratuita de salud, bienestar y experiencias para personas en su prime en Chile.</p>
             <div className={s.footerPill}>🆓 100% gratuito para siempre</div>
           </div>
           <div className={s.footerCol}>
@@ -569,7 +606,12 @@ export default function Home() {
           <div className={s.footerCol}>
             <h4>Empresa</h4>
             <ul className={s.footerLinks}>
-              {["Quiénes somos", "Proveedores", "Anunciantes", "Trabaja aquí"].map(l => <li key={l}><a href="#">{l}</a></li>)}
+              {[
+                { label: "Quiénes somos", href: "#" },
+                { label: "Proveedores", href: "mailto:hola@longvivia.cl" },
+                { label: "Anunciantes", href: "mailto:hola@longvivia.cl" },
+                { label: "Trabaja aquí", href: "/trabaja" },
+              ].map(l => <li key={l.label}><a href={l.href}>{l.label}</a></li>)}
             </ul>
           </div>
           <div className={s.footerCol}>
