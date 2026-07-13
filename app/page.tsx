@@ -192,7 +192,7 @@ export default function Home() {
     <>
       {/* A11Y BAR — discreta, solo texto */}
       <div className={s.a11yBar}>
-        <span>¿Necesitas ayuda? <a href="https://wa.me/14155238886?text=Hola%2C%20quiero%20saber%20m%C3%A1s%20de%20LongVivIA" target="_blank" rel="noopener noreferrer" style={{ color: "var(--v2)", fontWeight: 600, textDecoration: "none" }}>Escríbenos por WhatsApp</a></span>
+        <span>¿Necesitas ayuda? <a href="mailto:hola@longvivia.cl" style={{ color: "var(--v2)", fontWeight: 600, textDecoration: "none" }}>hola@longvivia.cl</a></span>
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
           <span style={{ fontSize: 13, color: "var(--gris)", marginRight: 4 }}>Tamaño de texto:</span>
           <button className={s.a11yBtn} onClick={() => {
@@ -409,7 +409,7 @@ export default function Home() {
         <div className={s.secLabel} style={{ marginBottom: 16 }}>Todo en un lugar</div>
         <h2 className={s.secTitle} style={{ color: "white", marginBottom: 16 }}>Servicios hechos<br /><em style={{ color: "var(--v4)" }}>para tu energía</em></h2>
         <p style={{ fontSize: 18, color: "rgba(255,255,255,.65)", fontWeight: 400, lineHeight: 1.75, maxWidth: 520, marginBottom: 64 }}>
-          Accede a todo de forma simple. Si necesitas ayuda, VIVIAN te guía o escríbenos por WhatsApp.
+          Accede a todo de forma simple. Si necesitas ayuda, VIVIAN te guía o escríbenos a hola@longvivia.cl.
         </p>
         <div className={s.servicesGrid}>
           {[
@@ -532,7 +532,7 @@ export default function Home() {
           <a href="/registro" className={s.btnGold}>Comenzar gratis →</a>
           <a href="/login" className={s.btnGoldOutline}>Ya tengo cuenta →</a>
         </div>
-        <p className={s.ctaNote}>Sin tarjeta de crédito. Sin letra chica. ¿Dudas? <a href="https://wa.me/14155238886?text=Hola%2C%20quiero%20saber%20m%C3%A1s%20de%20LongVivIA" target="_blank" rel="noopener noreferrer" style={{ color: "var(--v4)", textDecoration: "none", fontWeight: 600 }}>Escríbenos por WhatsApp</a></p>
+        <p className={s.ctaNote}>Sin tarjeta de crédito. Sin letra chica. ¿Dudas? <a href="mailto:hola@longvivia.cl" style={{ color: "var(--v4)", textDecoration: "none", fontWeight: 600 }}>hola@longvivia.cl</a></p>
       </section>
 
       {/* FOOTER */}
@@ -582,8 +582,7 @@ export default function Home() {
         <div className={s.footerBottom}>
           <span>© 2026 LongViva SpA · Santiago, Chile</span>
           <div className={s.footerContact}>
-            <a href="https://wa.me/14155238886?text=Hola%2C%20quiero%20saber%20m%C3%A1s%20de%20LongVivIA" target="_blank" rel="noopener noreferrer" style={{ color: "inherit", textDecoration: "none" }}>💬 WhatsApp</a>
-            {" · "}hola@longvivia.cl
+            <a href="mailto:hola@longvivia.cl" style={{ color: "inherit", textDecoration: "none" }}>✉️ hola@longvivia.cl</a>
           </div>
         </div>
       </footer>
