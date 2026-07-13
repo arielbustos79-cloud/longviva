@@ -575,7 +575,12 @@ export default function Home() {
           <div className={s.footerCol}>
             <h4>Ayuda</h4>
             <ul className={s.footerLinks}>
-              {["Centro de ayuda", "Términos", "Privacidad", "Accesibilidad"].map(l => <li key={l}><a href="#">{l}</a></li>)}
+              {[
+                { label: "Centro de ayuda", href: "mailto:hola@longvivia.cl" },
+                { label: "Términos", href: "/terminos" },
+                { label: "Privacidad", href: "/privacidad" },
+                { label: "Accesibilidad", href: "mailto:hola@longvivia.cl" },
+              ].map(l => <li key={l.label}><a href={l.href}>{l.label}</a></li>)}
             </ul>
           </div>
         </div>
