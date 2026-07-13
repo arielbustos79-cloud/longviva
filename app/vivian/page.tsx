@@ -29,6 +29,7 @@ export default function VivianPage() {
   const [nombre, setNombre] = useState("");
   const [lupaOpen, setLupaOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [historialOpen, setHistorialOpen] = useState(false);
   const [escuchando, setEscuchando] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
@@ -165,10 +166,25 @@ export default function VivianPage() {
             Hola, {nombre}
           </div>
         )}
-        <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 16 }}>
+        <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 10 }}>
+          {/* Historial */}
+          <button
+            onClick={() => { setHistorialOpen(!historialOpen); setLupaOpen(false); }}
+            title="Ver historial de conversaciones"
+            style={{
+              background: historialOpen ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.1)",
+              border: "1px solid rgba(255,255,255,0.2)",
+              color: "white", borderRadius: "50%",
+              width: 36, height: 36, cursor: "pointer",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: "1rem", transition: "background .2s",
+            }}
+          >
+            🕐
+          </button>
           {/* Lupa */}
           <button
-            onClick={() => setLupaOpen(!lupaOpen)}
+            onClick={() => { setLupaOpen(!lupaOpen); setHistorialOpen(false); }}
             title="Buscar en historial"
             style={{
               background: lupaOpen ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.1)",
@@ -182,10 +198,59 @@ export default function VivianPage() {
             🔍
           </button>
           <a href={userId ? "/dashboard" : "/"} style={{ color: "rgba(255,255,255,0.6)", textDecoration: "none", fontSize: "0.9rem" }}>
-            {userId ? "← Dashboard" : "← Inicio"}
+            {userId ? "← Mi panel" : "← Inicio"}
           </a>
         </div>
       </div>
+
+      {/* Panel de historial */}
+      {historialOpen && (
+        <div style={{
+          background: "white", borderBottom: "2px solid var(--v5)",
+          padding: "16px 24px", maxWidth: 700, width: "100%", margin: "0 auto",
+          boxShadow: "0 4px 16px rgba(27,94,59,.08)",
+        }}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: "var(--v3)", marginBottom: 12, textTransform: "uppercase", letterSpacing: 0.8 }}>
+            Conversaciones anteriores
+          </div>
+          {hiddenHistory.length === 0 ? (
+            <p style={{ fontSize: 14, color: "var(--gris)", padding: "4px 0" }}>Aún no tienes conversaciones guardadas.</p>
+          ) : (
+            <div style={{ maxHeight: 300, overflowY: "auto", display: "flex", flexDirection: "column", gap: 6 }}>
+              {(() => {
+                // Agrupar por fecha y mostrar primer mensaje de cada grupo
+                const grupos: { fecha: string; mensajes: Message[] }[] = [];
+                let fechaActual = "";
+                hiddenHistory.forEach((m) => {
+                  const fecha = (m as Message & { created_at?: string }).created_at
+                    ? new Date((m as Message & { created_at?: string }).created_at!).toLocaleDateString("es-CL", { weekday: "long", day: "numeric", month: "long" })
+                    : "";
+                  if (fecha !== fechaActual) {
+                    fechaActual = fecha;
+                    grupos.push({ fecha, mensajes: [m] });
+                  } else {
+                    grupos[grupos.length - 1].mensajes.push(m);
+                  }
+                });
+                return grupos.map((g, i) => (
+                  <div key={i} style={{ borderRadius: 12, overflow: "hidden", border: "1px solid var(--v5)" }}>
+                    {g.fecha && (
+                      <div style={{ background: "var(--v6)", padding: "6px 14px", fontSize: 12, fontWeight: 700, color: "var(--v3)", letterSpacing: 0.5 }}>
+                        {g.fecha}
+                      </div>
+                    )}
+                    {g.mensajes.filter(m => m.role === "user").slice(0, 2).map((m, j) => (
+                      <div key={j} style={{ padding: "8px 14px", fontSize: 14, color: "var(--n2)", lineHeight: 1.5, borderTop: j > 0 ? "1px solid var(--v5)" : undefined }}>
+                        {m.content.length > 80 ? m.content.slice(0, 80) + "…" : m.content}
+                      </div>
+                    ))}
+                  </div>
+                ));
+              })()}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Panel de búsqueda */}
       {lupaOpen && (

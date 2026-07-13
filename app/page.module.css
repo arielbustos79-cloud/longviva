@@ -35,6 +35,7 @@
 .navScrolled {
   box-shadow:0 4px 28px rgba(27,94,59,.14);
   border-bottom-color:rgba(27,94,59,.18);
+  margin-top:0;
 }
 .navLinks { display:flex;gap:36px;list-style:none;align-items:center; }
 .navLinks a { text-decoration:none;color:var(--n2);font-size:17px;font-weight:500;transition:color .2s;padding:4px 0; }

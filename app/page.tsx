@@ -246,7 +246,7 @@ export default function Home() {
           <li><a href="#contacto">Contacto</a></li>
           {sesionActiva ? (
             <>
-              <li><a href="/dashboard" className={s.btnNavOutline}>Mi dashboard</a></li>
+              <li><a href="/dashboard" className={s.btnNavOutline}>Mi panel</a></li>
               <li><a href="/vivian" className={s.btnNav}>Hablar con VIVIAN →</a></li>
             </>
           ) : (
@@ -281,7 +281,7 @@ export default function Home() {
               <div style={{ height: 1, background: "var(--v5)", margin: "8px 0" }} />
               {sesionActiva ? (
                 <>
-                  <a href="/dashboard" className={s.mobileLinkBtn} onClick={() => setMenuOpen(false)}>Mi dashboard</a>
+                  <a href="/dashboard" className={s.mobileLinkBtn} onClick={() => setMenuOpen(false)}>Mi panel</a>
                   <a href="/vivian" className={s.mobileLinkPrimary} onClick={() => setMenuOpen(false)}>Hablar con VIVIAN →</a>
                 </>
               ) : (
@@ -493,7 +493,7 @@ export default function Home() {
                 num: "02",
                 icon: "🌿",
                 title: "Entra a tu plataforma",
-                desc: "Haz clic en el enlace y accede directo a tu dashboard personal.",
+                desc: "Haz clic en el enlace y accede directo a tu panel personal.",
               },
               {
                 num: "03",
