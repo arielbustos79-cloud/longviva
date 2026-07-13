@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, Fragment } from "react";
 import s from "./page.module.css";
+import VivianIcon from "@/components/VivianIcon";
 
 /* ─── useCountUp ──────────────────────────────────────────────── */
 function useCountUp(end: number, ms = 1800, go = false) {
@@ -361,7 +362,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            <div className={`${s.floatCard} ${s.left}`}><div className={s.fcIco} style={{ background: "var(--v6)" }}>🤖</div>VIVIAN IA</div>
+            <div className={`${s.floatCard} ${s.left}`}><div className={s.fcIco} style={{ background: "var(--v6)", padding: 2 }}><VivianIcon size={28} /></div>VIVIAN IA</div>
             <div className={`${s.floatCard} ${s.right}`}><div className={s.fcIco} style={{ background: "var(--d4)" }}>🆓</div>Siempre gratis</div>
           </div>
         </div>
@@ -389,7 +390,7 @@ export default function Home() {
               { icon: "🏥", title: "Telemedicina gratis", desc: "Consultas con especialistas sin costo ni filas" },
               { icon: "🧘", title: "Clases ilimitadas", desc: "Yoga, pilates y funcional adaptado a ti" },
               { icon: "✈️", title: "Tours a tu ritmo", desc: "Grupos pequeños, precios exclusivos" },
-              { icon: "🤖", title: "VIVIAN 24/7", desc: "Tu IA personal de salud, bienestar y ocio" },
+              { icon: <VivianIcon size={28} />, title: "VIVIAN 24/7", desc: "Tu IA personal de salud, bienestar y ocio" },
             ].map((c, i) => (
               <div key={c.title} className={`${s.primeCard} ${s.fadeIn}`} style={{ transitionDelay: `${i * 110}ms` }}>
                 <div className={s.pcIcon}>{c.icon}</div>
@@ -450,7 +451,7 @@ export default function Home() {
         </p>
         <div className={s.servicesGrid}>
           {[
-            { icon: "🤖", title: "VIVIAN IA", desc: "Tu asistente personal de salud, bienestar y ocio. Disponible 24/7, te conoce y te acompaña.", link: "Hablar con VIVIAN →", href: "/vivian", activo: true },
+            { icon: <VivianIcon size={26} />, title: "VIVIAN IA", desc: "Tu asistente personal de salud, bienestar y ocio. Disponible 24/7, te conoce y te acompaña.", link: "Hablar con VIVIAN →", href: "/vivian", activo: true },
             { icon: "💊", title: "Gestión de salud", desc: "Recordatorios de medicamentos, historial de citas y seguimiento de indicadores.", link: "Próximamente", href: "#", activo: false },
             { icon: "🏥", title: "Telemedicina", desc: "Consultas online con médicos y especialistas. Sin esperas. Compatible con Fonasa e Isapres.", link: "Próximamente", href: "#", activo: false },
             { icon: "🧘", title: "Bienestar activo", desc: "Clases de yoga, pilates y funcional. En vivo y grabadas. Instructores especializados.", link: "Próximamente", href: "#", activo: false },
@@ -607,7 +608,7 @@ export default function Home() {
             <h4>Empresa</h4>
             <ul className={s.footerLinks}>
               {[
-                { label: "Quiénes somos", href: "#" },
+                { label: "Quiénes somos", href: "/quienes-somos" },
                 { label: "Proveedores", href: "mailto:hola@longvivia.cl" },
                 { label: "Anunciantes", href: "mailto:hola@longvivia.cl" },
                 { label: "Trabaja aquí", href: "/trabaja" },
