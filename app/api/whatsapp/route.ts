@@ -9,21 +9,21 @@ async function verificarFirmaTwilio(request: Request): Promise<{ body: URLSearch
   const body = await request.text();
   const params = new URLSearchParams(body);
 
-  // En desarrollo omitimos verificación; en producción Twilio firma el request
   if (process.env.NODE_ENV !== "production") {
     return { body: params, ok: true };
   }
 
   const twilioSignature = request.headers.get("X-Twilio-Signature") || "";
-  const url = `${process.env.NEXT_PUBLIC_APP_URL}/api/whatsapp`;
 
-  // Verificación manual HMAC-SHA1
+  // Usar la URL real del request para que coincida exactamente con lo que Twilio firmó
+  const requestUrl = request.url;
+
   const crypto = await import("crypto");
   const authToken = process.env.TWILIO_AUTH_TOKEN || "";
 
   const sortedParams = Array.from(params.entries())
     .sort(([a], [b]) => a.localeCompare(b))
-    .reduce((acc, [k, v]) => acc + k + v, url);
+    .reduce((acc, [k, v]) => acc + k + v, requestUrl);
 
   const expected = crypto
     .createHmac("sha1", authToken)
