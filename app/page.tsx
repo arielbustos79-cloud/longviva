@@ -4,6 +4,94 @@ import { useEffect, useRef, useState, Fragment } from "react";
 import s from "./page.module.css";
 import VivianIcon from "@/components/VivianIcon";
 
+/* ─── Iconos SVG de marca ─────────────────────────────────────── */
+const IC = {
+  salud: (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+    </svg>
+  ),
+  bienestar: (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="8" r="3"/>
+      <path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/>
+      <path d="M3 14c0 0 2-1 4-1s3 1 5 1 3-1 5-1 4 1 4 1"/>
+    </svg>
+  ),
+  tours: (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <polygon points="16.24,7.76 14.12,14.12 7.76,16.24 9.88,9.88 16.24,7.76"/>
+    </svg>
+  ),
+  chat: (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+    </svg>
+  ),
+  mic: (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="9" y="2" width="6" height="11" rx="3"/>
+      <path d="M19 10a7 7 0 01-14 0"/>
+      <line x1="12" y1="19" x2="12" y2="22"/>
+      <line x1="8" y1="22" x2="16" y2="22"/>
+    </svg>
+  ),
+  pill: (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M10.5 20H4a2 2 0 01-2-2V6a2 2 0 012-2h16a2 2 0 012 2v7.5"/>
+      <circle cx="17" cy="17" r="5"/>
+      <path d="M14 17h6"/>
+    </svg>
+  ),
+  nutricion: (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M11 2C6.5 2 3 6 3 11c0 5.25 7.5 12 9 12s9-6.75 9-12c0-5-3.5-9-9-9z"/>
+      <path d="M11 7v10M7 11h8"/>
+    </svg>
+  ),
+  mail: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="4" width="20" height="16" rx="2"/>
+      <path d="M2 7l10 7 10-7"/>
+    </svg>
+  ),
+  registro: (
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="4" width="20" height="16" rx="2"/>
+      <path d="M2 7l10 7 10-7"/>
+    </svg>
+  ),
+  hoja: (
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M2 22c0 0 4-2 8-6s7-10 7-10-6 3-10 7S2 22 2 22z"/>
+      <path d="M2 22l8-8"/>
+    </svg>
+  ),
+  estrella: (
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
+    </svg>
+  ),
+  gratis: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="20 6 9 17 4 12"/>
+    </svg>
+  ),
+};
+
+/* ─── Avatares iniciales para testimonios ────────────────────── */
+function Inicial({ letra, color = "#1B5E3B" }: { letra: string; color?: string }) {
+  return (
+    <div style={{
+      width: 44, height: 44, borderRadius: "50%",
+      background: color, display: "flex", alignItems: "center", justifyContent: "center",
+      fontFamily: "Cormorant Garamond, serif", fontSize: 20, fontWeight: 700, color: "white",
+      flexShrink: 0,
+    }}>{letra}</div>
+  );
+}
+
 /* ─── useCountUp ──────────────────────────────────────────────── */
 function useCountUp(end: number, ms = 1800, go = false) {
   const [v, setV] = useState(0);
@@ -361,13 +449,13 @@ export default function Home() {
                 <PhoneChat />
                 <div className={s.phoneChips}>
                   <div className={s.chip}>✓ Ver agenda</div>
-                  <div className={s.chip}>🏥 Mi salud</div>
-                  <div className={s.chip}>✈️ Tours</div>
+                  <div className={s.chip} style={{ display: "flex", alignItems: "center", gap: 4 }}><span style={{ color: "var(--v2)", display: "flex" }}>{IC.salud}</span> Mi salud</div>
+                  <div className={s.chip} style={{ display: "flex", alignItems: "center", gap: 4 }}><span style={{ color: "var(--v2)", display: "flex" }}>{IC.tours}</span> Tours</div>
                 </div>
               </div>
             </div>
             <div className={`${s.floatCard} ${s.left}`}><div className={s.fcIco} style={{ background: "var(--v6)", padding: 2 }}><VivianIcon size={28} /></div>VIVIAN IA</div>
-            <div className={`${s.floatCard} ${s.right}`}><div className={s.fcIco} style={{ background: "var(--d4)" }}>🆓</div>Siempre gratis</div>
+            <div className={`${s.floatCard} ${s.right}`}><div className={s.fcIco} style={{ background: "var(--d4)", color: "var(--d1)", display:"flex", alignItems:"center", justifyContent:"center" }}>{IC.gratis}</div>Siempre gratis</div>
           </div>
         </div>
       </section>
@@ -391,13 +479,13 @@ export default function Home() {
         <div className={s.primeRight}>
           <div className={s.primeCards}>
             {[
-              { icon: "🏥", title: "Telemedicina gratis", desc: "Consultas con especialistas sin costo ni filas" },
-              { icon: "🧘", title: "Clases ilimitadas", desc: "Yoga, pilates y funcional adaptado a ti" },
-              { icon: "✈️", title: "Tours a tu ritmo", desc: "Grupos pequeños, precios exclusivos" },
+              { icon: IC.salud, title: "Telemedicina gratis", desc: "Consultas con especialistas sin costo ni filas" },
+              { icon: IC.bienestar, title: "Clases ilimitadas", desc: "Yoga, pilates y funcional adaptado a ti" },
+              { icon: IC.tours, title: "Tours a tu ritmo", desc: "Grupos pequeños, precios exclusivos" },
               { icon: <VivianIcon size={28} />, title: "VIVIAN 24/7", desc: "Tu IA personal de salud, bienestar y ocio" },
             ].map((c, i) => (
               <div key={c.title} className={`${s.primeCard} ${s.fadeIn}`} style={{ transitionDelay: `${i * 110}ms` }}>
-                <div className={s.pcIcon}>{c.icon}</div>
+                <div className={s.pcIcon} style={{ color: "var(--v2)" }}>{c.icon}</div>
                 <div className={s.pcInfo}><strong>{c.title}</strong><span>{c.desc}</span></div>
               </div>
             ))}
@@ -413,13 +501,13 @@ export default function Home() {
           <p className={`${s.secSub} ${s.fadeIn}`}>VIVIAN no es un chatbot frío. Es una compañía cálida, paciente y siempre disponible — que te conoce, recuerda lo que importa y actúa cuando lo necesitas.</p>
           <div className={s.vivianFeats}>
             {[
-              { icon: "🏥", title: "Asistente de salud activa", desc: "Recuerda medicamentos, agenda citas y responde preguntas médicas con claridad." },
-              { icon: "💬", title: "Compañía real, 24/7", desc: "Siempre disponible para conversar, escucharte y acompañarte — sin prisa ni tecnicismos." },
-              { icon: "✈️", title: "Guía de experiencias", desc: "Recomienda tours, clases y actividades según tus gustos, condición y presupuesto." },
-              { icon: "🎤", title: "Voz o texto, tú decides", desc: "Puedes hablarle o escribirle. VIVIAN entiende ambos con la misma calidez." },
+              { icon: IC.salud, title: "Asistente de salud activa", desc: "Recuerda medicamentos, agenda citas y responde preguntas médicas con claridad." },
+              { icon: IC.chat, title: "Compañía real, 24/7", desc: "Siempre disponible para conversar, escucharte y acompañarte — sin prisa ni tecnicismos." },
+              { icon: IC.tours, title: "Guía de experiencias", desc: "Recomienda tours, clases y actividades según tus gustos, condición y presupuesto." },
+              { icon: IC.mic, title: "Voz o texto, tú decides", desc: "Puedes hablarle o escribirle. VIVIAN entiende ambos con la misma calidez." },
             ].map((f, i) => (
               <div key={f.title} className={`${s.vf} ${s.fadeIn}`} style={{ transitionDelay: `${i * 100}ms` }}>
-                <div className={s.vfIco}>{f.icon}</div>
+                <div className={s.vfIco} style={{ color: "var(--v2)" }}>{f.icon}</div>
                 <div className={s.vfText}><strong>{f.title}</strong><span>{f.desc}</span></div>
               </div>
             ))}
@@ -456,11 +544,11 @@ export default function Home() {
         <div className={s.servicesGrid}>
           {[
             { icon: <VivianIcon size={26} />, title: "VIVIAN IA", desc: "Tu asistente personal de salud, bienestar y ocio. Disponible 24/7, te conoce y te acompaña.", link: "Hablar con VIVIAN →", href: "/vivian", activo: true },
-            { icon: "💊", title: "Gestión de salud", desc: "Recordatorios de medicamentos, historial de citas y seguimiento de indicadores.", link: "Próximamente", href: "#", activo: false },
-            { icon: "🏥", title: "Telemedicina", desc: "Consultas online con médicos y especialistas. Sin esperas. Compatible con Fonasa e Isapres.", link: "Próximamente", href: "#", activo: false },
-            { icon: "🧘", title: "Bienestar activo", desc: "Clases de yoga, pilates y funcional. En vivo y grabadas. Instructores especializados.", link: "Próximamente", href: "#", activo: false },
-            { icon: "✈️", title: "Ocio y experiencias", desc: "Tours con grupos pequeños, tu ritmo y precios exclusivos. Natura, gastronomía, cultura.", link: "Próximamente", href: "#", activo: false },
-            { icon: "🍽️", title: "Nutrición", desc: "Planes personalizados con nutricionistas. Seguimiento y recetas pensadas para ti.", link: "Próximamente", href: "#", activo: false },
+            { icon: IC.pill, title: "Gestión de salud", desc: "Recordatorios de medicamentos, historial de citas y seguimiento de indicadores.", link: "Próximamente", href: "#", activo: false },
+            { icon: IC.salud, title: "Telemedicina", desc: "Consultas online con médicos y especialistas. Sin esperas. Compatible con Fonasa e Isapres.", link: "Próximamente", href: "#", activo: false },
+            { icon: IC.bienestar, title: "Bienestar activo", desc: "Clases de yoga, pilates y funcional. En vivo y grabadas. Instructores especializados.", link: "Próximamente", href: "#", activo: false },
+            { icon: IC.tours, title: "Ocio y experiencias", desc: "Tours con grupos pequeños, tu ritmo y precios exclusivos. Natura, gastronomía, cultura.", link: "Próximamente", href: "#", activo: false },
+            { icon: IC.nutricion, title: "Nutrición", desc: "Planes personalizados con nutricionistas. Seguimiento y recetas pensadas para ti.", link: "Próximamente", href: "#", activo: false },
           ].map((srv, i) => (
             <div key={srv.title} className={`${s.srvCard} ${s.fadeIn}`} style={{ transitionDelay: `${i * 80}ms`, opacity: srv.activo ? 1 : 0.75 }}>
               <div className={s.srvIcon}>{srv.icon}</div>
@@ -487,19 +575,19 @@ export default function Home() {
             {[
               {
                 num: "01",
-                icon: "✉️",
+                icon: IC.registro,
                 title: "Regístrate gratis",
                 desc: "Solo tu nombre y correo. Sin contraseña — te llegará un enlace mágico al instante.",
               },
               {
                 num: "02",
-                icon: "🌿",
+                icon: IC.hoja,
                 title: "Entra a tu plataforma",
                 desc: "Haz clic en el enlace y accede directo a tu panel personal.",
               },
               {
                 num: "03",
-                icon: "✨",
+                icon: IC.estrella,
                 title: "Vive tu prime",
                 desc: "Habla con VIVIAN, agenda clases, consultas médicas y descubre experiencias hechas para ti.",
               },
@@ -518,7 +606,7 @@ export default function Home() {
                 }}>
                   {paso.num}
                 </div>
-                <div style={{ fontSize: 36, marginBottom: 16 }}>{paso.icon}</div>
+                <div style={{ marginBottom: 16, color: "var(--v2)" }}>{paso.icon}</div>
                 <h3 style={{
                   fontFamily: "Cormorant Garamond, serif",
                   fontSize: 24, fontWeight: 700,
@@ -548,16 +636,16 @@ export default function Home() {
         </div>
         <div className={s.testGrid}>
           {[
-            { text: "VIVIAN me recuerda mis medicamentos cada mañana y me ayudó a encontrar un médico online en minutos. Y todo gratis. No lo podía creer.", name: "María Teresa R.", age: "68 años · Santiago", ava: "👩" },
-            { text: "Le pregunté a VIVIAN qué hacer el fin de semana y me recomendó un tour perfecto. Fui al Cajón con un grupo encantador y llegué con más energía que nunca.", name: "Jorge A.", age: "72 años · Viña del Mar", ava: "👨" },
-            { text: "Pensé que la tecnología no era para mí. Pero VIVIAN es tan clara y paciente que en una semana ya reservaba mis clases sola y me sentía dueña de mi tiempo.", name: "Carmen L.", age: "65 años · Concepción", ava: "👩" },
+            { text: "VIVIAN me recuerda mis medicamentos cada mañana y me ayudó a encontrar un médico online en minutos. Y todo gratis. No lo podía creer.", name: "María Teresa R.", age: "68 años · Santiago", inicial: "M", color: "#1B5E3B" },
+            { text: "Le pregunté a VIVIAN qué hacer el fin de semana y me recomendó un tour perfecto. Fui al Cajón con un grupo encantador y llegué con más energía que nunca.", name: "Jorge A.", age: "72 años · Viña del Mar", inicial: "J", color: "#2D8A5F" },
+            { text: "Pensé que la tecnología no era para mí. Pero VIVIAN es tan clara y paciente que en una semana ya reservaba mis clases sola y me sentía dueña de mi tiempo.", name: "Carmen L.", age: "65 años · Concepción", inicial: "C", color: "#8B6220" },
           ].map((t, i) => (
             <div key={t.name} className={`${s.testCard} ${s.fadeIn}`} style={{ transitionDelay: `${i * 120}ms` }}>
               <div className={s.testStars}>★★★★★</div>
               <div className={s.testQ}>&ldquo;</div>
               <p className={s.testText}>{t.text}</p>
               <div className={s.testAuthor}>
-                <div className={s.testAva}>{t.ava}</div>
+                <Inicial letra={t.inicial} color={t.color} />
                 <div><div className={s.testName}>{t.name}</div><div className={s.testAge}>{t.age}</div></div>
               </div>
             </div>
@@ -600,7 +688,7 @@ export default function Home() {
               <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 22, fontWeight: 700, color: "white", marginLeft: 8 }}>LongViv<span style={{ color: "#C9973A" }}>IA</span></div>
             </a>
             <p className={s.footerDesc}>Plataforma digital gratuita de salud, bienestar y experiencias para personas en su prime en Chile.</p>
-            <div className={s.footerPill}>🆓 100% gratuito para siempre</div>
+            <div className={s.footerPill} style={{ display:"flex", alignItems:"center", gap:6 }}>{IC.gratis} 100% gratuito para siempre</div>
           </div>
           <div className={s.footerCol}>
             <h4>Servicios</h4>
@@ -640,7 +728,7 @@ export default function Home() {
         <div className={s.footerBottom}>
           <span>© 2026 LongViva SpA · Santiago, Chile</span>
           <div className={s.footerContact}>
-            <a href="mailto:hola@longvivia.cl" style={{ color: "inherit", textDecoration: "none" }}>✉️ hola@longvivia.cl</a>
+            <a href="mailto:hola@longvivia.cl" style={{ color: "inherit", textDecoration: "none", display:"flex", alignItems:"center", gap:6 }}>{IC.mail} hola@longvivia.cl</a>
           </div>
         </div>
       </footer>
