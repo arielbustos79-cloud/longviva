@@ -154,7 +154,6 @@ export default function MemoriaPage() {
                   style={{
                     aspectRatio: "1",
                     borderRadius: 18,
-                    border: "none",
                     cursor: visible ? "default" : "pointer",
                     background: encontrada
                       ? "var(--v6)"

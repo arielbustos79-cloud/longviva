@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase-browser";
 
-type TipoEvento = "registro_completado" | "vivian_mensaje" | "articulo_leido";
+type TipoEvento = "registro_completado" | "vivian_mensaje" | "articulo_leido" | "juego_completado";
 
 export async function logEvento(
   tipo: TipoEvento,
