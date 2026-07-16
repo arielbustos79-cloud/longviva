@@ -485,7 +485,7 @@ export default function Home() {
               { icon: <VivianIcon size={28} />, title: "VIVIAN 24/7", desc: "Tu IA personal de salud, bienestar y ocio" },
             ].map((c, i) => (
               <div key={c.title} className={`${s.primeCard} ${s.fadeIn}`} style={{ transitionDelay: `${i * 110}ms` }}>
-                <div className={s.pcIcon} style={{ color: "var(--v2)" }}>{c.icon}</div>
+                <div className={s.pcIcon} style={{ color: "rgba(255,255,255,.9)" }}>{c.icon}</div>
                 <div className={s.pcInfo}><strong>{c.title}</strong><span>{c.desc}</span></div>
               </div>
             ))}
@@ -551,7 +551,7 @@ export default function Home() {
             { icon: IC.nutricion, title: "Nutrición", desc: "Planes personalizados con nutricionistas. Seguimiento y recetas pensadas para ti.", link: "Próximamente", href: "#", activo: false },
           ].map((srv, i) => (
             <div key={srv.title} className={`${s.srvCard} ${s.fadeIn}`} style={{ transitionDelay: `${i * 80}ms`, opacity: srv.activo ? 1 : 0.75 }}>
-              <div className={s.srvIcon}>{srv.icon}</div>
+              <div className={s.srvIcon} style={{ color: "rgba(255,255,255,.85)" }}>{srv.icon}</div>
               <h3>{srv.title}{!srv.activo && <span style={{ fontSize: "11px", background: "var(--d3)", color: "var(--d1)", borderRadius: "20px", padding: "2px 10px", marginLeft: "8px", fontWeight: 600 }}>Próximamente</span>}</h3>
               <p>{srv.desc}</p>
               <a href={srv.href} className={s.srvLink} style={{ pointerEvents: srv.activo ? "auto" : "none", opacity: srv.activo ? 1 : 0.5 }}>{srv.link}</a>
@@ -642,7 +642,6 @@ export default function Home() {
           ].map((t, i) => (
             <div key={t.name} className={`${s.testCard} ${s.fadeIn}`} style={{ transitionDelay: `${i * 120}ms` }}>
               <div className={s.testStars}>★★★★★</div>
-              <div className={s.testQ}>&ldquo;</div>
               <p className={s.testText}>{t.text}</p>
               <div className={s.testAuthor}>
                 <Inicial letra={t.inicial} color={t.color} />
