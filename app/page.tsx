@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, Fragment } from "react";
 import s from "./page.module.css";
 import VivianIcon from "@/components/VivianIcon";
+import OliveBranch from "@/components/OliveBranch";
 
 /* ─── Iconos SVG de marca ─────────────────────────────────────── */
 const IC = {
@@ -79,6 +80,21 @@ const IC = {
     </svg>
   ),
 };
+
+/* ─── Separador de sección con rama de olivo ─────────────────── */
+function OliveDivider({ light = false }: { light?: boolean }) {
+  const lineColor = light ? "rgba(255,255,255,.15)" : "rgba(27,94,59,.12)";
+  return (
+    <div style={{
+      display: "flex", alignItems: "center", justifyContent: "center",
+      gap: 20, padding: "0 80px", margin: "0 auto", maxWidth: 900,
+    }}>
+      <div style={{ flex: 1, height: 1, background: lineColor }} />
+      <OliveBranch size={28} variant={light ? "light" : "dark"} />
+      <div style={{ flex: 1, height: 1, background: lineColor }} />
+    </div>
+  );
+}
 
 /* ─── Avatares iniciales para testimonios ────────────────────── */
 function Inicial({ letra, color = "#1B5E3B" }: { letra: string; color?: string }) {
@@ -493,6 +509,8 @@ export default function Home() {
         </div>
       </section>
 
+      <OliveDivider />
+
       {/* VIVIAN SECTION */}
       <section className={s.vivianSection} id="vivian">
         <div>
@@ -552,8 +570,12 @@ export default function Home() {
         </p>
         <div className={s.servicesGrid}>
           {/* VIVIAN — card destacada, ocupa toda la altura izquierda */}
-          <div className={`${s.srvCardDestacado} ${s.fadeIn}`}>
-            <div className={s.srvIcon} style={{ color: "white", display:"flex", alignItems:"center", justifyContent:"center" }}>
+          <div className={`${s.srvCardDestacado} ${s.fadeIn}`} style={{ position: "relative", overflow: "hidden" }}>
+            {/* Rama decorativa de fondo */}
+            <div style={{ position: "absolute", right: -24, top: -16, opacity: 0.12, pointerEvents: "none" }}>
+              <OliveBranch size={160} variant="light" />
+            </div>
+            <div className={s.srvIcon} style={{ color: "white", display:"flex", alignItems:"center", justifyContent:"center", position: "relative" }}>
               <VivianIcon size={34} />
             </div>
             <h3>VIVIAN IA</h3>
@@ -579,6 +601,7 @@ export default function Home() {
       </section>
 
       {/* CÓMO FUNCIONA */}
+
       <section id="como" style={{ background: "var(--crema)", padding: "96px 24px" }}>
         <div style={{ maxWidth: 860, margin: "0 auto" }}>
           <div className={`${s.secLabel} ${s.fadeIn}`} style={{ color: "var(--v3)", textAlign: "center" }}>Sin complicaciones</div>
@@ -645,6 +668,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <OliveDivider />
 
       {/* TESTIMONIOS */}
       <section className={s.testimonials}>
