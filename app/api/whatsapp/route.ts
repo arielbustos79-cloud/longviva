@@ -110,11 +110,11 @@ export async function POST(request: Request) {
     }
 
     // Evento de analítica — fire and forget, nunca bloquea la respuesta
-    supabase.from("eventos").insert({
+    void supabase.from("eventos").insert({
       tipo: "vivian_mensaje",
       user_id: userId,
       metadata: { canal: "whatsapp" },
-    }).then(() => {}).catch(() => {});
+    });
 
     return twimlResponse(reply);
   } catch (error) {
