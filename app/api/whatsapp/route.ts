@@ -101,23 +101,20 @@ export async function POST(request: Request) {
 
     const reply = response.content[0].type === "text" ? response.content[0].text : "";
 
-    // Guardar mensajes y registrar evento de analítica
-    const inserts: Promise<unknown>[] = [
-      supabase.from("eventos").insert({
-        tipo: "vivian_mensaje",
-        user_id: userId,
-        metadata: { canal: "whatsapp" },
-      }),
-    ];
+    // Guardar historial si hay usuario registrado
     if (userId) {
-      inserts.push(
-        supabase.from("chat_messages").insert([
-          { user_id: userId, role: "user", content: messageBody, canal: "whatsapp" },
-          { user_id: userId, role: "assistant", content: reply, canal: "whatsapp" },
-        ])
-      );
+      await supabase.from("chat_messages").insert([
+        { user_id: userId, role: "user", content: messageBody, canal: "whatsapp" },
+        { user_id: userId, role: "assistant", content: reply, canal: "whatsapp" },
+      ]);
     }
-    await Promise.all(inserts);
+
+    // Evento de analítica — fire and forget, nunca bloquea la respuesta
+    supabase.from("eventos").insert({
+      tipo: "vivian_mensaje",
+      user_id: userId,
+      metadata: { canal: "whatsapp" },
+    }).then(() => {}).catch(() => {});
 
     return twimlResponse(reply);
   } catch (error) {
