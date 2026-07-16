@@ -122,6 +122,11 @@ export default function DashboardPage() {
               activo: true, href: "/vivian", destacado: true,
             },
             {
+              svg: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>,
+              title: "Artículos", desc: "Lecturas para tu prime",
+              activo: true, href: "/articulos", destacado: false,
+            },
+            {
               svg: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>,
               title: "Mi agenda", desc: "Citas y recordatorios",
               activo: false, href: "#", destacado: false,
