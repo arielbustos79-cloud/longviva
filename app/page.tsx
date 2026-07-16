@@ -583,6 +583,21 @@ export default function Home() {
             <a href="/vivian" className={s.srvLink}>Hablar con VIVIAN →</a>
           </div>
 
+          {/* Card activa — Entrena tu mente */}
+          <div className={`${s.srvCard} ${s.fadeIn}`} style={{ transitionDelay: "80ms" }}>
+            <div className={s.srvIcon} style={{ color: "var(--v2)" }}>
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="3" width="9" height="9" rx="2"/>
+                <rect x="13" y="3" width="9" height="9" rx="2"/>
+                <rect x="2" y="13" width="9" height="9" rx="2"/>
+                <rect x="13" y="13" width="9" height="9" rx="2"/>
+              </svg>
+            </div>
+            <h3>Entrena tu mente</h3>
+            <p>Juegos de memoria y sopa de letras para mantener la mente activa. Sin presión, a tu ritmo.</p>
+            <a href="/juegos" className={s.srvLink}>Jugar →</a>
+          </div>
+
           {/* Cards secundarias — Próximamente */}
           {[
             { icon: IC.pill,      title: "Gestión de salud",   desc: "Recordatorios de medicamentos, historial de citas y seguimiento de indicadores." },
