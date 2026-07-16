@@ -209,10 +209,12 @@
 .marqueeWrap {
   background:var(--v2);overflow:hidden;padding:18px 0;
   position:relative;
+  width:100%;
+  box-sizing:border-box;
 }
 .marqueeWrap::before,
 .marqueeWrap::after {
-  content:'';position:absolute;top:0;bottom:0;width:100px;z-index:2;pointer-events:none;
+  content:'';position:absolute;top:0;bottom:0;width:80px;z-index:2;pointer-events:none;
 }
 .marqueeWrap::before { left:0;background:linear-gradient(to right,var(--v2),transparent); }
 .marqueeWrap::after  { right:0;background:linear-gradient(to left,var(--v2),transparent); }
@@ -508,5 +510,6 @@
   .heroProof { gap:24px; }
   .proofNum { font-size:30px; }
   .footerGrid { grid-template-columns:1fr; }
-  .marqueeWrap::before,.marqueeWrap::after { width:32px; }
+  .marqueeWrap::before,.marqueeWrap::after { width:24px; }
+  .marqueeItem { padding:4px 20px;font-size:13px; }
 }
