@@ -243,6 +243,7 @@ export default function Home() {
           <li><a href="#como">¿Cómo funciona?</a></li>
           <li><a href="#servicios">Servicios</a></li>
           <li><a href="/vivian">VIVIAN IA</a></li>
+          <li><a href="/articulos">Artículos</a></li>
           <li><a href="#contacto">Contacto</a></li>
           {sesionActiva ? (
             <>
@@ -277,6 +278,7 @@ export default function Home() {
               <a href="#como" className={s.mobileLink} onClick={() => setMenuOpen(false)}>¿Cómo funciona?</a>
               <a href="#servicios" className={s.mobileLink} onClick={() => setMenuOpen(false)}>Servicios</a>
               <a href="/vivian" className={s.mobileLink} onClick={() => setMenuOpen(false)}>VIVIAN IA</a>
+              <a href="/articulos" className={s.mobileLink} onClick={() => setMenuOpen(false)}>Artículos</a>
               <a href="#contacto" className={s.mobileLink} onClick={() => setMenuOpen(false)}>Contacto</a>
               <div style={{ height: 1, background: "var(--v5)", margin: "8px 0" }} />
               {sesionActiva ? (
@@ -603,7 +605,13 @@ export default function Home() {
           <div className={s.footerCol}>
             <h4>Servicios</h4>
             <ul className={s.footerLinks}>
-              {["Telemedicina", "Bienestar", "Tours", "Nutrición", "VIVIAN IA"].map(l => <li key={l}><a href="#">{l}</a></li>)}
+              {[
+                { label: "VIVIAN IA", href: "/vivian" },
+                { label: "Artículos", href: "/articulos" },
+                { label: "Telemedicina", href: "#" },
+                { label: "Bienestar", href: "#" },
+                { label: "Tours", href: "#" },
+              ].map(l => <li key={l.label}><a href={l.href}>{l.label}</a></li>)}
             </ul>
           </div>
           <div className={s.footerCol}>

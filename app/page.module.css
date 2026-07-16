@@ -473,4 +473,5 @@
   .heroProof { gap:24px; }
   .proofNum { font-size:30px; }
   .footerGrid { grid-template-columns:1fr; }
+  .marqueeWrap::before,.marqueeWrap::after { width:32px; }
 }
