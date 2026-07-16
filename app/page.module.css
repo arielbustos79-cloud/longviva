@@ -330,13 +330,15 @@
   box-shadow:0 4px 20px rgba(27,94,59,.06);transition:transform .3s, box-shadow .3s;
 }
 .testCard:hover { transform:translateY(-5px);box-shadow:0 14px 36px rgba(27,94,59,.12); }
-.testStars { color:var(--d2);font-size:18px;margin-bottom:16px;letter-spacing:2px; }
-.testQ { font-family:'Cormorant Garamond',serif;font-size:72px;color:var(--v4);line-height:.7;margin-bottom:16px;opacity:.45; }
-.testText { font-size:17px;line-height:1.8;color:var(--n2);font-style:italic;font-weight:400;margin-bottom:28px; }
-.testAuthor { display:flex;align-items:center;gap:14px; }
-.testAva { width:48px;height:48px;border-radius:50%;background:var(--v6);border:2px solid var(--v5);display:flex;align-items:center;justify-content:center;font-size:22px; }
-.testName { font-size:16px;font-weight:600;color:var(--n2); }
-.testAge  { font-size:14px;color:var(--gris);margin-top:2px; }
+.testStars { display:flex;align-items:center;gap:8px;margin-bottom:20px; }
+.testText {
+  font-family:'Cormorant Garamond',serif;
+  font-size:21px;line-height:1.75;color:var(--n2);
+  font-style:italic;font-weight:500;margin-bottom:28px;
+}
+.testAuthor { display:flex;align-items:center;gap:14px;padding-top:16px;border-top:1px solid var(--v5); }
+.testName { font-size:15px;font-weight:700;color:var(--n2); }
+.testAge  { font-size:13px;color:var(--gris);margin-top:3px; }
 
 /* ─── CTA FINAL ─────────────────────────────────────────── */
 .ctaFinal { background:var(--n1);padding:110px 80px;text-align:center;position:relative;overflow:hidden; }

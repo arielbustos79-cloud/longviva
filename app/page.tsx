@@ -684,7 +684,10 @@ export default function Home() {
             { text: "Pensé que la tecnología no era para mí. Pero VIVIAN es tan clara y paciente que en una semana ya reservaba mis clases sola y me sentía dueña de mi tiempo.", name: "Carmen L.", age: "65 años · Concepción", inicial: "C", color: "#8B6220" },
           ].map((t, i) => (
             <div key={t.name} className={`${s.testCard} ${s.fadeIn}`} style={{ transitionDelay: `${i * 120}ms` }}>
-              <div className={s.testStars}>★★★★★</div>
+              <div className={s.testStars}>
+                <OliveBranch size={18} variant="dark" />
+                <span style={{ fontSize: 12, fontWeight: 700, letterSpacing: 1, color: "var(--v3)", textTransform: "uppercase" }}>Usuario LongVivIA</span>
+              </div>
               <p className={s.testText}>{t.text}</p>
               <div className={s.testAuthor}>
                 <Inicial letra={t.inicial} color={t.color} />
