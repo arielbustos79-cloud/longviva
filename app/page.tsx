@@ -179,11 +179,11 @@ function PhoneChat() {
 
 /* ─── VivianChat (sección VIVIAN) ─────────────────────────────── */
 const VIVIAN_MSGS = [
-  { bot: true,  node: <>¡Buenos días! ☀️ Recuerda tomar el Enalapril. Tienes médico a las 11 AM.</> },
-  { bot: false, node: <>¿Hay algo bueno para este fin de semana?</> },
-  { bot: true,  node: <>¡Sí! Cajón del Maipo el sábado. <strong>¿Lo reservamos?</strong> 🏔️</> },
-  { bot: false, node: <>Sí, perfecto</> },
-  { bot: true,  node: <>Listo, reservado. 3 personas ya confirmaron. ¡Va a ser increíble! 🌿</> },
+  { bot: true,  node: <>¡Hola! Soy VIVIAN. ¿En qué puedo acompañarte hoy? 🌿</> },
+  { bot: false, node: <>Me cuesta dormir últimamente. ¿Qué me recomiendas?</> },
+  { bot: true,  node: <>Eso pasa mucho. ¿A qué hora sueles irte a dormir y qué tan seguido te despiertas?</> },
+  { bot: false, node: <>Como a las 11, pero me despierto dos o tres veces.</> },
+  { bot: true,  node: <><strong>Entiendo.</strong> Unos minutos de respiración lenta antes de dormir pueden ayudar mucho. ¿Lo probamos juntos? 🌙</> },
 ];
 
 function VivianChat() {
@@ -501,10 +501,10 @@ export default function Home() {
           <p className={`${s.secSub} ${s.fadeIn}`}>VIVIAN no es un chatbot frío. Es una compañía cálida, paciente y siempre disponible — que te conoce, recuerda lo que importa y actúa cuando lo necesitas.</p>
           <div className={s.vivianFeats}>
             {[
-              { icon: IC.salud, title: "Asistente de salud activa", desc: "Recuerda medicamentos, agenda citas y responde preguntas médicas con claridad." },
-              { icon: IC.chat, title: "Compañía real, 24/7", desc: "Siempre disponible para conversar, escucharte y acompañarte — sin prisa ni tecnicismos." },
-              { icon: IC.tours, title: "Guía de experiencias", desc: "Recomienda tours, clases y actividades según tus gustos, condición y presupuesto." },
-              { icon: IC.mic, title: "Voz o texto, tú decides", desc: "Puedes hablarle o escribirle. VIVIAN entiende ambos con la misma calidez." },
+              { icon: IC.chat,  title: "Compañía real, 24/7",        desc: "Siempre disponible para conversar, escucharte y acompañarte — sin prisa ni tecnicismos." },
+              { icon: IC.salud, title: "Orientación en salud activa", desc: "Responde preguntas de salud con claridad, sin tecnicismos y siempre sugiriendo consultar a tu médico." },
+              { icon: IC.tours, title: "Guía de experiencias",        desc: "Orienta sobre actividades, paseos y formas de mantenerte activo según tus intereses." },
+              { icon: IC.mic,   title: "Voz o texto, tú decides",     desc: "Puedes hablarle o escribirle. VIVIAN entiende ambos con la misma calidez." },
             ].map((f, i) => (
               <div key={f.title} className={`${s.vf} ${s.fadeIn}`} style={{ transitionDelay: `${i * 100}ms` }}>
                 <div className={s.vfIco} style={{ color: "var(--v2)" }}>{f.icon}</div>
@@ -512,9 +512,18 @@ export default function Home() {
               </div>
             ))}
           </div>
+          <div className={`${s.fadeIn}`} style={{ marginTop: 36 }}>
+            <a
+              href={sesionActiva ? "/vivian" : "/registro"}
+              className={s.btnPrimary}
+              style={{ display: "inline-block" }}
+            >
+              Hablar con VIVIAN →
+            </a>
+          </div>
         </div>
         <div className={`${s.vivianVisual} ${s.fadeIn}`}>
-          <div className={s.vivianPhone}>
+          <div className={s.vivianPhone} style={{ pointerEvents: "none", userSelect: "none" }}>
             <div className={s.vpHeader}>
               <div className={s.vpAva}>
                 <svg width="46" height="46" viewBox="0 0 46 46">
