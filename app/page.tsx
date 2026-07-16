@@ -542,19 +542,28 @@ export default function Home() {
           Accede a todo de forma simple. Si necesitas ayuda, VIVIAN te guía o escríbenos a hola@longvivia.cl.
         </p>
         <div className={s.servicesGrid}>
+          {/* VIVIAN — card destacada, ocupa toda la altura izquierda */}
+          <div className={`${s.srvCardDestacado} ${s.fadeIn}`}>
+            <div className={s.srvIcon} style={{ color: "white", display:"flex", alignItems:"center", justifyContent:"center" }}>
+              <VivianIcon size={34} />
+            </div>
+            <h3>VIVIAN IA</h3>
+            <p>Tu asistente personal de salud, bienestar y ocio. Disponible 24/7, te conoce, recuerda lo que importa y te acompaña en cada etapa de tu prime.</p>
+            <a href="/vivian" className={s.srvLink}>Hablar con VIVIAN →</a>
+          </div>
+
+          {/* Cards secundarias — Próximamente */}
           {[
-            { icon: <VivianIcon size={26} />, title: "VIVIAN IA", desc: "Tu asistente personal de salud, bienestar y ocio. Disponible 24/7, te conoce y te acompaña.", link: "Hablar con VIVIAN →", href: "/vivian", activo: true },
-            { icon: IC.pill, title: "Gestión de salud", desc: "Recordatorios de medicamentos, historial de citas y seguimiento de indicadores.", link: "Próximamente", href: "#", activo: false },
-            { icon: IC.salud, title: "Telemedicina", desc: "Consultas online con médicos y especialistas. Sin esperas. Compatible con Fonasa e Isapres.", link: "Próximamente", href: "#", activo: false },
-            { icon: IC.bienestar, title: "Bienestar activo", desc: "Clases de yoga, pilates y funcional. En vivo y grabadas. Instructores especializados.", link: "Próximamente", href: "#", activo: false },
-            { icon: IC.tours, title: "Ocio y experiencias", desc: "Tours con grupos pequeños, tu ritmo y precios exclusivos. Natura, gastronomía, cultura.", link: "Próximamente", href: "#", activo: false },
-            { icon: IC.nutricion, title: "Nutrición", desc: "Planes personalizados con nutricionistas. Seguimiento y recetas pensadas para ti.", link: "Próximamente", href: "#", activo: false },
+            { icon: IC.pill,      title: "Gestión de salud",   desc: "Recordatorios de medicamentos, historial de citas y seguimiento de indicadores." },
+            { icon: IC.salud,     title: "Telemedicina",        desc: "Consultas online con médicos y especialistas. Compatible con Fonasa e Isapres." },
+            { icon: IC.bienestar, title: "Bienestar activo",    desc: "Clases de yoga, pilates y funcional. En vivo y grabadas." },
+            { icon: IC.tours,     title: "Ocio y experiencias", desc: "Tours con grupos pequeños, tu ritmo y precios exclusivos." },
+            { icon: IC.nutricion, title: "Nutrición",           desc: "Planes personalizados con nutricionistas. Seguimiento y recetas para ti." },
           ].map((srv, i) => (
-            <div key={srv.title} className={`${s.srvCard} ${s.fadeIn}`} style={{ transitionDelay: `${i * 80}ms`, opacity: srv.activo ? 1 : 0.75 }}>
-              <div className={s.srvIcon} style={{ color: "rgba(255,255,255,.85)" }}>{srv.icon}</div>
-              <h3>{srv.title}{!srv.activo && <span style={{ fontSize: "11px", background: "var(--d3)", color: "var(--d1)", borderRadius: "20px", padding: "2px 10px", marginLeft: "8px", fontWeight: 600 }}>Próximamente</span>}</h3>
+            <div key={srv.title} className={`${s.srvCard} ${s.fadeIn}`} style={{ transitionDelay: `${(i + 1) * 80}ms`, opacity: 0.7 }}>
+              <div className={s.srvIcon} style={{ color: "rgba(255,255,255,.75)" }}>{srv.icon}</div>
+              <h3>{srv.title} <span style={{ fontSize: "10px", background: "rgba(201,151,58,.15)", color: "var(--d2)", borderRadius: "20px", padding: "2px 9px", fontWeight: 600, letterSpacing: .5 }}>Próximamente</span></h3>
               <p>{srv.desc}</p>
-              <a href={srv.href} className={s.srvLink} style={{ pointerEvents: srv.activo ? "auto" : "none", opacity: srv.activo ? 1 : 0.5 }}>{srv.link}</a>
             </div>
           ))}
         </div>
