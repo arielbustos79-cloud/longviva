@@ -1,8 +1,19 @@
+import React from "react";
 import { createClient } from "@/lib/supabase-server";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import OliveBranch from "@/components/OliveBranch";
+
+// Renderiza **texto** como <strong>
+function renderNegrita(texto: string): React.ReactNode {
+  const partes = texto.split(/(\*\*[^*]+\*\*)/g);
+  return partes.map((p, i) =>
+    p.startsWith("**") && p.endsWith("**")
+      ? <strong key={i} style={{ fontWeight: 700, color: "var(--n1)" }}>{p.slice(2, -2)}</strong>
+      : p
+  );
+}
 
 const PILARES: Record<string, string> = {
   salud_activa: "Salud activa",
@@ -115,28 +126,38 @@ export default async function ArticuloPage({ params }: Props) {
           fontSize: 18, color: "var(--n2)", lineHeight: 1.85,
           display: "flex", flexDirection: "column", gap: 20,
         }}>
-          {articulo.contenido.split("\n\n").map((parrafo: string, i: number) => {
-            if (parrafo.startsWith("## ")) {
+          {articulo.contenido.split("\n\n").map((bloque: string, i: number) => {
+            const b = bloque.trim();
+            if (!b) return null;
+
+            // Título de sección
+            if (b.startsWith("## ")) {
               return (
                 <h2 key={i} style={{
                   fontFamily: "Cormorant Garamond, serif", fontSize: 26, fontWeight: 600,
-                  color: "var(--v2)", marginTop: 12,
+                  color: "var(--v2)", marginTop: 8, marginBottom: 0,
                 }}>
-                  {parrafo.replace("## ", "")}
+                  {b.replace(/^## /, "")}
                 </h2>
               );
             }
-            if (parrafo.startsWith("- ")) {
-              const items = parrafo.split("\n").filter(l => l.startsWith("- "));
+
+            // Lista de ítems
+            if (b.includes("\n- ") || b.startsWith("- ")) {
+              const items = b.split("\n").filter(l => l.startsWith("- "));
               return (
-                <ul key={i} style={{ paddingLeft: 20, display: "flex", flexDirection: "column", gap: 8 }}>
+                <ul key={i} style={{ paddingLeft: 22, display: "flex", flexDirection: "column", gap: 10, margin: 0 }}>
                   {items.map((item, j) => (
-                    <li key={j} style={{ color: "var(--n2)" }}>{item.replace("- ", "")}</li>
+                    <li key={j} style={{ color: "var(--n2)" }}>
+                      {renderNegrita(item.replace(/^- /, ""))}
+                    </li>
                   ))}
                 </ul>
               );
             }
-            return <p key={i} style={{ margin: 0 }}>{parrafo}</p>;
+
+            // Párrafo normal
+            return <p key={i} style={{ margin: 0 }}>{renderNegrita(b)}</p>;
           })}
         </div>
 
