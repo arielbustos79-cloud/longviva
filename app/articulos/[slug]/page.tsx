@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import OliveBranch from "@/components/OliveBranch";
+import ArticuloTracker from "./ArticuloTracker";
 
 // Renderiza **texto** como <strong>
 function renderNegrita(texto: string): React.ReactNode {
@@ -60,6 +61,7 @@ export default async function ArticuloPage({ params }: Props) {
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--crema)", fontFamily: "DM Sans, sans-serif" }}>
+      <ArticuloTracker slug={articulo.slug} pilar={articulo.pilar} />
 
       {/* Header */}
       <header style={{ background: "var(--v2)", padding: "16px 40px", display: "flex", alignItems: "center", gap: 12 }}>

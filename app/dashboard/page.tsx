@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase-browser";
 import { useRouter } from "next/navigation";
 import OliveBranch from "@/components/OliveBranch";
 import s from "./page.module.css";
+import { logEvento } from "@/lib/logEvento";
 
 type Profile = {
   nombre: string | null;
@@ -25,6 +26,12 @@ export default function DashboardPage() {
       if (!user) { router.push("/login"); return; }
 
       setEmail(user.email ?? "");
+
+      // Registrar primer acceso si la cuenta tiene menos de 5 minutos
+      const createdAt = new Date(user.created_at).getTime();
+      if (Date.now() - createdAt < 5 * 60 * 1000) {
+        logEvento("registro_completado");
+      }
 
       const { data } = await supabase
         .from("profiles")

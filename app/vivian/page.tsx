@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { createClient } from "@/lib/supabase-browser";
+import { logEvento } from "@/lib/logEvento";
 
 type Message = { role: "user" | "assistant"; content: string };
 
@@ -121,6 +122,8 @@ export default function VivianPage() {
     setSessionMessages(newMessages);
     setInput("");
     setLoading(true);
+
+    logEvento("vivian_mensaje", { canal: "web" });
 
     try {
       const res = await fetch("/api/vivian", {
