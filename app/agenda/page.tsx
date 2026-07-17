@@ -93,9 +93,11 @@ export default function AgendaPage() {
     const payload = { titulo: form.titulo, tipo: form.tipo, fecha: fechaISO, proveedor: form.proveedor || null, notas: form.notas || null };
 
     if (editando) {
-      await supabase.from("agenda").update(payload).eq("id", editando.id);
+      const { error } = await supabase.from("agenda").update(payload).eq("id", editando.id);
+      if (error) { alert("Error al guardar: " + error.message); setGuardando(false); return; }
     } else {
-      await supabase.from("agenda").insert({ ...payload, user_id: user.id, confirmado: false });
+      const { error } = await supabase.from("agenda").insert({ ...payload, user_id: user.id, confirmado: false });
+      if (error) { alert("Error al guardar: " + error.message); setGuardando(false); return; }
     }
     setGuardando(false);
     setMostrarForm(false);
