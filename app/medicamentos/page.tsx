@@ -174,9 +174,7 @@ export default function MedicamentosPage() {
                   </button>
                 </div>
               </div>
-              <p style={{ fontSize: 14, color: "var(--gris)", background: "var(--d4)", border: "1px solid var(--d3)", borderRadius: 12, padding: "12px 16px", margin: 0 }}>
-                💊 Recibirás un recordatorio por WhatsApp en cada horario configurado.
-              </p>
+
               <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
                 <button type="submit" disabled={guardando} style={{ background: "var(--v2)", color: "white", border: "none", borderRadius: 50, padding: "14px 32px", fontSize: 17, fontWeight: 700, cursor: "pointer", flex: 1 }}>
                   {guardando ? "Guardando..." : editando ? "Guardar cambios" : "Agregar medicamento"}
