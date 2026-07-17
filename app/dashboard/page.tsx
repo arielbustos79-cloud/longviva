@@ -166,12 +166,12 @@ export default function DashboardPage() {
             {
               svg: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>,
               title: "Mi agenda", desc: "Citas y recordatorios",
-              activo: false, href: "#", destacado: false,
+              activo: true, href: "/agenda", destacado: false,
             },
             {
               svg: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2v-4M9 21H5a2 2 0 01-2-2v-4m0 0h18"/></svg>,
               title: "Mis medicamentos", desc: "Recordatorios y seguimiento",
-              activo: false, href: "#", destacado: false,
+              activo: true, href: "/medicamentos", destacado: false,
             },
             {
               svg: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>,

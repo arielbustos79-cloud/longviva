@@ -600,9 +600,16 @@ export default function Home() {
             <a href="/juegos" className={s.srvLink}>Jugar →</a>
           </div>
 
+          {/* Card activa — Gestión de salud */}
+          <div className={`${s.srvCard} ${s.fadeIn}`} style={{ transitionDelay: "160ms" }}>
+            <div className={s.srvIcon} style={{ color: "var(--v2)" }}>{IC.pill}</div>
+            <h3>Gestión de salud</h3>
+            <p>Agenda tus citas médicas y registra tus medicamentos con recordatorios automáticos por WhatsApp.</p>
+            <a href="/agenda" className={s.srvLink}>Ver mi agenda →</a>
+          </div>
+
           {/* Cards secundarias — Próximamente */}
           {[
-            { icon: IC.pill,      title: "Gestión de salud",   desc: "Recordatorios de medicamentos, historial de citas y seguimiento de indicadores." },
             { icon: IC.salud,     title: "Telemedicina",        desc: "Consultas online con médicos y especialistas. Compatible con Fonasa e Isapres." },
             { icon: IC.bienestar, title: "Bienestar activo",    desc: "Clases de yoga, pilates y funcional. En vivo y grabadas." },
             { icon: IC.tours,     title: "Ocio y experiencias", desc: "Tours con grupos pequeños, tu ritmo y precios exclusivos." },
