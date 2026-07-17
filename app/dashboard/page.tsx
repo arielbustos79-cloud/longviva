@@ -94,7 +94,7 @@ export default function DashboardPage() {
       {/* Toast de bienvenida */}
       {toastVisible && (
         <div style={{
-          position: "fixed", bottom: 28, left: "50%", transform: "translateX(-50%)",
+          position: "fixed", top: 80, left: "50%", transform: "translateX(-50%)",
           background: "var(--v2)", color: "white",
           padding: "14px 24px", borderRadius: 50,
           fontSize: 16, fontWeight: 600,
