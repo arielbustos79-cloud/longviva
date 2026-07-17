@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase-browser";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import OliveBranch from "@/components/OliveBranch";
 import s from "./page.module.css";
 import { logEvento } from "@/lib/logEvento";
@@ -17,8 +17,19 @@ export default function DashboardPage() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(true);
+  const [toastVisible, setToastVisible] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
   const supabase = createClient();
+
+  useEffect(() => {
+    if (searchParams.get("bienvenida") === "1") {
+      setToastVisible(true);
+      // Limpiar el parámetro de la URL sin recargar
+      window.history.replaceState({}, "", "/dashboard");
+      setTimeout(() => setToastVisible(false), 4000);
+    }
+  }, []);
 
   useEffect(() => {
     async function load() {
@@ -80,6 +91,21 @@ export default function DashboardPage() {
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--crema)", fontFamily: "DM Sans, sans-serif" }}>
+
+      {/* Toast de bienvenida */}
+      {toastVisible && (
+        <div style={{
+          position: "fixed", bottom: 28, left: "50%", transform: "translateX(-50%)",
+          background: "var(--v2)", color: "white",
+          padding: "14px 24px", borderRadius: 50,
+          fontSize: 16, fontWeight: 600,
+          boxShadow: "0 8px 32px rgba(27,94,59,.3)",
+          zIndex: 1000, whiteSpace: "nowrap",
+          animation: "fadeInUp .35s ease",
+        }}>
+          🌿 ¡Listo, {nombre}! Ya iniciaste sesión.
+        </div>
+      )}
 
       {/* Header */}
       <header className={s.header}>
