@@ -344,11 +344,11 @@ export default function Home() {
         </a>
         <ul className={s.navLinks}>
           <li><a href="/quienes-somos">Quiénes somos</a></li>
-          <li><a href="/juegos">Entrena tu mente</a></li>
           <li><a href="#como">¿Cómo funciona?</a></li>
           <li><a href="#servicios">Servicios</a></li>
           <li><a href="/vivian">VIVIAN IA</a></li>
           <li><a href="/articulos">Artículos</a></li>
+          <li><a href="/juegos">Entrena tu mente</a></li>
           <li><a href="#contacto">Contacto</a></li>
           {sesionActiva ? (
             <>
@@ -380,11 +380,11 @@ export default function Home() {
             <button className={s.mobileClose} onClick={() => setMenuOpen(false)}>✕</button>
             <nav style={{ display: "flex", flexDirection: "column", gap: 8, width: "100%" }}>
               <a href="/quienes-somos" className={s.mobileLink} onClick={() => setMenuOpen(false)}>Quiénes somos</a>
-              <a href="/juegos" className={s.mobileLink} onClick={() => setMenuOpen(false)}>Entrena tu mente</a>
               <a href="#como" className={s.mobileLink} onClick={() => setMenuOpen(false)}>¿Cómo funciona?</a>
               <a href="#servicios" className={s.mobileLink} onClick={() => setMenuOpen(false)}>Servicios</a>
               <a href="/vivian" className={s.mobileLink} onClick={() => setMenuOpen(false)}>VIVIAN IA</a>
               <a href="/articulos" className={s.mobileLink} onClick={() => setMenuOpen(false)}>Artículos</a>
+              <a href="/juegos" className={s.mobileLink} onClick={() => setMenuOpen(false)}>Entrena tu mente</a>
               <a href="#contacto" className={s.mobileLink} onClick={() => setMenuOpen(false)}>Contacto</a>
               <div style={{ height: 1, background: "var(--v5)", margin: "8px 0" }} />
               {sesionActiva ? (
