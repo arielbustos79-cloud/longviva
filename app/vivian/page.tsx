@@ -156,21 +156,20 @@ export default function VivianPage() {
     <div style={{ minHeight: "100vh", background: "var(--crema)", display: "flex", flexDirection: "column", fontFamily: "DM Sans, sans-serif" }}>
 
       {/* Header */}
-      <div style={{ background: "#1B5E3B", padding: "1rem 1.5rem", display: "flex", alignItems: "center", gap: "1rem" }}>
-        <div style={{ width: 44, height: 44, borderRadius: "50%", background: "rgba(255,255,255,0.15)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.4rem" }}>
-          🌿
+      <div style={{ background: "#1B5E3B", padding: "0.75rem 1.25rem", display: "flex", alignItems: "center", gap: "0.75rem" }}>
+        {/* Volver + fecha */}
+        <a href={userId ? "/dashboard" : "/"} style={{ color: "rgba(255,255,255,0.6)", textDecoration: "none", fontSize: "0.82rem", whiteSpace: "nowrap", flexShrink: 0 }}>
+          {new Date().toLocaleDateString("es-CL", { day: "numeric", month: "long" })} · ← Volver
+        </a>
+
+        {/* Centro: VIVIAN + En línea */}
+        <div style={{ flex: 1, textAlign: "center" }}>
+          <div style={{ color: "white", fontWeight: 700, fontSize: "1.05rem", fontFamily: "Cormorant Garamond, serif", lineHeight: 1.2 }}>VIVIAN</div>
+          <div style={{ color: "#B7E4C7", fontSize: "0.75rem" }}>● En línea</div>
         </div>
-        <div>
-          <div style={{ color: "white", fontWeight: 700, fontSize: "1.1rem", fontFamily: "Cormorant Garamond, serif" }}>VIVIAN</div>
-          <div style={{ color: "#B7E4C7", fontSize: "0.8rem" }}>● En línea · Tu asistente LongVivIA</div>
-        </div>
-        {nombre && (
-          <div style={{ color: "rgba(255,255,255,0.6)", fontSize: "0.85rem", marginLeft: 8 }}>
-            Hola, {nombre}
-          </div>
-        )}
-        <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 10 }}>
-          {/* Historial */}
+
+        {/* Íconos derecha */}
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
           <button
             onClick={() => { setHistorialOpen(!historialOpen); setLupaOpen(false); }}
             title="Ver historial de conversaciones"
@@ -185,7 +184,6 @@ export default function VivianPage() {
           >
             🕐
           </button>
-          {/* Lupa */}
           <button
             onClick={() => { setLupaOpen(!lupaOpen); setHistorialOpen(false); }}
             title="Buscar en historial"
@@ -200,9 +198,6 @@ export default function VivianPage() {
           >
             🔍
           </button>
-          <a href={userId ? "/dashboard" : "/"} style={{ color: "rgba(255,255,255,0.6)", textDecoration: "none", fontSize: "0.9rem" }}>
-            {userId ? "← Mi panel" : "← Inicio"}
-          </a>
         </div>
       </div>
 
@@ -334,16 +329,16 @@ export default function VivianPage() {
       </div>
 
       {/* Input */}
-      <div style={{ padding: "1rem 1.5rem", background: "white", borderTop: "1px solid #EAFAF0", maxWidth: 700, width: "100%", margin: "0 auto", display: "flex", gap: "0.75rem", alignItems: "center" }}>
+      <div style={{ padding: "0.875rem 1rem", background: "white", borderTop: "1px solid #EAFAF0", maxWidth: 700, width: "100%", margin: "0 auto", display: "flex", gap: "0.5rem", alignItems: "center", boxSizing: "border-box" }}>
         {/* Botón micrófono */}
         <button
           onClick={toggleMic}
           title={escuchando ? "Detener" : "Hablarle a VIVIAN"}
           style={{
-            width: 48, height: 48, borderRadius: "50%", flexShrink: 0,
+            width: 44, height: 44, borderRadius: "50%", flexShrink: 0,
             background: escuchando ? "#c0392b" : "#EAFAF0",
             border: escuchando ? "2px solid #c0392b" : "2px solid #B7E4C7",
-            cursor: "pointer", fontSize: "1.2rem",
+            cursor: "pointer", fontSize: "1.1rem",
             display: "flex", alignItems: "center", justifyContent: "center",
             transition: "all .2s",
             boxShadow: escuchando ? "0 0 0 6px rgba(192,57,43,.15)" : "none",
@@ -356,15 +351,15 @@ export default function VivianPage() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-          placeholder={escuchando ? "Escuchando... habla ahora" : "Escríbele o háblale a VIVIAN..."}
-          style={{ flex: 1, padding: "0.85rem 1.25rem", borderRadius: "50px", border: `1.5px solid ${escuchando ? "#c0392b" : "#B7E4C7"}`, fontSize: "1rem", fontFamily: "DM Sans, sans-serif", outline: "none", background: escuchando ? "#fff5f5" : "#EAFAF0", transition: "all .2s" }}
+          placeholder={escuchando ? "Escuchando..." : "Escribe o Habla"}
+          style={{ flex: 1, minWidth: 0, padding: "0.85rem 1rem", borderRadius: "50px", border: `1.5px solid ${escuchando ? "#c0392b" : "#B7E4C7"}`, fontSize: "1rem", fontFamily: "DM Sans, sans-serif", outline: "none", background: escuchando ? "#fff5f5" : "#EAFAF0", transition: "all .2s" }}
         />
         <button
           onClick={sendMessage}
           disabled={loading || !input.trim()}
-          style={{ background: loading || !input.trim() ? "#B7E4C7" : "#1B5E3B", color: "white", border: "none", borderRadius: "50px", padding: "0.85rem 1.5rem", fontWeight: 600, fontSize: "0.95rem", cursor: loading ? "not-allowed" : "pointer", transition: "background 0.2s", whiteSpace: "nowrap" }}
+          style={{ background: loading || !input.trim() ? "#B7E4C7" : "#1B5E3B", color: "white", border: "none", borderRadius: "50px", padding: "0.85rem 1.25rem", fontWeight: 600, fontSize: "0.95rem", cursor: loading ? "not-allowed" : "pointer", transition: "background 0.2s", whiteSpace: "nowrap", flexShrink: 0 }}
         >
-          Enviar →
+          Enviar
         </button>
       </div>
     </div>
