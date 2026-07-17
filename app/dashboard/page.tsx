@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase-browser";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import OliveBranch from "@/components/OliveBranch";
 import s from "./page.module.css";
 import { logEvento } from "@/lib/logEvento";
@@ -19,13 +19,12 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [toastVisible, setToastVisible] = useState(false);
   const router = useRouter();
-  const searchParams = useSearchParams();
   const supabase = createClient();
 
   useEffect(() => {
-    if (searchParams.get("bienvenida") === "1") {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("bienvenida") === "1") {
       setToastVisible(true);
-      // Limpiar el parámetro de la URL sin recargar
       window.history.replaceState({}, "", "/dashboard");
       setTimeout(() => setToastVisible(false), 4000);
     }
