@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import OliveBranch from "@/components/OliveBranch";
 import s from "./page.module.css";
 import { logEvento } from "@/lib/logEvento";
+import ResumenHoy from "./ResumenHoy";
 
 type Profile = {
   nombre: string | null;
@@ -140,6 +141,9 @@ export default function DashboardPage() {
             Tu plataforma de salud, bienestar y experiencias.
           </p>
         </div>
+
+        {/* Resumen de hoy */}
+        <ResumenHoy />
 
         {/* Cards de acceso rápido */}
         <div style={{
