@@ -149,9 +149,10 @@ longviva/
 └── public/
 ```
 
-> ⚠️ El repo también contiene `app/parkinandson/`, `app/api/norita/` y `lib/norita-prompt.ts` —
-> un sub-proyecto **independiente** de otra marca (Parkin&Son / NORITA), no una feature de
-> LongVivIA. Ver sección [Sub-proyecto: Parkin&Son / NORITA](#sub-proyecto-parkinson--norita) más abajo.
+> ℹ️ El sub-proyecto Parkin&Son / NORITA (otra marca, mismo holding) vivía en este repo bajo
+> `app/parkinandson/`, `app/api/norita/` y `lib/norita-prompt.ts`. Se movió a la rama
+> `parkinandson-draft` para no mezclarse con el desarrollo activo de LongVivIA — está en pausa
+> intencional. Ver el `.claude/CLAUDE.md` de esa rama para el detalle completo.
 
 ---
 
@@ -379,47 +380,17 @@ NEXT_PUBLIC_APP_URL=https://longvivia.cl
 
 ---
 
-## Sub-proyecto: Parkin&Son / NORITA
+## Sub-proyecto: Parkin&Son / NORITA (movido a otra rama)
 
-⚠️ **Esto NO es una feature de LongVivIA.** Es un producto/marca distinto que vive en el mismo
-repo, bajo el mismo paraguas societario (Longviva SPA), pero con landing, identidad visual y
-asistente IA propios. No está enlazado desde la navegación de LongVivIA ni mencionado en su
-copy — es accesible solo por URL directa.
+Vivía en este repo bajo `app/parkinandson/`, `app/api/norita/` y `lib/norita-prompt.ts` — un
+producto/marca distinto (acompañamiento para personas con Parkinson y sus familias), no una
+feature de LongVivIA, sin enlace desde la navegación ni URL pública en producción.
 
-**Qué es:** plataforma de acompañamiento para personas con Parkinson y sus familias en Chile.
-El prompt de sistema (`lib/norita-prompt.ts`) indica que la plataforma fue creada por alguien
-con diagnóstico de Parkinson juvenil (2022) y está pensada explícitamente para no asumir que
-todo usuario con Parkinson es adulto mayor.
-
-**Rutas:**
-| Ruta | Descripción |
-|------|-------------|
-| `/parkinandson` | Landing propia (hero, sección de conciencia sobre el tulipán/símbolo Parkinson, CTA a NORITA, formulario de lista de espera) |
-| `/parkinandson/norita` | Chat con NORITA, UI de chat independiente (no reutiliza componentes de VIVIAN) |
-
-**Backend:** `app/api/norita/route.ts` — llama a Claude API (`claude-sonnet-4-6`) directamente
-con `NORITA_SYSTEM_PROMPT` + contexto opcional (`userName`, `estadio`, `ciudad`). Recibe
-`history` desde el cliente (sin persistencia en Supabase — a diferencia de VIVIAN, que sí
-guarda memoria persistente).
-
-**NORITA — personalidad y reglas (`lib/norita-prompt.ts`):**
-- Flujo obligatorio: 1) contención emocional → 2) orientación → 3) alternativas terapéuticas
-- Vocabulario prohibido: "enfermo/a", "deterioro", "dependiente", "ya no puede"
-- Conoce terapias con evidencia (tango terapéutico, LSVT BIG/LOUD, ejercicio aeróbico,
-  musicoterapia, Tai Chi adaptado, mindfulness MBSR, neuronutrición)
-- No diagnostica, no cambia medicación, no reemplaza al neurólogo
-
-**Estado real (verificado en código, no solo intención):**
-- ✅ Landing y chat funcionando en la UI
-- ❌ **El formulario de lista de espera de `/parkinandson` tiene un `TODO: conectar con
-  Supabase` sin implementar — hoy los leads del formulario NO se guardan en ningún lado.**
-- ❌ El chat de NORITA no persiste historial (se pierde al recargar), a diferencia de VIVIAN
-- Único commit de origen: `6df8295` (5 jun 2026), agrupado junto con el trabajo de memoria
-  persistente de VIVIAN — sugiere que fue un prototipo rápido, no un desarrollo planificado
-  aparte
-
-**Antes de invertir más en esto:** confirmar si Parkin&Son sigue siendo un producto activo o
-fue un experimento descartado — no hay decisión documentada al respecto.
+Se separó a la rama **`parkinandson-draft`** (18 jul 2026) para dejar de mezclarse con el
+desarrollo activo de LongVivIA. El historial se preservó — incluyendo el commit original
+`6df8295` (5 jun 2026) que lo introdujo junto con el trabajo de memoria persistente de VIVIAN.
+Proyecto en pausa intencional; el `TODO: conectar con Supabase` del formulario de lista de
+espera queda sin resolver a propósito. Detalle completo en el `.claude/CLAUDE.md` de esa rama.
 
 ---
 
