@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase-browser";
 import OliveBranch from "@/components/OliveBranch";
+import { exportarMedicamento } from "@/lib/generarIcs";
 
 type Medicamento = {
   id: string;
@@ -198,6 +199,13 @@ export default function MedicamentosPage() {
           </div>
         )}
 
+        {/* Nota exportación */}
+        {medicamentos.length > 0 && (
+          <p style={{ fontSize: 13, color: "var(--gris)", marginBottom: 24, lineHeight: 1.6 }}>
+            💡 "Agregar recordatorios al calendario" descarga un evento recurrente diario para cada horario. Tu calendario nativo (Google, iPhone, Outlook) se encarga de la alarma. Si cambias los horarios del medicamento, deberás exportar de nuevo.
+          </p>
+        )}
+
         {/* Activos */}
         {activos.length > 0 && (
           <div style={{ marginBottom: 40 }}>
@@ -252,6 +260,11 @@ function MedCard({ med, onEdit, onDelete, onToggle, eliminando }: {
         <button onClick={() => onToggle(med)} style={{ fontSize: 14, fontWeight: 600, background: med.activo ? "var(--v6)" : "transparent", color: med.activo ? "var(--v3)" : "var(--gris)", border: `1.5px solid ${med.activo ? "var(--v5)" : "#D4DED6"}`, borderRadius: 50, padding: "8px 18px", cursor: "pointer" }}>
           {med.activo ? "✓ Activo" : "Reactivar"}
         </button>
+        {med.activo && (
+          <button onClick={() => exportarMedicamento(med)} style={{ fontSize: 14, fontWeight: 600, background: "transparent", color: "var(--v2)", border: "1.5px solid var(--v5)", borderRadius: 50, padding: "8px 18px", cursor: "pointer" }}>
+            📅 Agregar recordatorios al calendario
+          </button>
+        )}
         <button onClick={() => onEdit(med)} style={{ fontSize: 14, fontWeight: 600, background: "transparent", color: "var(--v2)", border: "1.5px solid var(--v5)", borderRadius: 50, padding: "8px 18px", cursor: "pointer" }}>
           Editar
         </button>

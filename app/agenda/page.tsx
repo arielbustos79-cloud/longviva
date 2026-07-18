@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase-browser";
 import OliveBranch from "@/components/OliveBranch";
+import { exportarCita } from "@/lib/generarIcs";
 
 type Cita = {
   id: string;
@@ -217,6 +218,13 @@ export default function AgendaPage() {
           </div>
         )}
 
+        {/* Nota exportación */}
+        {citas.length > 0 && (
+          <p style={{ fontSize: 13, color: "var(--gris)", marginBottom: 24, lineHeight: 1.6 }}>
+            💡 Usa "Agregar a mi calendario" para recibir la alarma nativa de tu teléfono (Google Calendar, iPhone, Outlook). Si editas o eliminas una cita después de exportarla, el evento en tu calendario no se actualiza automáticamente.
+          </p>
+        )}
+
         {/* Próximas */}
         {proximas.length > 0 && (
           <div style={{ marginBottom: 40 }}>
@@ -271,6 +279,9 @@ function CitaCard({ cita, onEdit, onDelete, onToggle, eliminando }: {
       <div style={{ display: "flex", gap: 10, marginTop: 16, flexWrap: "wrap" }}>
         <button onClick={() => onToggle(cita)} style={{ fontSize: 14, fontWeight: 600, background: cita.confirmado ? "var(--v6)" : "transparent", color: cita.confirmado ? "var(--v3)" : "var(--gris)", border: `1.5px solid ${cita.confirmado ? "var(--v5)" : "#D4DED6"}`, borderRadius: 50, padding: "8px 18px", cursor: "pointer" }}>
           {cita.confirmado ? "✓ Confirmada" : "Marcar confirmada"}
+        </button>
+        <button onClick={() => exportarCita(cita)} style={{ fontSize: 14, fontWeight: 600, background: "transparent", color: "var(--v2)", border: "1.5px solid var(--v5)", borderRadius: 50, padding: "8px 18px", cursor: "pointer" }}>
+          📅 Agregar a mi calendario
         </button>
         <button onClick={() => onEdit(cita)} style={{ fontSize: 14, fontWeight: 600, background: "transparent", color: "var(--v2)", border: "1.5px solid var(--v5)", borderRadius: 50, padding: "8px 18px", cursor: "pointer" }}>
           Editar
