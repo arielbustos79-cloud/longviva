@@ -202,7 +202,7 @@ export default function MedicamentosPage() {
         {/* Nota exportación */}
         {medicamentos.length > 0 && (
           <p style={{ fontSize: 13, color: "var(--gris)", marginBottom: 24, lineHeight: 1.6 }}>
-            💡 "Agregar recordatorios al calendario" descarga un evento recurrente diario para cada horario. Tu calendario nativo (Google, iPhone, Outlook) se encarga de la alarma. Si cambias los horarios del medicamento, deberás exportar de nuevo.
+            💡 Usa "Agregar a mi calendario" para recibir la alarma nativa de tu teléfono (Google Calendar, iPhone, Outlook). Si cambias los horarios del medicamento después de exportarlo, el evento en tu calendario no se actualiza automáticamente.
           </p>
         )}
 
@@ -262,7 +262,7 @@ function MedCard({ med, onEdit, onDelete, onToggle, eliminando }: {
         </button>
         {med.activo && (
           <button onClick={() => exportarMedicamento(med)} style={{ fontSize: 14, fontWeight: 600, background: "transparent", color: "var(--v2)", border: "1.5px solid var(--v5)", borderRadius: 50, padding: "8px 18px", cursor: "pointer" }}>
-            📅 Agregar recordatorios al calendario
+            📅 Agregar a mi calendario
           </button>
         )}
         <button onClick={() => onEdit(med)} style={{ fontSize: 14, fontWeight: 600, background: "transparent", color: "var(--v2)", border: "1.5px solid var(--v5)", borderRadius: 50, padding: "8px 18px", cursor: "pointer" }}>
