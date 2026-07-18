@@ -114,7 +114,10 @@ longviva/
 │   ├── registro/page.tsx     ← Registro con nombre + email
 │   ├── dashboard/            ← Panel de usuario autenticado
 │   │   ├── page.tsx
-│   │   └── page.module.css
+│   │   ├── page.module.css
+│   │   └── ResumenHoy.tsx    ← Tarjeta "Resumen de hoy" (próxima cita/medicamento)
+│   ├── agenda/page.tsx       ← Mi agenda — CRUD de citas + export .ics
+│   ├── medicamentos/page.tsx ← Mis medicamentos — CRUD + export .ics recurrente
 │   ├── vivian/page.tsx       ← Chat VIVIAN (web)
 │   ├── articulos/
 │   │   ├── page.tsx          ← Listado de artículos
@@ -141,9 +144,14 @@ longviva/
 │   ├── supabase-browser.ts   ← Cliente Supabase (client components)
 │   ├── supabase-server.ts    ← Cliente Supabase (server components)
 │   ├── vivian-prompt.ts      ← System prompt de VIVIAN
+│   ├── generarIcs.ts         ← Genera y descarga .ics (citas y medicamentos)
 │   └── logEvento.ts          ← Fire-and-forget analytics a tabla "eventos"
 └── public/
 ```
+
+> ⚠️ El repo también contiene `app/parkinandson/`, `app/api/norita/` y `lib/norita-prompt.ts` —
+> un sub-proyecto **independiente** de otra marca (Parkin&Son / NORITA), no una feature de
+> LongVivIA. Ver sección [Sub-proyecto: Parkin&Son / NORITA](#sub-proyecto-parkinson--norita) más abajo.
 
 ---
 
@@ -156,6 +164,8 @@ longviva/
 | `/registro` | ✅ Activa | Registro (nombre + email → magic link) |
 | `/dashboard` | ✅ Activa | Panel de usuario (requiere auth) |
 | `/vivian` | ✅ Activa | Chat con VIVIAN (web) |
+| `/agenda` | ✅ Activa | Mi agenda — citas médicas, export .ics |
+| `/medicamentos` | ✅ Activa | Mis medicamentos — recordatorios, export .ics diario |
 | `/articulos` | ✅ Activa | Listado de artículos |
 | `/articulos/[slug]` | ✅ Activa | Artículo individual con tracker |
 | `/juegos` | ✅ Activa | Selección de juegos cognitivos |
@@ -187,14 +197,27 @@ longviva/
 
 ## Dashboard (`/dashboard`)
 
+**Resumen de hoy** (`ResumenHoy.tsx`): tarjeta sobre las cards de acceso, muestra próxima cita agendada y próximo medicamento a tomar.
+
 Cards activas:
 - **Hablar con VIVIAN** → `/vivian` (card destacada verde)
 - **Artículos** → `/articulos`
 - **Entrena tu mente** → `/juegos`
+- **Mi agenda** → `/agenda`
+- **Mis medicamentos** → `/medicamentos`
 
-Cards próximamente: Mi agenda, Mis medicamentos, Telemedicina, Bienestar activo, Tours y experiencias.
+Cards próximamente: Telemedicina, Bienestar activo, Tours y experiencias.
 
 **Toast de bienvenida:** Al llegar desde magic link (`?bienvenida=1`), muestra toast verde "🌿 ¡Listo, [nombre]! Ya iniciaste sesión." por 4 segundos. El parámetro se limpia del URL automáticamente.
+
+---
+
+## Agenda y Medicamentos (`/agenda`, `/medicamentos`)
+
+- **Agenda:** CRUD de citas (título, tipo, fecha/hora, proveedor, notas) en tabla `agenda`. Tipos "Telemedicina" y "Tour" ya están en el selector pero deshabilitados (`activo: false`) — reservados para cuando existan esas features.
+- **Medicamentos:** CRUD de medicamentos (nombre, dosis, múltiples horarios de toma) en tabla `medicamentos`. Se pueden marcar inactivos sin borrar el historial.
+- **Exportación a calendario (`lib/generarIcs.ts`, librería `ics`):** botón "📅 Agregar a mi calendario" en cada cita/medicamento genera un `.ics` descargable (alarma nativa en Google Calendar/iPhone/Outlook). Los medicamentos se exportan como evento diario recurrente (`FREQ=DAILY`) por cada horario.
+- **Limitación conocida (por diseño):** el `.ics` es un snapshot al momento de exportar — si el usuario edita o elimina la cita/medicamento después, el evento ya exportado en su calendario NO se actualiza solo. Se avisa con nota visible en ambas páginas.
 
 ---
 
@@ -288,6 +311,12 @@ chat_messages: id, user_id, role ('user'|'assistant'), content, canal ('web'|'wh
 -- Artículos
 articulos: id, slug, titulo, pilar, resumen, contenido, publicado, created_at
 
+-- Agenda
+agenda: id, user_id, titulo, tipo, fecha, proveedor, notas, confirmado, created_at
+
+-- Medicamentos
+medicamentos: id, user_id, nombre, dosis, horarios (array de "HH:MM"), activo, created_at
+
 -- Analytics
 eventos: id, tipo, user_id, metadata (JSONB), created_at
 ```
@@ -324,17 +353,18 @@ NEXT_PUBLIC_APP_URL=https://longvivia.cl
 ### Construido y en producción ✅
 - Landing page completa con todas las secciones y diseño de marca
 - Auth magic link (registro + login) con toast de bienvenida
-- Dashboard de usuario con cards de acceso rápido
+- Dashboard de usuario con cards de acceso rápido + tarjeta "Resumen de hoy"
 - VIVIAN web (chat completo con historial, búsqueda, micrófono)
 - VIVIAN WhatsApp (Twilio webhook con verificación de firma)
 - 5 artículos publicados con tracker de lectura
 - Juegos cognitivos: Memoria + Sopa de letras
+- **Mi agenda** — CRUD de citas + exportación a calendario (.ics)
+- **Mis medicamentos** — CRUD de recordatorios + exportación a calendario recurrente (.ics)
 - Panel de analytics interno `/admin`
 - Navbar con todos los links (desktop + mobile hamburguesa)
 
 ### Próximamente (features en roadmap)
-- Mi agenda (citas y recordatorios)
-- Mis medicamentos (recordatorios con notificaciones)
+- Notificaciones push/WhatsApp reales para agenda y medicamentos (hoy solo hay export manual a calendario)
 - Telemedicina online (Whereby embed)
 - Bienestar activo (clases en vivo/grabadas)
 - Tours y experiencias
@@ -346,6 +376,50 @@ NEXT_PUBLIC_APP_URL=https://longvivia.cl
 - Primer aliado B2B firmado
 - Registro de marca LongVivIA en INAPI (Clases 42 y 44)
 - Constitución LongViva SpA en RES
+
+---
+
+## Sub-proyecto: Parkin&Son / NORITA
+
+⚠️ **Esto NO es una feature de LongVivIA.** Es un producto/marca distinto que vive en el mismo
+repo, bajo el mismo paraguas societario (Longviva SPA), pero con landing, identidad visual y
+asistente IA propios. No está enlazado desde la navegación de LongVivIA ni mencionado en su
+copy — es accesible solo por URL directa.
+
+**Qué es:** plataforma de acompañamiento para personas con Parkinson y sus familias en Chile.
+El prompt de sistema (`lib/norita-prompt.ts`) indica que la plataforma fue creada por alguien
+con diagnóstico de Parkinson juvenil (2022) y está pensada explícitamente para no asumir que
+todo usuario con Parkinson es adulto mayor.
+
+**Rutas:**
+| Ruta | Descripción |
+|------|-------------|
+| `/parkinandson` | Landing propia (hero, sección de conciencia sobre el tulipán/símbolo Parkinson, CTA a NORITA, formulario de lista de espera) |
+| `/parkinandson/norita` | Chat con NORITA, UI de chat independiente (no reutiliza componentes de VIVIAN) |
+
+**Backend:** `app/api/norita/route.ts` — llama a Claude API (`claude-sonnet-4-6`) directamente
+con `NORITA_SYSTEM_PROMPT` + contexto opcional (`userName`, `estadio`, `ciudad`). Recibe
+`history` desde el cliente (sin persistencia en Supabase — a diferencia de VIVIAN, que sí
+guarda memoria persistente).
+
+**NORITA — personalidad y reglas (`lib/norita-prompt.ts`):**
+- Flujo obligatorio: 1) contención emocional → 2) orientación → 3) alternativas terapéuticas
+- Vocabulario prohibido: "enfermo/a", "deterioro", "dependiente", "ya no puede"
+- Conoce terapias con evidencia (tango terapéutico, LSVT BIG/LOUD, ejercicio aeróbico,
+  musicoterapia, Tai Chi adaptado, mindfulness MBSR, neuronutrición)
+- No diagnostica, no cambia medicación, no reemplaza al neurólogo
+
+**Estado real (verificado en código, no solo intención):**
+- ✅ Landing y chat funcionando en la UI
+- ❌ **El formulario de lista de espera de `/parkinandson` tiene un `TODO: conectar con
+  Supabase` sin implementar — hoy los leads del formulario NO se guardan en ningún lado.**
+- ❌ El chat de NORITA no persiste historial (se pierde al recargar), a diferencia de VIVIAN
+- Único commit de origen: `6df8295` (5 jun 2026), agrupado junto con el trabajo de memoria
+  persistente de VIVIAN — sugiere que fue un prototipo rápido, no un desarrollo planificado
+  aparte
+
+**Antes de invertir más en esto:** confirmar si Parkin&Son sigue siendo un producto activo o
+fue un experimento descartado — no hay decisión documentada al respecto.
 
 ---
 
