@@ -46,7 +46,7 @@ export default function PerfilSalud() {
     if (!userId || !consentido) return;
     setGuardando(true);
     const valor = seleccion === "" ? null : seleccion;
-    await supabase.from("profiles").update({ prevision: valor }).eq("id", userId);
+    await supabase.from("profiles").upsert({ id: userId, prevision: valor }, { onConflict: "id" });
     setPrevisionActual(valor);
     setGuardando(false);
     setEditando(false);
@@ -62,7 +62,7 @@ export default function PerfilSalud() {
     if (!userId || !afpConsentido) return;
     setAfpGuardando(true);
     const valor = afpSeleccion === "" ? null : afpSeleccion;
-    await supabase.from("profiles").update({ prevision_afp: valor }).eq("id", userId);
+    await supabase.from("profiles").upsert({ id: userId, prevision_afp: valor }, { onConflict: "id" });
     setAfpActual(valor);
     setAfpGuardando(false);
     setAfpEditando(false);
