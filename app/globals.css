@@ -29,5 +29,7 @@ body {
 
 /* Modo texto grande — accesibilidad */
 :root { --text-scale: 1; }
-html.text-grande { --text-scale: 1.2; }
-html.text-grande body { zoom: 1.15; }
+html.text-grande    { --text-scale: 1.2; }
+html.text-grande    body { zoom: 1.15; }
+html.text-muy-grande { --text-scale: 1.38; }
+html.text-muy-grande body { zoom: 1.3; }

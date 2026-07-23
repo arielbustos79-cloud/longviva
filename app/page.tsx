@@ -96,18 +96,6 @@ function OliveDivider({ light = false }: { light?: boolean }) {
   );
 }
 
-/* ─── Avatares iniciales para testimonios ────────────────────── */
-function Inicial({ letra, color = "#1B5E3B" }: { letra: string; color?: string }) {
-  return (
-    <div style={{
-      width: 44, height: 44, borderRadius: "50%",
-      background: color, display: "flex", alignItems: "center", justifyContent: "center",
-      fontFamily: "Cormorant Garamond, serif", fontSize: 20, fontWeight: 700, color: "white",
-      flexShrink: 0,
-    }}>{letra}</div>
-  );
-}
-
 /* ─── useCountUp ──────────────────────────────────────────────── */
 function useCountUp(end: number, ms = 1800, go = false) {
   const [v, setV] = useState(0);
@@ -242,12 +230,12 @@ function VivianChat() {
 /* ─── Marquee items ───────────────────────────────────────────── */
 const STRIP = [
   "✦ VIVIAN IA 24/7",
-  "✦ Yoga & Pilates próximamente",
-  "✦ Tours exclusivos próximamente",
-  "✦ Telemedicina próximamente",
-  "✦ Nutrición próximamente",
-  "✦ Comunidad activa próximamente",
-  "✦ Bienestar pleno próximamente",
+  "✦ Telemedicina disponible",
+  "✦ Bienestar activo",
+  "✦ Ocio y experiencias",
+  "✦ Nutrición disponible",
+  "✦ Libros gratis — bpdigital.cl",
+  "✦ Radios chilenas online",
   "✦ 100% gratuito",
 ];
 
@@ -259,9 +247,9 @@ export default function Home() {
 
   // Restaurar preferencia de tamaño de texto
   useEffect(() => {
-    if (localStorage.getItem("textSize") === "grande") {
-      document.documentElement.classList.add("text-grande");
-    }
+    const size = localStorage.getItem("textSize");
+    if (size === "grande") document.documentElement.classList.add("text-grande");
+    if (size === "muy-grande") document.documentElement.classList.add("text-muy-grande");
   }, []);
 
   // Detectar sesión activa
@@ -302,13 +290,19 @@ export default function Home() {
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
           <span style={{ fontSize: 13, color: "var(--gris)", marginRight: 4 }}>Tamaño de texto:</span>
           <button className={s.a11yBtn} onClick={() => {
+            document.documentElement.classList.remove("text-grande", "text-muy-grande");
+            localStorage.setItem("textSize", "normal");
+          }}>A</button>
+          <button className={s.a11yBtn} onClick={() => {
+            document.documentElement.classList.remove("text-muy-grande");
             document.documentElement.classList.add("text-grande");
             localStorage.setItem("textSize", "grande");
           }}>A+</button>
           <button className={s.a11yBtn} onClick={() => {
             document.documentElement.classList.remove("text-grande");
-            localStorage.setItem("textSize", "normal");
-          }}>A</button>
+            document.documentElement.classList.add("text-muy-grande");
+            localStorage.setItem("textSize", "muy-grande");
+          }}>A++</button>
         </div>
       </div>
 
@@ -414,7 +408,7 @@ export default function Home() {
           <div className={s.heroPill}>Plataforma 100% gratuita · Chile</div>
           <h1 className={s.h1}>
             <span className={s.break}>
-              {["60", "no", "es"].map((w, i) => (
+              {["Los", "60", "no", "son"].map((w, i) => (
                 <Fragment key={w}>
                   <span className={s.wr} style={{ animationDelay: `${80 + i * 90}ms` }}>{w}</span>{" "}
                 </Fragment>
@@ -423,35 +417,35 @@ export default function Home() {
             <span className={s.break}>
               {["el", "límite."].map((w, i) => (
                 <Fragment key={w}>
-                  <span className={s.wr} style={{ animationDelay: `${350 + i * 90}ms` }}>{w}</span>{" "}
+                  <span className={s.wr} style={{ animationDelay: `${470 + i * 90}ms` }}>{w}</span>{" "}
                 </Fragment>
               ))}
             </span>
             <em className={s.break}>
-              {["Es", "tu", "punto"].map((w, i) => (
+              {["Son", "tu", "punto"].map((w, i) => (
                 <Fragment key={w}>
-                  <span className={s.wr} style={{ animationDelay: `${580 + i * 90}ms` }}>{w}</span>{" "}
+                  <span className={s.wr} style={{ animationDelay: `${700 + i * 90}ms` }}>{w}</span>{" "}
                 </Fragment>
               ))}
             </em>
             <em className={s.break}>
               {["de", "partida."].map((w, i) => (
                 <Fragment key={w}>
-                  <span className={s.wr} style={{ animationDelay: `${850 + i * 90}ms` }}>{w}</span>
+                  <span className={s.wr} style={{ animationDelay: `${970 + i * 90}ms` }}>{w}</span>
                   {i === 0 ? " " : ""}
                 </Fragment>
               ))}
             </em>
           </h1>
-          <p className={`${s.heroDesc} ${s.entryFade}`} style={{ animationDelay: "1080ms" }}>
+          <p className={`${s.heroDesc} ${s.entryFade}`} style={{ animationDelay: "1200ms" }}>
             LongVivIA es tu plataforma de salud, bienestar y experiencias — con VIVIAN, la IA que te acompaña en tu etapa más libre y poderosa.
           </p>
-          <div className={`${s.heroCtas} ${s.entryFade}`} style={{ animationDelay: "1250ms" }}>
+          <div className={`${s.heroCtas} ${s.entryFade}`} style={{ animationDelay: "1380ms" }}>
             <a href="/registro" className={s.btnPrimary}>Comenzar gratis →</a>
             <a href="#vivian" className={s.btnGhost}>Conocer a VIVIAN ↓</a>
           </div>
-          <div className={`${s.heroProof} ${s.entryFade}`} style={{ animationDelay: "1420ms" }}>
-            <ProofCounter raw="3.5M" label="personas en su prime en Chile" />
+          <div className={`${s.heroProof} ${s.entryFade}`} style={{ animationDelay: "1560ms" }}>
+            <ProofCounter raw="4.1M" label="personas 60+ en Chile · INE 2026" />
             <ProofCounter raw="100%" label="gratuito, siempre" />
             <ProofCounter raw="24/7" label="VIVIAN contigo" />
           </div>
@@ -492,13 +486,13 @@ export default function Home() {
         <div className={`${s.primeLeft} ${s.fadeIn}`}>
           <div className={s.secLabel}>Para una vida larga y activa.</div>
           <h2 className={s.primeTitle}>Vitalidad, movimiento<br />y <em>libertad total.</em></h2>
-          <p className={s.primeDesc}>LongVivIA se financia con publicidad cuidadosamente seleccionada y alianzas con empresas que quieren estar a tu lado. Tú accedes a todo sin pagar nada. Así de simple.</p>
+          <p className={s.primeDesc}>LongVivIA se financia con publicidad segmentada y con comisiones cuando te conectamos con proveedores de confianza. Tú accedes a todo sin pagar nada. Así de simple.</p>
         </div>
         <div className={s.primeRight}>
           <div className={s.primeCards}>
             {[
               { icon: IC.salud,              title: "Telemedicina",     desc: "Consultas online con proveedores que calzan con tu previsión" },
-              { icon: IC.bienestar,          title: "Bienestar activo", desc: "Rutinas simples, yoga y pilates adaptados a tu ritmo" },
+              { icon: IC.bienestar,          title: "Bienestar activo", desc: "Rutinas simples y validadas para mantenerte activo a tu ritmo" },
               { icon: IC.tours,              title: "Ocio y tours",     desc: "Grupos pequeños, pensado para disfrutar sin apuro" },
               { icon: <VivianIcon size={28} />, title: "VIVIAN 24/7",  desc: "Tu IA personal de salud, bienestar y ocio" },
             ].map((c, i) => (
@@ -522,7 +516,7 @@ export default function Home() {
           <div className={s.vivianFeats}>
             {[
               { icon: IC.chat,  title: "Compañía real, 24/7",        desc: "Siempre disponible para conversar, escucharte y acompañarte — sin prisa ni tecnicismos." },
-              { icon: IC.salud, title: "Orientación en salud activa", desc: "Responde preguntas de salud con claridad, sin tecnicismos y siempre sugiriendo consultar a tu médico." },
+              { icon: IC.salud, title: "Orientación en salud",        desc: "Responde preguntas de salud con claridad, sin tecnicismos y siempre sugiriendo consultar a tu médico." },
               { icon: IC.tours, title: "Guía de experiencias",        desc: "Orienta sobre actividades, paseos y formas de mantenerte activo según tus intereses." },
               { icon: IC.mic,   title: "Voz o texto, tú decides",     desc: "Puedes hablarle o escribirle. VIVIAN entiende ambos con la misma calidez." },
             ].map((f, i) => (
@@ -700,35 +694,6 @@ export default function Home() {
               Comenzar gratis →
             </a>
           </div>
-        </div>
-      </section>
-
-      <OliveDivider />
-
-      {/* TESTIMONIOS */}
-      <section className={s.testimonials}>
-        <div style={{ textAlign: "center", marginBottom: 64 }}>
-          <div className={`${s.secLabel} ${s.fadeIn}`} style={{ color: "var(--v3)", textAlign: "center" }}>Lo que dicen quienes ya viven su prime</div>
-          <h2 className={`${s.secTitle} ${s.fadeIn}`} style={{ color: "var(--n2)", textAlign: "center" }}>Historias <em>reales</em></h2>
-        </div>
-        <div className={s.testGrid}>
-          {[
-            { text: "VIVIAN me recuerda mis medicamentos cada mañana y me ayudó a encontrar un médico online en minutos. Y todo gratis. No lo podía creer.", name: "María Teresa R.", age: "68 años · Santiago", inicial: "M", color: "#1B5E3B" },
-            { text: "Le pregunté a VIVIAN qué hacer el fin de semana y me recomendó un tour perfecto. Fui al Cajón con un grupo encantador y llegué con más energía que nunca.", name: "Jorge A.", age: "72 años · Viña del Mar", inicial: "J", color: "#2D8A5F" },
-            { text: "Pensé que la tecnología no era para mí. Pero VIVIAN es tan clara y paciente que en una semana ya reservaba mis clases sola y me sentía dueña de mi tiempo.", name: "Carmen L.", age: "65 años · Concepción", inicial: "C", color: "#8B6220" },
-          ].map((t, i) => (
-            <div key={t.name} className={`${s.testCard} ${s.fadeIn}`} style={{ transitionDelay: `${i * 120}ms` }}>
-              <div className={s.testStars}>
-                <OliveBranch size={18} variant="dark" />
-                <span style={{ fontSize: 12, fontWeight: 700, letterSpacing: 1, color: "var(--v3)", textTransform: "uppercase" }}>Usuario LongVivIA</span>
-              </div>
-              <p className={s.testText}>{t.text}</p>
-              <div className={s.testAuthor}>
-                <Inicial letra={t.inicial} color={t.color} />
-                <div><div className={s.testName}>{t.name}</div><div className={s.testAge}>{t.age}</div></div>
-              </div>
-            </div>
-          ))}
         </div>
       </section>
 
