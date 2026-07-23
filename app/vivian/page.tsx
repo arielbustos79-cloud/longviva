@@ -38,8 +38,9 @@ export default function VivianPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [historialOpen, setHistorialOpen] = useState(false);
   const [escuchando, setEscuchando] = useState(false);
-  const [confirmDelete, setConfirmDelete] = useState<string | null>(null); // fecha ISO del grupo a borrar
+  const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
   const [confirmDeleteAll, setConfirmDeleteAll] = useState(false);
+  const [grupoExpandido, setGrupoExpandido] = useState<string | null>(null);
 
   const bottomRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
@@ -311,48 +312,52 @@ export default function VivianPage() {
             <p style={{ fontSize: 14, color: "var(--gris)", padding: "4px 0" }}>Aún no tienes conversaciones guardadas.</p>
           ) : (
             <div style={{ maxHeight: 360, overflowY: "auto", display: "flex", flexDirection: "column", gap: 8 }}>
-              {grupos.map((g) => (
-                <div key={g.fechaISO} style={{ borderRadius: 12, overflow: "hidden", border: "1px solid var(--v5)" }}>
-                  {/* Header del grupo */}
-                  <div style={{ background: "var(--v6)", padding: "6px 14px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                    <span style={{ fontSize: 12, fontWeight: 700, color: "var(--v3)", letterSpacing: 0.5, textTransform: "capitalize" }}>
-                      {g.fechaLabel}
-                    </span>
-                    {confirmDelete === g.fechaISO ? (
-                      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                        <span style={{ fontSize: 12, color: "#c0392b" }}>¿Eliminar? No se puede deshacer.</span>
+              {grupos.map((g) => {
+                const expandido = grupoExpandido === g.fechaISO;
+                return (
+                  <div key={g.fechaISO} style={{ borderRadius: 12, overflow: "hidden", border: "1px solid var(--v5)" }}>
+                    {/* Header del grupo — clic para expandir */}
+                    <div
+                      style={{ background: "var(--v6)", padding: "8px 14px", display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer" }}
+                      onClick={() => setGrupoExpandido(expandido ? null : g.fechaISO)}
+                    >
+                      <span style={{ fontSize: 12, fontWeight: 700, color: "var(--v3)", letterSpacing: 0.5, textTransform: "capitalize" }}>
+                        {expandido ? "▾" : "▸"} {g.fechaLabel}
+                      </span>
+                      {confirmDelete === g.fechaISO ? (
+                        <div style={{ display: "flex", alignItems: "center", gap: 6 }} onClick={e => e.stopPropagation()}>
+                          <span style={{ fontSize: 12, color: "#c0392b" }}>¿Eliminar? No se puede deshacer.</span>
+                          <button onClick={() => eliminarGrupo(g.fechaISO)} style={{ fontSize: 11, fontWeight: 700, color: "white", background: "#c0392b", border: "none", borderRadius: 50, padding: "3px 10px", cursor: "pointer" }}>Sí</button>
+                          <button onClick={() => setConfirmDelete(null)} style={{ fontSize: 11, color: "var(--gris)", background: "transparent", border: "1px solid #D4DED6", borderRadius: 50, padding: "3px 8px", cursor: "pointer" }}>No</button>
+                        </div>
+                      ) : (
                         <button
-                          onClick={() => eliminarGrupo(g.fechaISO)}
-                          style={{ fontSize: 11, fontWeight: 700, color: "white", background: "#c0392b", border: "none", borderRadius: 50, padding: "3px 10px", cursor: "pointer" }}
+                          onClick={e => { e.stopPropagation(); setConfirmDelete(g.fechaISO); }}
+                          title="Eliminar esta conversación"
+                          style={{ background: "transparent", border: "none", cursor: "pointer", fontSize: 14, color: "var(--gris)", padding: "2px 6px", borderRadius: 6 }}
                         >
-                          Sí
+                          🗑
                         </button>
-                        <button
-                          onClick={() => setConfirmDelete(null)}
-                          style={{ fontSize: 11, color: "var(--gris)", background: "transparent", border: "1px solid #D4DED6", borderRadius: 50, padding: "3px 8px", cursor: "pointer" }}
-                        >
-                          No
-                        </button>
-                      </div>
-                    ) : (
-                      <button
-                        onClick={() => setConfirmDelete(g.fechaISO)}
-                        title="Eliminar esta conversación"
-                        style={{ background: "transparent", border: "none", cursor: "pointer", fontSize: 14, color: "var(--gris)", padding: "2px 6px", borderRadius: 6 }}
-                      >
-                        🗑
-                      </button>
-                    )}
-                  </div>
-
-                  {/* Preview mensajes de usuario */}
-                  {g.mensajes.filter(m => m.role === "user").slice(0, 2).map((m, j) => (
-                    <div key={j} style={{ padding: "8px 14px", fontSize: 14, color: "var(--n2)", lineHeight: 1.5, borderTop: "1px solid var(--v5)" }}>
-                      {m.content.length > 90 ? m.content.slice(0, 90) + "…" : m.content}
+                      )}
                     </div>
-                  ))}
-                </div>
-              ))}
+
+                    {/* Mensajes expandidos */}
+                    {expandido && g.mensajes.map((m, j) => (
+                      <div key={j} style={{
+                        padding: "10px 14px", fontSize: 14, lineHeight: 1.6,
+                        borderTop: "1px solid var(--v5)",
+                        background: m.role === "assistant" ? "#F9FDFB" : "white",
+                        display: "flex", gap: 8, alignItems: "flex-start",
+                      }}>
+                        <span style={{ fontSize: 11, fontWeight: 700, color: m.role === "user" ? "var(--v3)" : "var(--gris)", flexShrink: 0, paddingTop: 2, minWidth: 44 }}>
+                          {m.role === "user" ? "Tú" : "VIVIAN"}
+                        </span>
+                        <span style={{ color: "var(--n2)" }}>{m.content}</span>
+                      </div>
+                    ))}
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>
