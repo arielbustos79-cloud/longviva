@@ -202,6 +202,11 @@ export default function DashboardPage() {
               activo: true, href: "/nutricion", destacado: false,
             },
             {
+              svg: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>,
+              title: "Comunidad", desc: "Talleres y actividades municipales cerca de ti",
+              activo: true, href: "/comunidad", destacado: false,
+            },
+            {
               svg: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M10.5 20H4a2 2 0 01-2-2V6a2 2 0 012-2h16a2 2 0 012 2v7.5"/><circle cx="17" cy="17" r="5"/><path d="M14 17h6"/></svg>,
               title: "Farmacias", desc: "Descuentos en remedios y cuidado personal",
               activo: false, href: "#", destacado: false,

@@ -608,6 +608,8 @@ export default function Home() {
             { icon: IC.bienestar, title: "Bienestar activo",    desc: "Rutinas simples y validadas para mantenerte en movimiento. Sin gimnasio ni complicaciones.",                   href: "/bienestar",    activo: true },
             { icon: IC.tours,     title: "Ocio y experiencias", desc: "Grupos pequeños, pensado para tu ritmo. Incluye el Programa Vacaciones Tercera Edad de Sernatur.",             href: "/ocio",         activo: true },
             { icon: IC.nutricion, title: "Nutrición",           desc: "Nutricionistas especializados en personas en su prime. Verifica con tu previsión qué cubre tu plan.",          href: "/nutricion",    activo: true },
+            { icon: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>,
+              title: "Comunidad",   desc: "Te conectamos con talleres, clubes y actividades cerca de ti — según tu comuna.",                                                              href: "/comunidad",    activo: true },
             { icon: IC.pill,      title: "Farmacias",           desc: "Descuentos en remedios, genéricos y cuidado personal. Estamos confirmando los mejores convenios para ti.",     href: "#",             activo: false },
           ].map((srv, i) => (
             srv.activo ? (
