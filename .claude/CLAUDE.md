@@ -31,7 +31,9 @@ VIVIAN
 
 ## Qué es LongVivIA
 
-Plataforma digital **100% gratuita** de salud, bienestar y experiencias para personas en su prime (+60 años) en Chile. Se financia con publicidad segmentada y alianzas B2B (AFP, Isapres, Cajas de Compensación, farmacias, clínicas).
+Plataforma digital **100% gratuita** de salud, bienestar y experiencias para personas en su prime (+60 años) en Chile. Se financia con publicidad segmentada y comisión por derivación a proveedores externos (modelo vigente desde 22-07-2026 — reemplaza el modelo anterior de cuota por afiliado).
+
+LongVivIA actúa como **orientador/filtro/validador** — no construye servicios propios, conecta al usuario con proveedores ya existentes y gana comisión por derivación.
 
 **Tagline principal:** Para una vida larga y activa.
 **Tagline campaña:** Tu prime, tu plataforma Viva.
@@ -59,6 +61,8 @@ prime, vitalidad, plenitud, protagonismo, movimiento, libertad, energía, activo
 - Siempre termina con acción concreta o pregunta
 - Emojis con moderación (máx. 1-2 por mensaje)
 - **Modelo:** claude-sonnet-4-6 (Anthropic)
+
+**Regla crítica de consentimiento (implementada 22-07-2026):** Si el usuario menciona su previsión en el chat, VIVIAN debe preguntar "¿Quieres que recuerde tu previsión para orientarte mejor la próxima vez?" antes de usar ese dato. Nunca asumir consentimiento por una mención casual. Ver `lib/vivian-prompt.ts`.
 
 ---
 
@@ -93,8 +97,10 @@ Base de datos: Supabase (PostgreSQL) con RLS
 Auth:          Supabase Auth — magic link OTP (sin contraseña)
 IA VIVIAN:     Claude API — claude-sonnet-4-6 (Anthropic)
 WhatsApp:      Twilio Sandbox + webhook en /api/whatsapp
+               ⚠️ Sandbox bloqueado — ticket Twilio #28132027 activo
 Analytics:     Tabla "eventos" en Supabase (custom, no GA)
 Hosting:       Vercel (auto-deploy desde GitHub master)
+ICS export:    Librería `ics` (npm) — genera .ics para Google/iPhone/Outlook
 ```
 
 ---
@@ -112,47 +118,50 @@ longviva/
 │   ├── layout.tsx
 │   ├── login/page.tsx        ← Magic link login
 │   ├── registro/page.tsx     ← Registro con nombre + email
-│   ├── dashboard/            ← Panel de usuario autenticado
-│   │   ├── page.tsx
+│   ├── dashboard/
+│   │   ├── page.tsx          ← Panel de usuario autenticado
 │   │   ├── page.module.css
-│   │   └── ResumenHoy.tsx    ← Tarjeta "Resumen de hoy" (próxima cita/medicamento)
+│   │   ├── PerfilSalud.tsx   ← Mi previsión (selector + consentimiento Ley 19.628)
+│   │   └── ResumenHoy.tsx    ← Tarjeta "Resumen de hoy" (medicamentos + citas)
 │   ├── agenda/page.tsx       ← Mi agenda — CRUD de citas + export .ics
 │   ├── medicamentos/page.tsx ← Mis medicamentos — CRUD + export .ics recurrente
+│   ├── telemedicina/page.tsx ← Router por previsión (RedSalud/IntegraMédica/Mediclic)
+│   ├── ocio/page.tsx         ← Ocio y experiencias (VTE Sernatur + Turismo Senior)
+│   ├── nutricion/page.tsx    ← Nutrición — router por previsión (DoctorPlus/Mediglobal)
+│   ├── bienestar/page.tsx    ← Bienestar activo — artículos curados + placeholder clases
 │   ├── vivian/page.tsx       ← Chat VIVIAN (web)
 │   ├── articulos/
 │   │   ├── page.tsx          ← Listado de artículos
 │   │   └── [slug]/
 │   │       ├── page.tsx      ← Artículo individual
-│   │       └── ArticuloTracker.tsx  ← Evento articulo_leido
+│   │       └── ArticuloTracker.tsx
 │   ├── juegos/
-│   │   ├── page.tsx          ← Selección de juegos
-│   │   ├── memoria/page.tsx  ← Juego de memoria (4x3, 6 pares)
-│   │   └── sopa-letras/page.tsx ← Sopa de letras (12x12)
-│   ├── admin/page.tsx        ← Panel interno (solo ariel.bustos79@gmail.com)
+│   │   ├── page.tsx
+│   │   ├── memoria/page.tsx
+│   │   └── sopa-letras/page.tsx
+│   ├── admin/page.tsx
 │   ├── quienes-somos/page.tsx
 │   ├── terminos/page.tsx
 │   ├── privacidad/page.tsx
 │   ├── trabaja/page.tsx
-│   ├── auth/callback/route.ts ← Intercambia code → sesión, redirige a /dashboard?bienvenida=1
+│   ├── auth/callback/route.ts
 │   └── api/
-│       ├── vivian/route.ts   ← Claude API endpoint (chat web)
-│       └── whatsapp/route.ts ← Twilio webhook (VIVIAN por WhatsApp)
+│       ├── vivian/route.ts
+│       └── whatsapp/route.ts
 ├── components/
-│   ├── OliveBranch.tsx       ← SVG logo rama de olivo (props: size, variant)
-│   └── VivianIcon.tsx        ← Avatar SVG de VIVIAN
+│   ├── OliveBranch.tsx
+│   └── VivianIcon.tsx
 ├── lib/
-│   ├── supabase-browser.ts   ← Cliente Supabase (client components)
-│   ├── supabase-server.ts    ← Cliente Supabase (server components)
-│   ├── vivian-prompt.ts      ← System prompt de VIVIAN
+│   ├── supabase-browser.ts
+│   ├── supabase-server.ts
+│   ├── vivian-prompt.ts      ← System prompt VIVIAN (incluye regla de consentimiento previsión)
+│   ├── prevision.ts          ← Tipos, labels y routers por previsión (telemedicina/nutrición)
 │   ├── generarIcs.ts         ← Genera y descarga .ics (citas y medicamentos)
-│   └── logEvento.ts          ← Fire-and-forget analytics a tabla "eventos"
+│   └── logEvento.ts
+├── scripts/
+│   └── articulos-batch-2.sql ← INSERT de los 5 artículos del batch 2
 └── public/
 ```
-
-> ℹ️ El sub-proyecto Parkin&Son / NORITA (otra marca, mismo holding) vivía en este repo bajo
-> `app/parkinandson/`, `app/api/norita/` y `lib/norita-prompt.ts`. Se movió a la rama
-> `parkinandson-draft` para no mezclarse con el desarrollo activo de LongVivIA — está en pausa
-> intencional. Ver el `.claude/CLAUDE.md` de esa rama para el detalle completo.
 
 ---
 
@@ -167,136 +176,105 @@ longviva/
 | `/vivian` | ✅ Activa | Chat con VIVIAN (web) |
 | `/agenda` | ✅ Activa | Mi agenda — citas médicas, export .ics |
 | `/medicamentos` | ✅ Activa | Mis medicamentos — recordatorios, export .ics diario |
+| `/telemedicina` | ✅ Activa | Router de derivación por previsión |
+| `/ocio` | ✅ Activa | Ocio y experiencias (VTE Sernatur + Turismo Senior) |
+| `/nutricion` | ✅ Activa | Nutrición — router por previsión |
+| `/bienestar` | ✅ Activa | Bienestar activo — artículos curados |
 | `/articulos` | ✅ Activa | Listado de artículos |
 | `/articulos/[slug]` | ✅ Activa | Artículo individual con tracker |
 | `/juegos` | ✅ Activa | Selección de juegos cognitivos |
 | `/juegos/memoria` | ✅ Activa | Juego de memoria |
 | `/juegos/sopa-letras` | ✅ Activa | Sopa de letras |
 | `/admin` | ✅ Activa | Panel analytics (solo admin) |
-| `/quienes-somos` | ✅ Activa | Página institucional |
+| `/quienes-somos` | ✅ Activa | Página institucional (actualizada 22-07-2026) |
 | `/terminos` | ✅ Draft | Pendiente revisión legal |
 | `/privacidad` | ✅ Draft | Pendiente revisión legal |
 | `/trabaja` | ✅ Activa | Página de empleo |
 
 ---
 
-## Landing page (`/`) — Secciones
-
-1. **Navbar** — Logo + links (Quiénes somos, ¿Cómo funciona?, Servicios, VIVIAN IA, Artículos, Entrena tu mente, Contacto) + botón Ingresar/Mi panel + hamburguesa mobile
-2. **Hero** — Tagline principal + CTA registro
-3. **Prime** — 4 tarjetas: Telemedicina gratis, Clases ilimitadas, Tours a tu ritmo, VIVIAN 24/7
-4. **VIVIAN section** — Mockup chat (no clickeable) + features + botón "Hablar con VIVIAN →"
-5. **Servicios** — Card destacada VIVIAN IA + cards secundarias (Entrena tu mente ✅, Gestión de salud 🔜, Telemedicina 🔜, Bienestar activo 🔜, Ocio y experiencias 🔜, Nutrición 🔜)
-6. **¿Cómo funciona?** — 3 pasos animados
-7. **Testimonios** — Citas editoriales con OliveBranch + "Usuario LongVivIA"
-8. **Marquee** — Pilares: salud, bienestar, juegos, VIVIAN, nutrición...
-9. **Contacto / Footer** — Email, WhatsApp, redes, links legales
-
-**Motivos visuales:** OliveBranch SVG como separador de secciones y decoración en card VIVIAN.
-
----
-
 ## Dashboard (`/dashboard`)
 
-**Resumen de hoy** (`ResumenHoy.tsx`): tarjeta sobre las cards de acceso, muestra próxima cita agendada y próximo medicamento a tomar.
-
-Cards activas:
-- **Hablar con VIVIAN** → `/vivian` (card destacada verde)
-- **Artículos** → `/articulos`
-- **Entrena tu mente** → `/juegos`
-- **Mi agenda** → `/agenda`
-- **Mis medicamentos** → `/medicamentos`
-
-Cards próximamente: Telemedicina, Bienestar activo, Tours y experiencias.
-
-**Toast de bienvenida:** Al llegar desde magic link (`?bienvenida=1`), muestra toast verde "🌿 ¡Listo, [nombre]! Ya iniciaste sesión." por 4 segundos. El parámetro se limpia del URL automáticamente.
+Orden de secciones de arriba hacia abajo:
+1. **PerfilSalud** — "Mi previsión de salud": selector agrupado (Fonasa / Isapre [7 opciones] / Caja de Compensación) + checkbox de consentimiento explícito Ley 19.628. Botón gris hasta que el usuario tilda el consentimiento.
+2. **ResumenHoy** — Medicamentos del día (4 estados: ingerido/próxima/pendiente/atrasada) + citas de hoy. UPSERT en `tomas_medicamento` al marcar ingerido. Auto-refresh de estados cada 60 segundos.
+3. **Cards de acceso rápido** — VIVIAN IA (destacada), Artículos, Entrena tu mente, Mi agenda, Mis medicamentos (activos) + Telemedicina 🔜, Bienestar activo 🔜, Tours 🔜 (próximamente)
+4. **Banner VIVIAN** — CTA rápido a `/vivian`
 
 ---
 
-## Agenda y Medicamentos (`/agenda`, `/medicamentos`)
+## Pilares de derivación
 
-- **Agenda:** CRUD de citas (título, tipo, fecha/hora, proveedor, notas) en tabla `agenda`. Tipos "Telemedicina" y "Tour" ya están en el selector pero deshabilitados (`activo: false`) — reservados para cuando existan esas features.
-- **Medicamentos:** CRUD de medicamentos (nombre, dosis, múltiples horarios de toma) en tabla `medicamentos`. Se pueden marcar inactivos sin borrar el historial.
-- **Exportación a calendario (`lib/generarIcs.ts`, librería `ics`):** botón "📅 Agregar a mi calendario" en cada cita/medicamento genera un `.ics` descargable (alarma nativa en Google Calendar/iPhone/Outlook). Los medicamentos se exportan como evento diario recurrente (`FREQ=DAILY`) por cada horario.
-- **Limitación conocida (por diseño):** el `.ics` es un snapshot al momento de exportar — si el usuario edita o elimina la cita/medicamento después, el evento ya exportado en su calendario NO se actualiza solo. Se avisa con nota visible en ambas páginas.
+Lógica centralizada en `lib/prevision.ts`. Valores del campo `profiles.prevision`:
+
+| Valor | Label |
+|---|---|
+| `fonasa` | Fonasa |
+| `isapre_banmedica` | Isapre Banmédica |
+| `isapre_cruz_blanca` | Isapre Cruz Blanca |
+| `isapre_consalud` | Isapre Consalud |
+| `isapre_colmena` | Isapre Colmena |
+| `isapre_vida_tres` | Isapre Vida Tres |
+| `isapre_nueva_masvida` | Isapre Nueva Masvida |
+| `isapre_cruz_del_norte` | Isapre Cruz del Norte |
+| `caja` | Caja de Compensación |
+| `null` | Sin previsión registrada |
+
+**Telemedicina** (`/telemedicina`):
+- Fonasa → RedSalud Telemedicina + Mediglobal
+- Cruz Blanca / Colmena → IntegraMédica
+- Caja → Mediclic
+- Resto isapres → Mediglobal
+- Sin previsión → mensaje + link al dashboard para completar perfil
+
+**Ocio** (`/ocio`): VTE Sernatur (destacado como "Programa estatal") + Turismo Senior. Sin mencionar precios.
+
+**Nutrición** (`/nutricion`): Fonasa → DoctorPlus. Resto → DoctorPlus + Mediglobal.
+
+**Bienestar** (`/bienestar`): artículos curados propios + placeholder "Próximamente" para clases en vivo.
+
+**Farmacias**: ⏸️ BLOQUEADO — pendiente confirmar modelo de afiliación (tipo ChileSalud) antes de construir cualquier cosa.
+
+**Copy invariable en todos los pilares:** nunca prometer "gratis" ni "sin costo" de forma absoluta — usar "Consulta si tu previsión cubre esta atención" o "Verifica con tu plan antes de agendar".
+
+---
+
+## Agenda y Medicamentos
+
+- **Agenda** (`/agenda`): CRUD de citas en tabla `agenda`. Exporta `.ics` con alarma 1h antes. Tipos Telemedicina y Tour en el selector pero `activo: false`.
+- **Medicamentos** (`/medicamentos`): CRUD en tabla `medicamentos`. Exporta `.ics` con `RRULE:FREQ=DAILY` por cada horario (alarma al momento exacto).
+- **tomas_medicamento**: tabla para tracking de dosis. UPSERT al marcar ingerido. No se pre-generan filas — se calcula cruzando `medicamentos.horarios` con registros del día.
+- **Limitación conocida:** el `.ics` es estático — si el usuario edita algo después de exportar, el calendario no se actualiza. Se avisa con nota en ambas páginas.
+
+---
+
+## Artículos (estado 22-07-2026)
+
+10 artículos publicados en 2 batches:
+
+**Batch 1 (5 artículos):**
+- Chequeos que vale la pena tener al día (`salud_activa`)
+- Moverse 20 minutos al día (`salud_activa`)
+- El café de los martes (`vida_social`)
+- Videollamadas sin complicaciones (`tecnologia_simple`)
+- Isapre o Fonasa (`finanzas_prevision`)
+
+**Batch 2 (5 artículos — 22-07-2026):**
+- Jubilarse y sentir un vacío (`bienestar_energia`, curado)
+- Hervir laurel en casa (`salud_activa`, curado)
+- Fiestas old school (`vida_social`, original)
+- Invertir en tiempos inciertos (`finanzas_prevision`, original)
+- IA y brecha digital (`tecnologia_simple`, original)
+
+Columna del cuerpo: `contenido` (no `cuerpo` — error detectado al insertar batch 2).
 
 ---
 
 ## VIVIAN Chat (`/vivian`)
 
-- Header: "VIVIAN" centrado + "● En línea", fecha + "← Volver" (→ /dashboard si hay sesión, → / si no)
-- Íconos: 🕐 historial de conversaciones / 🔍 búsqueda en historial
-- Input: placeholder "Escribe o Habla", botón micrófono (SpeechRecognition), botón "Enviar"
-- Historial: carga últimos 60 mensajes como contexto oculto para VIVIAN
+- Historial: últimos 60 mensajes como contexto oculto
 - Logs: `logEvento("vivian_mensaje", { canal: "web" })`
-- **WhatsApp:** webhook en `/api/whatsapp` con verificación firma Twilio (HMAC-SHA1), logs `vivian_mensaje` canal whatsapp
-
----
-
-## Artículos
-
-- Tabla `articulos` en Supabase: `slug, titulo, pilar, resumen, contenido, publicado`
-- Pilares: salud, bienestar, nutricion, movimiento, mente
-- 5 artículos publicados con contenido aprobado
-- `ArticuloTracker.tsx`: dispara `articulo_leido` tras 30s O 80% de scroll (lo que ocurra primero), sin duplicados (ref `registrado`)
-
----
-
-## Juegos — Entrena tu mente (`/juegos`)
-
-### Memoria (`/juegos/memoria`)
-- 6 pares de símbolos SVG (sol, hoja, ola, montaña, flor, pájaro)
-- Grilla 4×3 (12 cartas), Fisher-Yates shuffle
-- Lógica: voltear 2 → pareja = queda descubierta, no pareja = vuelve en 1000ms
-- Al completar: `logEvento("juego_completado", { juego: "memoria", intentos })`
-
-### Sopa de letras (`/juegos/sopa-letras`)
-- Grilla 12×12, 8 palabras: PRIME, ENERGIA, VITAL, CALMA, SALUD, MOVER, VIVIAN, PLENO
-- Palabras en 4 direcciones (→ ← ↓ ↑), sin diagonal
-- Selección: clic primera letra → clic última letra (misma fila o columna)
-- Al completar: `logEvento("juego_completado", { juego: "sopa_letras" })`
-
----
-
-## Analytics internos
-
-### Tabla `eventos` (Supabase)
-```sql
-CREATE TABLE eventos (
-  id         UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  tipo       TEXT,  -- ver TipoEvento
-  user_id    UUID,
-  metadata   JSONB,
-  created_at TIMESTAMPTZ DEFAULT now()
-);
-```
-
-### `lib/logEvento.ts`
-Tipos válidos (`TipoEvento`):
-- `registro_completado` — primer acceso (<5 min desde created_at)
-- `vivian_mensaje` — mensaje enviado a VIVIAN (web o whatsapp)
-- `articulo_leido` — artículo leído (30s o 80% scroll)
-- `juego_completado` — juego terminado (memoria o sopa_letras)
-
-Patrón: fire-and-forget (`void promise`) — nunca bloquea la UI.
-
-### Panel `/admin`
-Protegido por `ADMIN_EMAILS = ["ariel.bustos79@gmail.com"]`.
-KPIs: usuarios totales, mensajes VIVIAN, artículos leídos, usuarios activos VIVIAN.
-Top artículos, VIVIAN por canal, timeline de actividad reciente.
-
----
-
-## Auth flow
-
-1. Usuario ingresa email en `/login` o `/registro`
-2. Supabase envía magic link al correo
-3. Usuario hace clic → `/auth/callback?code=xxx`
-4. `route.ts` intercambia code → sesión → redirige a `/dashboard?bienvenida=1`
-5. Dashboard muestra toast de bienvenida una sola vez
-
-**Email template (Supabase):** incluye texto de tranquilidad antes del aviso legal:
-> "Puedes cerrar esta pantalla sin problema — tu sesión queda guardada. La próxima vez que entres a longvivia.cl, ya vas a estar dentro, sin necesitar un nuevo enlace."
+- **WhatsApp:** webhook en `/api/whatsapp` — ⚠️ sandbox bloqueado por Twilio #28132027
 
 ---
 
@@ -305,22 +283,52 @@ Top artículos, VIVIAN por canal, timeline de actividad reciente.
 ```sql
 -- Perfiles
 profiles: id, nombre, apellido, telefono, ciudad, prevision, condicion, plan, preferencias, created_at
+-- prevision: TEXT — valores snake_case (fonasa, isapre_*, caja, null)
+-- Ley 19.628: consentimiento explícito requerido antes de guardar prevision
 
 -- Chat VIVIAN
 chat_messages: id, user_id, role ('user'|'assistant'), content, canal ('web'|'whatsapp'), created_at
 
 -- Artículos
 articulos: id, slug, titulo, pilar, resumen, contenido, publicado, created_at
+-- ATENCIÓN: columna es "contenido", NO "cuerpo"
 
 -- Agenda
 agenda: id, user_id, titulo, tipo, fecha, proveedor, notas, confirmado, created_at
 
 -- Medicamentos
-medicamentos: id, user_id, nombre, dosis, horarios (array de "HH:MM"), activo, created_at
+medicamentos: id, user_id, nombre, dosis, horarios (text[]), activo, created_at
+
+-- Tracking de dosis
+tomas_medicamento: id, medicamento_id, user_id, fecha (date), horario (text), ingerido (bool), marcado_en (timestamptz)
+UNIQUE (medicamento_id, fecha, horario)
+RLS: select/insert/update own rows
+GRANT ALL TO authenticated
 
 -- Analytics
 eventos: id, tipo, user_id, metadata (JSONB), created_at
 ```
+
+---
+
+## Analytics internos
+
+### `lib/logEvento.ts` — TipoEvento válidos:
+- `registro_completado` — primer acceso (<5 min desde created_at)
+- `vivian_mensaje` — mensaje enviado a VIVIAN (web o whatsapp)
+- `articulo_leido` — artículo leído (30s o 80% scroll)
+- `juego_completado` — juego terminado (memoria o sopa_letras)
+
+### Panel `/admin`
+Protegido por `ADMIN_EMAILS = ["ariel.bustos79@gmail.com"]`.
+
+---
+
+## Auth flow
+
+1. Email en `/login` o `/registro` → magic link
+2. Clic → `/auth/callback?code=xxx` → sesión → `/dashboard?bienvenida=1`
+3. Toast verde "🌿 ¡Listo, [nombre]! Ya iniciaste sesión." por 4 segundos
 
 ---
 
@@ -342,55 +350,42 @@ NEXT_PUBLIC_APP_URL=https://longvivia.cl
 ## Deploy
 
 - **Repo:** github.com/arielbustos79-cloud/longviva (rama `master`)
-- **Vercel:** proyecto `longviva` bajo cuenta `arielteta9`
-- **Auto-deploy:** cada push a `master` → deploy automático en Vercel
+- **Auto-deploy:** cada push a `master` → Vercel automático
 - **Deploy manual:** `npx vercel --prod` desde `C:\Users\ARIEL\longviva`
-- **Dominio producción:** longvivia.cl + www.longvivia.cl
+- **Dominio:** longvivia.cl + www.longvivia.cl
 
 ---
 
-## Estado actual — Julio 2026
+## Estado actual — 22 de julio de 2026
 
 ### Construido y en producción ✅
-- Landing page completa con todas las secciones y diseño de marca
-- Auth magic link (registro + login) con toast de bienvenida
-- Dashboard de usuario con cards de acceso rápido + tarjeta "Resumen de hoy"
-- VIVIAN web (chat completo con historial, búsqueda, micrófono)
-- VIVIAN WhatsApp (Twilio webhook con verificación de firma)
-- 5 artículos publicados con tracker de lectura
+- Landing page completa (servicios activos con links reales: Telemedicina, Ocio, Bienestar, Nutrición + Farmacias "Próximamente")
+- Auth magic link con toast de bienvenida
+- Dashboard: PerfilSalud (previsión + consentimiento) + ResumenHoy + cards de acceso
+- VIVIAN web + WhatsApp (sandbox bloqueado)
+- 10 artículos publicados (2 batches)
 - Juegos cognitivos: Memoria + Sopa de letras
-- **Mi agenda** — CRUD de citas + exportación a calendario (.ics)
-- **Mis medicamentos** — CRUD de recordatorios + exportación a calendario recurrente (.ics)
-- Panel de analytics interno `/admin`
-- Navbar con todos los links (desktop + mobile hamburguesa)
+- Mi agenda — CRUD + export .ics (alarma 1h antes)
+- Mis medicamentos — CRUD + export .ics recurrente diario
+- Telemedicina `/telemedicina` — router por previsión
+- Ocio `/ocio` — VTE Sernatur + Turismo Senior
+- Nutrición `/nutricion` — router por previsión
+- Bienestar `/bienestar` — artículos curados
+- Panel analytics `/admin`
+- LongViva SpA constituida (13-07-2026)
 
-### Próximamente (features en roadmap)
-- Notificaciones push/WhatsApp reales para agenda y medicamentos (hoy solo hay export manual a calendario)
-- Telemedicina online (Whereby embed)
-- Bienestar activo (clases en vivo/grabadas)
-- Tours y experiencias
-- App React Native (Expo) — publicación en Google Play
+### Pendiente de construir / bloqueado
+- **Farmacias** — bloqueado, pendiente confirmar modelo afiliación (tipo ChileSalud)
+- **Notificaciones push/WhatsApp** — bloqueado por Twilio #28132027
+- **Clases en vivo** (bienestar) — mercado fragmentado, sin proveedor definido
+- **App React Native** (Expo)
 
 ### Pendiente operacional
-- Publicar páginas de Términos y Privacidad (pendiente revisión legal)
-- Twilio: salir del Sandbox (requiere cuenta de empresa activa)
-- Primer aliado B2B firmado
-- Registro de marca LongVivIA en INAPI (Clases 42 y 44)
-- Constitución LongViva SpA en RES
-
----
-
-## Sub-proyecto: Parkin&Son / NORITA (movido a otra rama)
-
-Vivía en este repo bajo `app/parkinandson/`, `app/api/norita/` y `lib/norita-prompt.ts` — un
-producto/marca distinto (acompañamiento para personas con Parkinson y sus familias), no una
-feature de LongVivIA, sin enlace desde la navegación ni URL pública en producción.
-
-Se separó a la rama **`parkinandson-draft`** (18 jul 2026) para dejar de mezclarse con el
-desarrollo activo de LongVivIA. El historial se preservó — incluyendo el commit original
-`6df8295` (5 jun 2026) que lo introdujo junto con el trabajo de memoria persistente de VIVIAN.
-Proyecto en pausa intencional; el `TODO: conectar con Supabase` del formulario de lista de
-espera queda sin resolver a propósito. Detalle completo en el `.claude/CLAUDE.md` de esa rama.
+- Términos y Privacidad — pendiente revisión legal
+- SII Inicio de Actividades — pausado campo domicilio/usufructo
+- Twilio: salir del sandbox (ticket #28132027 activo)
+- Primer aliado B2B — propuesta enviada a Conecta Mayor UC (19-07-2026)
+- Registro de marca INAPI — "LongVivIA" denominativa, Clase 42
 
 ---
 
@@ -398,7 +393,14 @@ espera queda sin resolver a propósito. Detalle completo en el `.claude/CLAUDE.m
 
 1. **Senior-friendly:** fuente mínima 18px, botones grandes, máx. 3 clics para cualquier acción
 2. **Mobile first:** diseño responsivo probado en mobile
-3. **Analytics no bloqueante:** todos los eventos usan fire-and-forget (`void promise`)
+3. **Analytics no bloqueante:** fire-and-forget (`void promise`)
 4. **Contenido de salud:** NUNCA generar estadísticas o citas médicas — solo usar contenido aprobado
-5. **Privacidad:** RLS en Supabase, nunca exponer service_role_key al cliente
+5. **Privacidad:** RLS en Supabase, nunca exponer service_role_key al cliente. Campo `prevision` requiere consentimiento explícito (Ley 19.628).
 6. **Sin tecnicismos de marca:** respetar vocabulario permitido/prohibido en TODO el copy
+7. **Copy de servicios derivados:** nunca prometer gratuidad ni precio que LongVivIA no controla
+
+---
+
+## Sub-proyecto: Parkin&Son / NORITA
+
+Movido a rama `parkinandson-draft` (18 jul 2026). En pausa intencional.
