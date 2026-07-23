@@ -48,15 +48,49 @@ export async function POST(request: Request) {
         }\n\nUSO DE LA MEMORIA: retoma naturalmente lo que ya hablaron si el usuario lo menciona. Nunca digas que no tienes acceso a conversaciones anteriores — sí las recuerdas. Respeta siempre las fechas: si algo es para el futuro, no lo trates como si fuera hoy.`
       : `\n\nFECHA DE HOY: ${hoy}`;
 
-    const response = await anthropic.messages.create({
+    // web_search habilitado solo para AFP/previsión y ocio/cartelera — VIVIAN lo regula por system prompt
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const WEB_SEARCH_TOOL = { type: "web_search_20250305", name: "web_search" } as any;
+
+    let msgs: Anthropic.MessageParam[] = [
+      ...sessionHistory,
+      { role: "user", content: message },
+    ];
+
+    let resp = await anthropic.messages.create({
       model: "claude-sonnet-4-6",
-      max_tokens: 500,
+      max_tokens: 1024,
       system: VIVIAN_SYSTEM_PROMPT + perfilCtx + memoriaAnterior,
-      messages: [...sessionHistory, { role: "user", content: message }],
+      tools: [WEB_SEARCH_TOOL],
+      messages: msgs,
     });
 
-    const reply =
-      response.content[0].type === "text" ? response.content[0].text : "";
+    // Agentic loop — hasta 2 búsquedas por respuesta
+    let iterations = 0;
+    while (resp.stop_reason === "tool_use" && iterations < 2) {
+      iterations++;
+      msgs = [...msgs, { role: "assistant", content: resp.content }];
+      const toolResults = resp.content
+        .filter((b): b is Anthropic.ToolUseBlock => b.type === "tool_use")
+        .map((b) => ({
+          type: "tool_result" as const,
+          tool_use_id: b.id,
+          content: "",
+        }));
+      msgs = [...msgs, { role: "user", content: toolResults }];
+      resp = await anthropic.messages.create({
+        model: "claude-sonnet-4-6",
+        max_tokens: 1024,
+        system: VIVIAN_SYSTEM_PROMPT + perfilCtx + memoriaAnterior,
+        tools: [WEB_SEARCH_TOOL],
+        messages: msgs,
+      });
+    }
+
+    const reply = resp.content
+      .filter(b => b.type === "text")
+      .map(b => (b as Anthropic.TextBlock).text)
+      .join("") || "";
 
     // Guardar en Supabase
     if (userId) {
