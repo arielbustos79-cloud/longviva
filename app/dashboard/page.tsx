@@ -168,7 +168,7 @@ export default function DashboardPage() {
             },
             {
               svg: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="9" height="9" rx="2"/><rect x="13" y="3" width="9" height="9" rx="2"/><rect x="2" y="13" width="9" height="9" rx="2"/><rect x="13" y="13" width="9" height="9" rx="2"/></svg>,
-              title: "Entrena tu mente", desc: "Memoria y sopa de letras",
+              title: "Entrena tu mente", desc: "4 juegos cognitivos: atención, memoria, percepción y ejecución",
               activo: true, href: "/juegos", destacado: false,
             },
             {
