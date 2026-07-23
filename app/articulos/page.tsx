@@ -151,6 +151,12 @@ export default function ArticulosPage() {
             ))}
           </div>
         )}
+
+        <div style={{ textAlign: "center", marginTop: 40, paddingTop: 32, borderTop: "1px solid var(--v5)" }}>
+          <Link href="/dashboard" style={{ display: "inline-flex", alignItems: "center", gap: 8, color: "var(--v2)", fontWeight: 600, fontSize: 15, textDecoration: "none" }}>
+            ← Volver al panel
+          </Link>
+        </div>
       </main>
     </div>
   );

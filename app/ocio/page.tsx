@@ -259,8 +259,14 @@ export default function OcioPage() {
         {/* VIVIAN tip */}
         <div style={{ background: "var(--v6)", borderRadius: 16, padding: "20px 24px", border: "1px solid var(--v5)", marginTop: 40 }}>
           <p style={{ fontSize: 14, color: "var(--gris)", margin: 0, lineHeight: 1.7 }}>
-            💡 ¿No sabes por dónde partir? Cuéntale a <Link href="/vivian" style={{ color: "var(--v2)", fontWeight: 700 }}>VIVIAN</Link> qué tipo de salida te llama — ella te ayuda a decidir según tus gustos.
+            💡 ¿No sabes por dónde partir? Cuéntale a <Link href="/vivian" style={{ color: "var(--v2)", fontWeight: 700 }}>VIVIAN</Link> qué tipo de experiencia te atrae — ella te ayuda a decidir según tus gustos.
           </p>
+        </div>
+
+        <div style={{ textAlign: "center", marginTop: 40, paddingTop: 32, borderTop: "1px solid var(--v5)" }}>
+          <Link href="/dashboard" style={{ display: "inline-flex", alignItems: "center", gap: 8, color: "var(--v2)", fontWeight: 600, fontSize: 15, textDecoration: "none" }}>
+            ← Volver al panel
+          </Link>
         </div>
 
       </main>

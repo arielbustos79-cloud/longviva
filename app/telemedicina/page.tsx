@@ -126,6 +126,12 @@ export default function TelemedicinaPage() {
             <strong>Importante:</strong> LongVivIA no opera ni gestiona estas consultas directamente — te orientamos hacia proveedores de confianza. El costo real depende de tu convenio con tu previsión. Ante una urgencia médica, llama al <strong>131 (SAMU)</strong>.
           </p>
         </div>
+
+        <div style={{ textAlign: "center", marginTop: 40, paddingTop: 32, borderTop: "1px solid var(--v5)" }}>
+          <Link href="/dashboard" style={{ display: "inline-flex", alignItems: "center", gap: 8, color: "var(--v2)", fontWeight: 600, fontSize: 15, textDecoration: "none" }}>
+            ← Volver al panel
+          </Link>
+        </div>
       </main>
     </div>
   );
