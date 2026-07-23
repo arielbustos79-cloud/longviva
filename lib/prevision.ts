@@ -8,6 +8,7 @@ export type Prevision =
   | "isapre_nueva_masvida"
   | "isapre_cruz_del_norte"
   | "caja"
+  | "ninguna"
   | null;
 
 export const PREVISION_LABELS: Record<string, string> = {
@@ -20,6 +21,7 @@ export const PREVISION_LABELS: Record<string, string> = {
   isapre_nueva_masvida: "Isapre Nueva Masvida",
   isapre_cruz_del_norte: "Isapre Cruz del Norte",
   caja: "Caja de Compensación",
+  ninguna: "Sin previsión registrada",
 };
 
 export const PREVISION_OPTIONS = [
@@ -37,6 +39,7 @@ export const PREVISION_OPTIONS = [
     ],
   },
   { group: "Caja de Compensación", items: [{ value: "caja", label: "Caja de Compensación (La Araucana / Los Andes / Los Héroes)" }] },
+  { group: "Otro", items: [{ value: "ninguna", label: "Sin previsión registrada" }] },
 ];
 
 // ── Telemedicina ────────────────────────────────────────────
@@ -46,12 +49,20 @@ export type ProveedorTelemed = {
   nota: string;
 };
 
+// Lista genérica cuando no hay previsión específica o es "ninguna"
+export const PROVEEDORES_TELEMED_GENERICOS: ProveedorTelemed[] = [
+  { nombre: "Mediglobal",           url: "https://www.mediglobal.cl",    nota: "Acepta Fonasa y diversas Isapres. Verifica qué prestaciones cubre tu plan." },
+  { nombre: "RedSalud Telemedicina", url: "https://www.redsalud.cl",     nota: "Disponible para Fonasa e Isapres con convenio. Consulta antes de agendar." },
+  { nombre: "IntegraMédica",        url: "https://www.integramedica.cl", nota: "Cubre Cruz Blanca, Colmena y otras Isapres. Verifica tu plan antes de reservar." },
+  { nombre: "Mediclic",             url: "https://www.mediclic.cl",      nota: "Trabaja con Cajas de Compensación (La Araucana, Los Andes, Los Héroes) y otras previsiones." },
+];
+
 export function getProveedoresTelemed(prevision: Prevision): ProveedorTelemed[] {
   switch (prevision) {
     case "fonasa":
       return [
-        { nombre: "RedSalud Telemedicina", url: "https://www.redsalud.cl", nota: "Consulta si tu convenio Fonasa cubre esta atención antes de agendar." },
-        { nombre: "Mediglobal", url: "https://www.mediglobal.cl", nota: "Verifica con tu ejecutiva(o) Fonasa qué prestaciones están cubiertas." },
+        { nombre: "RedSalud Telemedicina", url: "https://www.redsalud.cl",  nota: "Consulta si tu convenio Fonasa cubre esta atención antes de agendar." },
+        { nombre: "Mediglobal",            url: "https://www.mediglobal.cl", nota: "Verifica con tu ejecutiva(o) Fonasa qué prestaciones están cubiertas." },
       ];
     case "isapre_cruz_blanca":
     case "isapre_colmena":
@@ -62,14 +73,17 @@ export function getProveedoresTelemed(prevision: Prevision): ProveedorTelemed[] 
       return [
         { nombre: "Mediclic", url: "https://www.mediclic.cl", nota: "Verifica con tu Caja de Compensación qué cobertura aplica." },
       ];
+    case "ninguna":
+    case null:
+      return PROVEEDORES_TELEMED_GENERICOS;
     default:
-      // Todas las demás isapres
+      // Demás isapres
       if (prevision && prevision.startsWith("isapre_")) {
         return [
           { nombre: "Mediglobal", url: "https://www.mediglobal.cl", nota: "Consulta con tu Isapre si cubre telemedicina y qué copago aplica." },
         ];
       }
-      return [];
+      return PROVEEDORES_TELEMED_GENERICOS;
   }
 }
 

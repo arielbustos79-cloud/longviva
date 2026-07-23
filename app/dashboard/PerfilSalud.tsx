@@ -37,11 +37,12 @@ export default function PerfilSalud() {
   async function guardar() {
     if (!userId || !consentido) return;
     setGuardando(true);
+    const valor = seleccion === "" ? null : seleccion;
     await supabase
       .from("profiles")
-      .update({ prevision: seleccion || null })
+      .update({ prevision: valor })
       .eq("id", userId);
-    setPrevisionActual(seleccion || null);
+    setPrevisionActual(valor);
     setGuardando(false);
     setEditando(false);
   }
@@ -90,7 +91,6 @@ export default function PerfilSalud() {
                 ))}
               </optgroup>
             ))}
-            <option value="">Sin previsión registrada</option>
           </select>
 
           {/* Consentimiento explícito */}
