@@ -201,7 +201,7 @@ export default function MedicamentosPage() {
 
         {/* Nota exportación */}
         {medicamentos.length > 0 && (
-          <p style={{ fontSize: 13, color: "var(--gris)", marginBottom: 24, lineHeight: 1.6 }}>
+          <p style={{ fontSize: 15, color: "var(--gris)", marginBottom: 24, lineHeight: 1.6 }}>
             💡 Usa "Agregar a mi calendario" para recibir la alarma nativa de tu teléfono (Google Calendar, iPhone, Outlook). Si cambias los horarios del medicamento después de exportarlo, el evento en tu calendario no se actualiza automáticamente.
           </p>
         )}
