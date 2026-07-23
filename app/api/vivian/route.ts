@@ -31,14 +31,12 @@ export async function POST(request: Request) {
         .select("prevision, prevision_afp")
         .eq("id", userId)
         .single();
-      console.log("[VIVIAN] perfil cargado:", JSON.stringify(perfil));
       if (perfil?.prevision) {
         perfilCtx += `\n\nPREVISIÓN DE SALUD DEL USUARIO: ${perfil.prevision} — usa este dato para derivar al proveedor de telemedicina o nutrición que corresponde a su previsión.`;
       }
       if (perfil?.prevision_afp) {
         perfilCtx += `\n\nAFP DEL USUARIO: ${perfil.prevision_afp} — cuando el usuario pregunte sobre trámites AFP, derívalo directamente al sitio oficial de su AFP sin preguntarle cuál es.`;
       }
-      console.log("[VIVIAN] perfilCtx:", perfilCtx);
     }
 
     // hiddenHistory = memoria de sesiones pasadas → va en system prompt, no en messages[]
