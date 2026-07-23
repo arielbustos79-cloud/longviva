@@ -8,8 +8,11 @@ type Message = { role: "user" | "assistant"; content: string };
 type MsgConFecha = Message & { id: string; created_at: string };
 
 function renderConLinks(text: string) {
-  const urlRegex = /(https?:\/\/[^\s]+)/g;
-  const partes = text.split(urlRegex);
+  // Convierte Markdown [texto](url) → url plana antes de parsear
+  const sinMarkdown = text.replace(/\[([^\]]*)\]\((https?:\/\/[^\s)]+)\)/g, "$2");
+  // No captura puntuación al final de la URL (coma, punto, paréntesis, corchetes, etc.)
+  const urlRegex = /(https?:\/\/[^\s)\].,!?;:'"]+)/g;
+  const partes = sinMarkdown.split(urlRegex);
   return partes.map((parte, i) =>
     urlRegex.test(parte) ? (
       <a key={i} href={parte} target="_blank" rel="noopener noreferrer"
