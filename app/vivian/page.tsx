@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { createClient } from "@/lib/supabase-browser";
 import { logEvento } from "@/lib/logEvento";
 
 type Message = { role: "user" | "assistant"; content: string };
+type MsgConFecha = Message & { id: string; created_at: string };
 
 function renderConLinks(text: string) {
   const urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -23,7 +24,12 @@ function renderConLinks(text: string) {
 
 export default function VivianPage() {
   const [sessionMessages, setSessionMessages] = useState<Message[]>([]);
+  // hiddenHistory: solo role+content para contexto de VIVIAN
   const [hiddenHistory, setHiddenHistory] = useState<Message[]>([]);
+  // historialVisible: mensajes completos con id+fecha para el panel
+  const [historialVisible, setHistorialVisible] = useState<MsgConFecha[]>([]);
+  const [historialCargando, setHistorialCargando] = useState(false);
+
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
@@ -32,6 +38,9 @@ export default function VivianPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [historialOpen, setHistorialOpen] = useState(false);
   const [escuchando, setEscuchando] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState<string | null>(null); // fecha ISO del grupo a borrar
+  const [confirmDeleteAll, setConfirmDeleteAll] = useState(false);
+
   const bottomRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -53,25 +62,46 @@ export default function VivianPage() {
         .single();
       if (profile?.nombre) setNombre(profile.nombre);
 
-      // Cargar historial completo — oculto, solo para contexto
+      // hiddenHistory: últimos 60 mensajes para contexto de VIVIAN
       const { data: historial } = await supabase
         .from("chat_messages")
         .select("role, content, created_at")
         .eq("user_id", user.id)
-        .order("created_at", { ascending: true })
+        .order("created_at", { ascending: false })
         .limit(60);
 
       if (historial && historial.length > 0) {
-        setHiddenHistory(historial as Message[]);
+        setHiddenHistory([...historial].reverse() as Message[]);
       }
 
-      // Siempre arranca con saludo fresco
       setSessionMessages([
-        { role: "assistant", content: `¡Hola${nombre ? ", " + nombre : ""}! Soy VIVIAN, tu asistente personal. ¿En qué puedo ayudarte hoy? 🌿` },
+        { role: "assistant", content: `¡Hola${profile?.nombre ? ", " + profile.nombre : ""}! Soy VIVIAN, tu asistente personal. ¿En qué puedo ayudarte hoy? 🌿` },
       ]);
     }
     init();
   }, []);
+
+  // Cargar historial visible cada vez que se abre el panel
+  const cargarHistorialVisible = useCallback(async () => {
+    if (!userId) return;
+    setHistorialCargando(true);
+    const { data } = await supabase
+      .from("chat_messages")
+      .select("id, role, content, created_at")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false })
+      .limit(500);
+    setHistorialVisible((data ?? []) as MsgConFecha[]);
+    setHistorialCargando(false);
+  }, [userId]);
+
+  useEffect(() => {
+    if (historialOpen) {
+      setConfirmDelete(null);
+      setConfirmDeleteAll(false);
+      cargarHistorialVisible();
+    }
+  }, [historialOpen]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -81,35 +111,57 @@ export default function VivianPage() {
     if (lupaOpen) searchRef.current?.focus();
   }, [lupaOpen]);
 
+  async function eliminarGrupo(fechaISO: string) {
+    if (!userId) return;
+    const inicio = new Date(fechaISO);
+    inicio.setHours(0, 0, 0, 0);
+    const fin = new Date(fechaISO);
+    fin.setHours(23, 59, 59, 999);
+    await supabase
+      .from("chat_messages")
+      .delete()
+      .eq("user_id", userId)
+      .gte("created_at", inicio.toISOString())
+      .lte("created_at", fin.toISOString());
+    setConfirmDelete(null);
+    await cargarHistorialVisible();
+  }
+
+  async function eliminarTodo() {
+    if (!userId) return;
+    await supabase
+      .from("chat_messages")
+      .delete()
+      .eq("user_id", userId);
+    setConfirmDeleteAll(false);
+    setHistorialVisible([]);
+    setHiddenHistory([]);
+  }
+
   function toggleMic() {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SpeechRecognition) {
       alert("Tu navegador no soporta el micrófono. Usa Chrome o Edge.");
       return;
     }
-
     if (escuchando) {
       recognitionRef.current?.stop();
       setEscuchando(false);
       return;
     }
-
     const rec = new SpeechRecognition();
     rec.lang = "es-CL";
     rec.interimResults = false;
     rec.maxAlternatives = 1;
-
     rec.onstart = () => setEscuchando(true);
-
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     rec.onresult = (e: any) => {
-      const texto = e.results[0][0].transcript;
-      setInput(texto);
+      setInput(e.results[0][0].transcript);
       setEscuchando(false);
     };
-
     rec.onerror = () => setEscuchando(false);
     rec.onend = () => setEscuchando(false);
-
     recognitionRef.current = rec;
     rec.start();
   }
@@ -132,8 +184,8 @@ export default function VivianPage() {
         body: JSON.stringify({
           message: input,
           userId,
-          history: sessionMessages, // solo mensajes de esta sesión
-          hiddenHistory: hiddenHistory.slice(-30), // memoria anterior, va al system prompt
+          history: sessionMessages,
+          hiddenHistory: hiddenHistory.slice(-30),
         }),
       });
       const data = await res.json();
@@ -145,11 +197,30 @@ export default function VivianPage() {
     }
   }
 
+  // Agrupar historial visible por fecha (descendente)
+  function agruparPorFecha(msgs: MsgConFecha[]) {
+    const grupos: { fechaLabel: string; fechaISO: string; mensajes: MsgConFecha[] }[] = [];
+    let fechaActual = "";
+    // msgs ya viene ordenado desc — agrupamos y mostramos más reciente primero
+    msgs.forEach(m => {
+      const d = new Date(m.created_at);
+      const fechaISO = d.toISOString().split("T")[0];
+      const fechaLabel = d.toLocaleDateString("es-CL", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+      if (fechaISO !== fechaActual) {
+        fechaActual = fechaISO;
+        grupos.push({ fechaLabel, fechaISO, mensajes: [m] });
+      } else {
+        grupos[grupos.length - 1].mensajes.push(m);
+      }
+    });
+    return grupos;
+  }
+
+  const grupos = agruparPorFecha(historialVisible);
+
   // Búsqueda en historial
   const resultados = searchQuery.trim().length > 1
-    ? hiddenHistory.filter(m =>
-        m.content.toLowerCase().includes(searchQuery.toLowerCase())
-      )
+    ? historialVisible.filter(m => m.content.toLowerCase().includes(searchQuery.toLowerCase()))
     : [];
 
   return (
@@ -157,18 +228,13 @@ export default function VivianPage() {
 
       {/* Header */}
       <div style={{ background: "#1B5E3B", padding: "0.75rem 1.25rem", display: "flex", alignItems: "center", gap: "0.75rem" }}>
-        {/* Volver + fecha */}
         <a href={userId ? "/dashboard" : "/"} style={{ color: "rgba(255,255,255,0.6)", textDecoration: "none", fontSize: "0.82rem", whiteSpace: "nowrap", flexShrink: 0 }}>
           {new Date().toLocaleDateString("es-CL", { day: "numeric", month: "long" })} · ← Volver
         </a>
-
-        {/* Centro: VIVIAN + En línea */}
         <div style={{ flex: 1, textAlign: "center" }}>
           <div style={{ color: "white", fontWeight: 700, fontSize: "1.05rem", fontFamily: "Cormorant Garamond, serif", lineHeight: 1.2 }}>VIVIAN</div>
           <div style={{ color: "#B7E4C7", fontSize: "0.75rem" }}>● En línea</div>
         </div>
-
-        {/* Íconos derecha */}
         <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
           <button
             onClick={() => { setHistorialOpen(!historialOpen); setLupaOpen(false); }}
@@ -208,43 +274,85 @@ export default function VivianPage() {
           padding: "16px 24px", maxWidth: 700, width: "100%", margin: "0 auto",
           boxShadow: "0 4px 16px rgba(27,94,59,.08)",
         }}>
-          <div style={{ fontSize: 13, fontWeight: 700, color: "var(--v3)", marginBottom: 12, textTransform: "uppercase", letterSpacing: 0.8 }}>
-            Conversaciones anteriores
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "var(--v3)", textTransform: "uppercase", letterSpacing: 0.8 }}>
+              Conversaciones anteriores
+            </div>
+            {historialVisible.length > 0 && !confirmDeleteAll && (
+              <button
+                onClick={() => setConfirmDeleteAll(true)}
+                style={{ fontSize: 12, color: "#c0392b", background: "transparent", border: "1px solid #c0392b", borderRadius: 50, padding: "4px 12px", cursor: "pointer", fontWeight: 600 }}
+              >
+                Borrar todo
+              </button>
+            )}
           </div>
-          {hiddenHistory.length === 0 ? (
+
+          {/* Confirmación borrar todo */}
+          {confirmDeleteAll && (
+            <div style={{ background: "#FFF5F5", border: "1.5px solid #c0392b", borderRadius: 12, padding: "12px 16px", marginBottom: 12 }}>
+              <p style={{ fontSize: 14, color: "#c0392b", fontWeight: 600, margin: "0 0 10px" }}>
+                ¿Eliminar todo el historial? Esta acción no se puede deshacer.
+              </p>
+              <div style={{ display: "flex", gap: 8 }}>
+                <button onClick={eliminarTodo} style={{ fontSize: 13, fontWeight: 700, color: "white", background: "#c0392b", border: "none", borderRadius: 50, padding: "6px 16px", cursor: "pointer" }}>
+                  Sí, borrar todo
+                </button>
+                <button onClick={() => setConfirmDeleteAll(false)} style={{ fontSize: 13, color: "var(--gris)", background: "transparent", border: "1px solid #D4DED6", borderRadius: 50, padding: "6px 14px", cursor: "pointer" }}>
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          )}
+
+          {historialCargando ? (
+            <p style={{ fontSize: 14, color: "var(--gris)", padding: "4px 0" }}>Cargando...</p>
+          ) : grupos.length === 0 ? (
             <p style={{ fontSize: 14, color: "var(--gris)", padding: "4px 0" }}>Aún no tienes conversaciones guardadas.</p>
           ) : (
-            <div style={{ maxHeight: 300, overflowY: "auto", display: "flex", flexDirection: "column", gap: 6 }}>
-              {(() => {
-                // Agrupar por fecha y mostrar primer mensaje de cada grupo
-                const grupos: { fecha: string; mensajes: Message[] }[] = [];
-                let fechaActual = "";
-                hiddenHistory.forEach((m) => {
-                  const fecha = (m as Message & { created_at?: string }).created_at
-                    ? new Date((m as Message & { created_at?: string }).created_at!).toLocaleDateString("es-CL", { weekday: "long", day: "numeric", month: "long" })
-                    : "";
-                  if (fecha !== fechaActual) {
-                    fechaActual = fecha;
-                    grupos.push({ fecha, mensajes: [m] });
-                  } else {
-                    grupos[grupos.length - 1].mensajes.push(m);
-                  }
-                });
-                return grupos.map((g, i) => (
-                  <div key={i} style={{ borderRadius: 12, overflow: "hidden", border: "1px solid var(--v5)" }}>
-                    {g.fecha && (
-                      <div style={{ background: "var(--v6)", padding: "6px 14px", fontSize: 12, fontWeight: 700, color: "var(--v3)", letterSpacing: 0.5 }}>
-                        {g.fecha}
+            <div style={{ maxHeight: 360, overflowY: "auto", display: "flex", flexDirection: "column", gap: 8 }}>
+              {grupos.map((g) => (
+                <div key={g.fechaISO} style={{ borderRadius: 12, overflow: "hidden", border: "1px solid var(--v5)" }}>
+                  {/* Header del grupo */}
+                  <div style={{ background: "var(--v6)", padding: "6px 14px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                    <span style={{ fontSize: 12, fontWeight: 700, color: "var(--v3)", letterSpacing: 0.5, textTransform: "capitalize" }}>
+                      {g.fechaLabel}
+                    </span>
+                    {confirmDelete === g.fechaISO ? (
+                      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                        <span style={{ fontSize: 12, color: "#c0392b" }}>¿Eliminar? No se puede deshacer.</span>
+                        <button
+                          onClick={() => eliminarGrupo(g.fechaISO)}
+                          style={{ fontSize: 11, fontWeight: 700, color: "white", background: "#c0392b", border: "none", borderRadius: 50, padding: "3px 10px", cursor: "pointer" }}
+                        >
+                          Sí
+                        </button>
+                        <button
+                          onClick={() => setConfirmDelete(null)}
+                          style={{ fontSize: 11, color: "var(--gris)", background: "transparent", border: "1px solid #D4DED6", borderRadius: 50, padding: "3px 8px", cursor: "pointer" }}
+                        >
+                          No
+                        </button>
                       </div>
+                    ) : (
+                      <button
+                        onClick={() => setConfirmDelete(g.fechaISO)}
+                        title="Eliminar esta conversación"
+                        style={{ background: "transparent", border: "none", cursor: "pointer", fontSize: 14, color: "var(--gris)", padding: "2px 6px", borderRadius: 6 }}
+                      >
+                        🗑
+                      </button>
                     )}
-                    {g.mensajes.filter(m => m.role === "user").slice(0, 2).map((m, j) => (
-                      <div key={j} style={{ padding: "8px 14px", fontSize: 14, color: "var(--n2)", lineHeight: 1.5, borderTop: j > 0 ? "1px solid var(--v5)" : undefined }}>
-                        {m.content.length > 80 ? m.content.slice(0, 80) + "…" : m.content}
-                      </div>
-                    ))}
                   </div>
-                ));
-              })()}
+
+                  {/* Preview mensajes de usuario */}
+                  {g.mensajes.filter(m => m.role === "user").slice(0, 2).map((m, j) => (
+                    <div key={j} style={{ padding: "8px 14px", fontSize: 14, color: "var(--n2)", lineHeight: 1.5, borderTop: "1px solid var(--v5)" }}>
+                      {m.content.length > 90 ? m.content.slice(0, 90) + "…" : m.content}
+                    </div>
+                  ))}
+                </div>
+              ))}
             </div>
           )}
         </div>
@@ -273,7 +381,7 @@ export default function VivianPage() {
             <div style={{ marginTop: 12, maxHeight: 260, overflowY: "auto", display: "flex", flexDirection: "column", gap: 8 }}>
               {resultados.length === 0 ? (
                 <p style={{ fontSize: 14, color: "var(--gris)", padding: "8px 4px" }}>
-                  Sin resultados para "{searchQuery}"
+                  Sin resultados para &quot;{searchQuery}&quot;
                 </p>
               ) : (
                 resultados.map((m, i) => (
@@ -285,9 +393,7 @@ export default function VivianPage() {
                     <div style={{ fontSize: 11, fontWeight: 700, color: m.role === "user" ? "var(--v3)" : "var(--d2)", marginBottom: 4, textTransform: "uppercase", letterSpacing: 0.8 }}>
                       {m.role === "user" ? "Tú" : "VIVIAN"}
                     </div>
-                    <div style={{ fontSize: 14, color: "var(--n2)", lineHeight: 1.5 }}>
-                      {m.content}
-                    </div>
+                    <div style={{ fontSize: 14, color: "var(--n2)", lineHeight: 1.5 }}>{m.content}</div>
                   </div>
                 ))
               )}
@@ -330,7 +436,6 @@ export default function VivianPage() {
 
       {/* Input */}
       <div style={{ padding: "0.875rem 1rem", background: "white", borderTop: "1px solid #EAFAF0", maxWidth: 700, width: "100%", margin: "0 auto", display: "flex", gap: "0.5rem", alignItems: "center", boxSizing: "border-box" }}>
-        {/* Botón micrófono */}
         <button
           onClick={toggleMic}
           title={escuchando ? "Detener" : "Hablarle a VIVIAN"}
@@ -346,7 +451,6 @@ export default function VivianPage() {
         >
           {escuchando ? "⏹" : "🎤"}
         </button>
-
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
