@@ -23,6 +23,22 @@ export async function POST(request: Request) {
       weekday: "long", year: "numeric", month: "long", day: "numeric",
     });
 
+    // Perfil del usuario (previsión y AFP) para personalizar derivaciones
+    let perfilCtx = "";
+    if (userId) {
+      const { data: perfil } = await supabase
+        .from("profiles")
+        .select("prevision, prevision_afp")
+        .eq("id", userId)
+        .single();
+      if (perfil?.prevision) {
+        perfilCtx += `\n\nPREVISIÓN DE SALUD DEL USUARIO: ${perfil.prevision} — usa este dato para derivar al proveedor de telemedicina o nutrición que corresponde a su previsión.`;
+      }
+      if (perfil?.prevision_afp) {
+        perfilCtx += `\n\nAFP DEL USUARIO: ${perfil.prevision_afp} — cuando el usuario pregunte sobre trámites AFP, derívalo directamente al sitio oficial de su AFP sin preguntarle cuál es.`;
+      }
+    }
+
     // hiddenHistory = memoria de sesiones pasadas → va en system prompt, no en messages[]
     const memoriaAnterior = hiddenHistory && hiddenHistory.length > 0
       ? `\n\nFECHA DE HOY: ${hoy}\n\nTU MEMORIA (conversaciones reales anteriores con este usuario — son tus recuerdos, úsalos con naturalidad):\n${
@@ -35,7 +51,7 @@ export async function POST(request: Request) {
     const response = await anthropic.messages.create({
       model: "claude-sonnet-4-6",
       max_tokens: 500,
-      system: VIVIAN_SYSTEM_PROMPT + memoriaAnterior,
+      system: VIVIAN_SYSTEM_PROMPT + perfilCtx + memoriaAnterior,
       messages: [...sessionHistory, { role: "user", content: message }],
     });
 
