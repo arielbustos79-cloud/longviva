@@ -497,10 +497,10 @@ export default function Home() {
         <div className={s.primeRight}>
           <div className={s.primeCards}>
             {[
-              { icon: IC.salud, title: "Telemedicina gratis", desc: "Consultas con especialistas sin costo ni filas" },
-              { icon: IC.bienestar, title: "Clases ilimitadas", desc: "Yoga, pilates y funcional adaptado a ti" },
-              { icon: IC.tours, title: "Tours a tu ritmo", desc: "Grupos pequeños, precios exclusivos" },
-              { icon: <VivianIcon size={28} />, title: "VIVIAN 24/7", desc: "Tu IA personal de salud, bienestar y ocio" },
+              { icon: IC.salud,              title: "Telemedicina",     desc: "Consultas online con proveedores que calzan con tu previsión" },
+              { icon: IC.bienestar,          title: "Bienestar activo", desc: "Rutinas simples, yoga y pilates adaptados a tu ritmo" },
+              { icon: IC.tours,              title: "Ocio y tours",     desc: "Grupos pequeños, pensado para disfrutar sin apuro" },
+              { icon: <VivianIcon size={28} />, title: "VIVIAN 24/7",  desc: "Tu IA personal de salud, bienestar y ocio" },
             ].map((c, i) => (
               <div key={c.title} className={`${s.primeCard} ${s.fadeIn}`} style={{ transitionDelay: `${i * 110}ms` }}>
                 <div className={s.pcIcon} style={{ color: "rgba(255,255,255,.9)" }}>{c.icon}</div>

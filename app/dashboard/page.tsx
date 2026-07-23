@@ -183,17 +183,27 @@ export default function DashboardPage() {
             },
             {
               svg: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>,
-              title: "Telemedicina", desc: "Consultas online con especialistas",
-              activo: false, href: "#", destacado: false,
+              title: "Telemedicina", desc: "Consultas online según tu previsión",
+              activo: true, href: "/telemedicina", destacado: false,
             },
             {
               svg: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>,
-              title: "Bienestar activo", desc: "Yoga, pilates y funcional",
-              activo: false, href: "#", destacado: false,
+              title: "Bienestar activo", desc: "Rutinas simples a tu ritmo",
+              activo: true, href: "/bienestar", destacado: false,
             },
             {
               svg: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>,
-              title: "Tours y experiencias", desc: "Actividades para tu prime",
+              title: "Ocio y experiencias", desc: "Tours en grupos pequeños, a tu ritmo",
+              activo: true, href: "/ocio", destacado: false,
+            },
+            {
+              svg: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M11 2C6.5 2 3 6 3 11c0 5.25 7.5 12 9 12s9-6.75 9-12c0-5-3.5-9-9-9z"/><path d="M11 7v10M7 11h8"/></svg>,
+              title: "Nutrición", desc: "Nutricionistas especializados en tu prime",
+              activo: true, href: "/nutricion", destacado: false,
+            },
+            {
+              svg: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M10.5 20H4a2 2 0 01-2-2V6a2 2 0 012-2h16a2 2 0 012 2v7.5"/><circle cx="17" cy="17" r="5"/><path d="M14 17h6"/></svg>,
+              title: "Farmacias", desc: "Descuentos en remedios y cuidado personal",
               activo: false, href: "#", destacado: false,
             },
           ].map((card) => (
