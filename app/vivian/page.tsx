@@ -114,10 +114,9 @@ export default function VivianPage() {
 
   async function eliminarGrupo(fechaISO: string) {
     if (!userId) return;
-    const inicio = new Date(fechaISO);
-    inicio.setHours(0, 0, 0, 0);
-    const fin = new Date(fechaISO);
-    fin.setHours(23, 59, 59, 999);
+    // fechaISO es fecha UTC — usar UTC explícito para evitar desplazamiento por timezone local
+    const inicio = new Date(fechaISO + "T00:00:00.000Z");
+    const fin = new Date(fechaISO + "T23:59:59.999Z");
     await supabase
       .from("chat_messages")
       .delete()
