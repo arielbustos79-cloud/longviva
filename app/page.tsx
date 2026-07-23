@@ -608,18 +608,28 @@ export default function Home() {
             <a href="/agenda" className={s.srvLink}>Ver mi agenda →</a>
           </div>
 
-          {/* Cards secundarias — Próximamente */}
+          {/* Cards activas — pilares de derivación */}
           {[
-            { icon: IC.salud,     title: "Telemedicina",        desc: "Consultas online con médicos y especialistas. Compatible con Fonasa e Isapres." },
-            { icon: IC.bienestar, title: "Bienestar activo",    desc: "Clases de yoga, pilates y funcional. En vivo y grabadas." },
-            { icon: IC.tours,     title: "Ocio y experiencias", desc: "Tours con grupos pequeños, tu ritmo y precios exclusivos." },
-            { icon: IC.nutricion, title: "Nutrición",           desc: "Planes personalizados con nutricionistas. Seguimiento y recetas para ti." },
+            { icon: IC.salud,     title: "Telemedicina",        desc: "Consultas médicas online con proveedores que calzan con tu previsión. Consulta cobertura antes de agendar.",   href: "/telemedicina", activo: true },
+            { icon: IC.bienestar, title: "Bienestar activo",    desc: "Rutinas simples y validadas para mantenerte en movimiento. Sin gimnasio ni complicaciones.",                   href: "/bienestar",    activo: true },
+            { icon: IC.tours,     title: "Ocio y experiencias", desc: "Grupos pequeños, pensado para tu ritmo. Incluye el Programa Vacaciones Tercera Edad de Sernatur.",             href: "/ocio",         activo: true },
+            { icon: IC.nutricion, title: "Nutrición",           desc: "Nutricionistas especializados en personas en su prime. Verifica con tu previsión qué cubre tu plan.",          href: "/nutricion",    activo: true },
+            { icon: IC.pill,      title: "Farmacias",           desc: "Descuentos en remedios, genéricos y cuidado personal. Estamos confirmando los mejores convenios para ti.",     href: "#",             activo: false },
           ].map((srv, i) => (
-            <div key={srv.title} className={`${s.srvCard} ${s.fadeIn}`} style={{ transitionDelay: `${(i + 1) * 80}ms`, opacity: 0.7 }}>
-              <div className={s.srvIcon} style={{ color: "rgba(255,255,255,.75)" }}>{srv.icon}</div>
-              <h3>{srv.title} <span style={{ fontSize: "10px", background: "rgba(201,151,58,.15)", color: "var(--d2)", borderRadius: "20px", padding: "2px 9px", fontWeight: 600, letterSpacing: .5 }}>Próximamente</span></h3>
-              <p>{srv.desc}</p>
-            </div>
+            srv.activo ? (
+              <a key={srv.title} href={srv.href} className={`${s.srvCard} ${s.fadeIn}`} style={{ transitionDelay: `${(i + 1) * 80}ms`, textDecoration: "none" }}>
+                <div className={s.srvIcon} style={{ color: "rgba(255,255,255,.9)" }}>{srv.icon}</div>
+                <h3>{srv.title}</h3>
+                <p>{srv.desc}</p>
+                <span style={{ fontSize: 13, color: "var(--v4)", fontWeight: 700 }}>Ver opciones →</span>
+              </a>
+            ) : (
+              <div key={srv.title} className={`${s.srvCard} ${s.fadeIn}`} style={{ transitionDelay: `${(i + 1) * 80}ms`, opacity: 0.7 }}>
+                <div className={s.srvIcon} style={{ color: "rgba(255,255,255,.75)" }}>{srv.icon}</div>
+                <h3>{srv.title} <span style={{ fontSize: "10px", background: "rgba(201,151,58,.15)", color: "var(--d2)", borderRadius: "20px", padding: "2px 9px", fontWeight: 600, letterSpacing: .5 }}>Próximamente</span></h3>
+                <p>{srv.desc}</p>
+              </div>
+            )
           ))}
         </div>
       </section>

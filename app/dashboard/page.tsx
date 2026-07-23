@@ -7,6 +7,7 @@ import OliveBranch from "@/components/OliveBranch";
 import s from "./page.module.css";
 import { logEvento } from "@/lib/logEvento";
 import ResumenHoy from "./ResumenHoy";
+import PerfilSalud from "./PerfilSalud";
 
 type Profile = {
   nombre: string | null;
@@ -141,6 +142,9 @@ export default function DashboardPage() {
             Tu plataforma de salud, bienestar y experiencias.
           </p>
         </div>
+
+        {/* Previsión de salud */}
+        <PerfilSalud />
 
         {/* Resumen de hoy */}
         <ResumenHoy />
