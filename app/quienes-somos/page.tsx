@@ -47,13 +47,11 @@ export default function QuienesSomosPage() {
           </Bloque>
 
           <Bloque titulo="Lo que ofrecemos">
-            VIVIAN, nuestra asistente conversacional, está disponible hoy en la web y por WhatsApp — cálida, directa y disponible cuando la necesites, para acompañarte en salud, bienestar y las decisiones del día a día.
-            {"\n\n"}
-            Estamos construyendo también agenda de citas, recordatorios de medicamentos, telemedicina, planes de bienestar y experiencias como tours y clases — todo pensado para que vivas tu prime con más movimiento y menos fricción. Estas funciones llegan pronto.
+            VIVIAN, nuestra asistente conversacional, está disponible hoy en la web — cálida, directa y disponible cuando la necesites, para acompañarte en salud, bienestar y las decisiones del día a día. También te orientamos hacia los mejores servicios de telemedicina, bienestar, nutrición, ocio y farmacias — para que no tengas que buscar solo, sin que nosotros mismos operemos esos servicios.
           </Bloque>
 
           <Bloque titulo="Cómo nos financiamos">
-            LongVivIA es y será siempre 100% gratuita para quienes la usan. Nos financiamos con publicidad segmentada y alianzas con instituciones como AFP, Isapres, Cajas de Compensación y farmacias — nunca con cuotas ni cobros a nuestros usuarios.
+            LongVivIA es y será siempre 100% gratuita para quienes la usan. Nos financiamos con publicidad segmentada y con comisiones cuando te conectamos con proveedores de salud, bienestar y experiencias de confianza — nunca con cuotas ni cobros a nuestros usuarios.
           </Bloque>
 
           <div style={{
