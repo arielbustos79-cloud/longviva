@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase-browser";
-import { PREVISION_OPTIONS, PREVISION_LABELS } from "@/lib/prevision";
+import { PREVISION_OPTIONS, PREVISION_LABELS, AFP_OPTIONS, AFP_LABELS } from "@/lib/prevision";
 
 export default function PerfilSalud() {
   const [previsionActual, setPrevisionActual] = useState<string | null>(null);
@@ -10,6 +10,13 @@ export default function PerfilSalud() {
   const [consentido, setConsentido] = useState(false);
   const [editando, setEditando] = useState(false);
   const [guardando, setGuardando] = useState(false);
+
+  const [afpActual, setAfpActual] = useState<string | null>(null);
+  const [afpSeleccion, setAfpSeleccion] = useState<string>("");
+  const [afpConsentido, setAfpConsentido] = useState(false);
+  const [afpEditando, setAfpEditando] = useState(false);
+  const [afpGuardando, setAfpGuardando] = useState(false);
+
   const [userId, setUserId] = useState<string | null>(null);
   const supabase = createClient();
 
@@ -20,10 +27,11 @@ export default function PerfilSalud() {
       setUserId(user.id);
       const { data } = await supabase
         .from("profiles")
-        .select("prevision")
+        .select("prevision, prevision_afp")
         .eq("id", user.id)
         .single();
       setPrevisionActual(data?.prevision ?? null);
+      setAfpActual(data?.prevision_afp ?? null);
     }
     cargar();
   }, []);
@@ -38,18 +46,33 @@ export default function PerfilSalud() {
     if (!userId || !consentido) return;
     setGuardando(true);
     const valor = seleccion === "" ? null : seleccion;
-    await supabase
-      .from("profiles")
-      .update({ prevision: valor })
-      .eq("id", userId);
+    await supabase.from("profiles").update({ prevision: valor }).eq("id", userId);
     setPrevisionActual(valor);
     setGuardando(false);
     setEditando(false);
   }
 
+  function abrirEdicionAfp() {
+    setAfpSeleccion(afpActual ?? "");
+    setAfpConsentido(false);
+    setAfpEditando(true);
+  }
+
+  async function guardarAfp() {
+    if (!userId || !afpConsentido) return;
+    setAfpGuardando(true);
+    const valor = afpSeleccion === "" ? null : afpSeleccion;
+    await supabase.from("profiles").update({ prevision_afp: valor }).eq("id", userId);
+    setAfpActual(valor);
+    setAfpGuardando(false);
+    setAfpEditando(false);
+  }
+
   const label = previsionActual ? PREVISION_LABELS[previsionActual] : null;
+  const afpLabel = afpActual ? AFP_LABELS[afpActual] : null;
 
   return (
+    <>
     <div style={{
       background: "white", borderRadius: 20, padding: "20px 24px",
       border: "1.5px solid var(--v5)", boxShadow: "0 2px 8px rgba(27,94,59,.06)",
@@ -93,7 +116,6 @@ export default function PerfilSalud() {
             ))}
           </select>
 
-          {/* Consentimiento explícito */}
           <label style={{ display: "flex", alignItems: "flex-start", gap: 12, cursor: "pointer", marginBottom: 20 }}>
             <input
               type="checkbox"
@@ -129,5 +151,86 @@ export default function PerfilSalud() {
         </div>
       )}
     </div>
+
+    {/* ── AFP ─────────────────────────────────────── */}
+    <div style={{
+      background: "white", borderRadius: 20, padding: "20px 24px",
+      border: "1.5px solid var(--v5)", boxShadow: "0 2px 8px rgba(27,94,59,.06)",
+      marginBottom: 24,
+    }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
+        <div>
+          <p style={{ fontSize: 11, fontWeight: 700, color: "var(--gris)", letterSpacing: 1, textTransform: "uppercase", margin: "0 0 4px" }}>
+            Mi AFP
+          </p>
+          <p style={{ fontSize: 16, fontWeight: 600, color: "var(--n2)", margin: 0 }}>
+            {afpLabel ?? <span style={{ color: "var(--gris)", fontWeight: 400 }}>Sin registrar — te orienta a trámites y simulaciones según tu AFP</span>}
+          </p>
+        </div>
+        <button
+          onClick={abrirEdicionAfp}
+          style={{ fontSize: 13, fontWeight: 600, background: "transparent", color: "var(--v2)", border: "1.5px solid var(--v5)", borderRadius: 50, padding: "7px 16px", cursor: "pointer" }}
+        >
+          {afpActual ? "Cambiar" : "Registrar"}
+        </button>
+      </div>
+
+      {afpEditando && (
+        <div style={{ marginTop: 20, borderTop: "1px solid var(--v5)", paddingTop: 20 }}>
+          <p style={{ fontSize: 14, color: "var(--n2)", marginBottom: 14 }}>
+            Selecciona tu AFP:
+          </p>
+
+          <select
+            value={afpSeleccion}
+            onChange={e => setAfpSeleccion(e.target.value)}
+            style={{ width: "100%", padding: "12px 14px", borderRadius: 12, border: "1.5px solid var(--v5)", fontSize: 15, fontFamily: "DM Sans, sans-serif", background: "var(--v6)", color: "var(--n2)", marginBottom: 16, boxSizing: "border-box" }}
+          >
+            <option value="">— Elige una opción —</option>
+            {AFP_OPTIONS.map(group => (
+              <optgroup key={group.group} label={group.group}>
+                {group.items.map(item => (
+                  <option key={item.value} value={item.value}>{item.label}</option>
+                ))}
+              </optgroup>
+            ))}
+          </select>
+
+          <label style={{ display: "flex", alignItems: "flex-start", gap: 12, cursor: "pointer", marginBottom: 20 }}>
+            <input
+              type="checkbox"
+              checked={afpConsentido}
+              onChange={e => setAfpConsentido(e.target.checked)}
+              style={{ marginTop: 2, width: 18, height: 18, accentColor: "var(--v2)", flexShrink: 0 }}
+            />
+            <span style={{ fontSize: 13, color: "var(--gris)", lineHeight: 1.6 }}>
+              Autorizo a LongVivIA a guardar mi AFP para orientarme a trámites y simulaciones en el sitio oficial de mi AFP. Este dato no se usa para recomendaciones de inversión ni cambio de fondo. Puedo cambiarlo o eliminarlo en cualquier momento, en conformidad con la Ley 19.628.
+            </span>
+          </label>
+
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+            <button
+              onClick={guardarAfp}
+              disabled={!afpConsentido || afpGuardando}
+              style={{
+                background: afpConsentido ? "var(--v2)" : "#D4DED6",
+                color: "white", border: "none", borderRadius: 50,
+                padding: "10px 24px", fontSize: 14, fontWeight: 700,
+                cursor: afpConsentido ? "pointer" : "not-allowed",
+              }}
+            >
+              {afpGuardando ? "Guardando..." : "Guardar con mi consentimiento"}
+            </button>
+            <button
+              onClick={() => setAfpEditando(false)}
+              style={{ background: "transparent", color: "var(--gris)", border: "1.5px solid #D4DED6", borderRadius: 50, padding: "10px 18px", fontSize: 14, cursor: "pointer" }}
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+    </>
   );
 }

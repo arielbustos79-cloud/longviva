@@ -87,6 +87,48 @@ export function getProveedoresTelemed(prevision: Prevision): ProveedorTelemed[] 
   }
 }
 
+// ── AFP ─────────────────────────────────────────────────────
+export type AfpNombre =
+  | "capital" | "cuprum" | "habitat" | "modelo"
+  | "planvital" | "provida" | "uno" | "ninguna" | null;
+
+export const AFP_LABELS: Record<string, string> = {
+  capital:   "AFP Capital",
+  cuprum:    "AFP Cuprum",
+  habitat:   "AFP Habitat",
+  modelo:    "AFP Modelo",
+  planvital: "AFP PlanVital",
+  provida:   "AFP Provida",
+  uno:       "AFP Uno",
+  ninguna:   "Sin AFP registrada",
+};
+
+export const AFP_OPTIONS = [
+  {
+    group: "AFP",
+    items: [
+      { value: "capital",   label: "AFP Capital" },
+      { value: "cuprum",    label: "AFP Cuprum" },
+      { value: "habitat",   label: "AFP Habitat" },
+      { value: "modelo",    label: "AFP Modelo" },
+      { value: "planvital", label: "AFP PlanVital" },
+      { value: "provida",   label: "AFP Provida" },
+      { value: "uno",       label: "AFP Uno" },
+    ],
+  },
+  { group: "Otro", items: [{ value: "ninguna", label: "Sin AFP registrada" }] },
+];
+
+export const AFP_URLS: Record<string, string> = {
+  capital:   "https://www.afpcapital.cl",
+  cuprum:    "https://www.afpcuprum.cl",
+  habitat:   "https://www.afphabitat.cl",
+  modelo:    "https://www.afpmodelo.cl",
+  planvital: "https://www.afpplanvital.cl",
+  provida:   "https://www.afpprovida.cl",
+  uno:       "https://www.afpuno.cl",
+};
+
 // ── Nutrición ───────────────────────────────────────────────
 export type ProveedorNutricion = {
   nombre: string;
