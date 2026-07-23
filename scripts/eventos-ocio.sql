@@ -26,9 +26,9 @@ GRANT SELECT ON eventos_ocio TO authenticated;
 INSERT INTO eventos_ocio (nombre, lugar, descripcion, fecha_texto, url, orden)
 VALUES (
   'Studio 54',
-  'Santiago Oriente',
-  'Fiesta mensual para mayores de 50. Música de los 80 y 90 en un ambiente energético, sin pretensiones. Solo adultos, perfecto para reencontrarse con la pista.',
-  'Mensual — verifica fecha en redes',
-  'https://www.google.com/search?q=Studio+54+Santiago+fiesta+adultos+mayores+50',
+  'Viña del Mar',
+  'Fiesta para mayores de 50. Música de los 80 y 90 en un ambiente energético, sin pretensiones. Solo adultos, perfecto para reencontrarse con la pista.',
+  'Mensual — ver fechas en Passline',
+  'https://www.passline.com/eventos/studio-54-vina',
   0
 );
