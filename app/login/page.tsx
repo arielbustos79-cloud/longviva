@@ -1,13 +1,44 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase-browser";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [checking, setChecking] = useState(false);
   const [error, setError] = useState("");
+  const router = useRouter();
+
+  // Cuando la PWA vuelve a primer plano (tras clic en magic link en el correo),
+  // verificamos si ya hay sesión y redirigimos automáticamente al panel.
+  useEffect(() => {
+    if (!sent) return;
+    const supabase = createClient();
+
+    const handleVisibility = async () => {
+      if (document.visibilityState !== "visible") return;
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) router.push("/dashboard");
+    };
+
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => document.removeEventListener("visibilitychange", handleVisibility);
+  }, [sent, router]);
+
+  async function handleCheckSession() {
+    setChecking(true);
+    const supabase = createClient();
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+      router.push("/dashboard");
+    } else {
+      setChecking(false);
+      setError("Aún no detectamos el enlace. ¿Ya hiciste clic en el correo?");
+    }
+  }
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
@@ -68,16 +99,48 @@ export default function LoginPage() {
               Revisa tu correo
             </h2>
             <p style={{ fontSize: 16, color: "var(--gris)", lineHeight: 1.7 }}>
-              Te enviamos un enlace de acceso a<br />
+              Enviamos un enlace de acceso a<br />
               <strong style={{ color: "var(--v2)" }}>{email}</strong>
             </p>
-            <p style={{ fontSize: 14, color: "var(--gris)", marginTop: 16 }}>
-              Sin contraseña. Solo haz clic en el enlace y entras directo.
-            </p>
+
+            {/* Instrucción clave para PWA */}
+            <div style={{
+              background: "var(--v6)", borderRadius: 14,
+              padding: "16px 20px", margin: "20px 0",
+              border: "1px solid var(--v5)", textAlign: "left",
+            }}>
+              <p style={{ fontSize: 14, color: "var(--n2)", margin: 0, lineHeight: 1.7 }}>
+                <strong>Cómo entrar:</strong><br />
+                1. Abre el correo de LongVivIA<br />
+                2. Haz clic en "Entrar a LongVivIA"<br />
+                3. Vuelve aquí — entrarás directo a tu panel
+              </p>
+            </div>
+
             <button
-              onClick={() => setSent(false)}
+              onClick={handleCheckSession}
+              disabled={checking}
               style={{
-                marginTop: 28, background: "none", border: "none",
+                width: "100%", padding: "18px",
+                background: checking ? "var(--v5)" : "var(--v2)",
+                color: "white", border: "none", borderRadius: 50,
+                fontSize: 17, fontWeight: 600,
+                cursor: checking ? "not-allowed" : "pointer",
+                fontFamily: "DM Sans, sans-serif",
+                marginBottom: 12,
+              }}
+            >
+              {checking ? "Verificando..." : "¿Ya hiciste clic? Entrar →"}
+            </button>
+
+            {error && (
+              <p style={{ color: "#c0392b", fontSize: 13, marginBottom: 12 }}>{error}</p>
+            )}
+
+            <button
+              onClick={() => { setSent(false); setError(""); }}
+              style={{
+                background: "none", border: "none",
                 color: "var(--v3)", fontSize: 14, cursor: "pointer",
                 textDecoration: "underline",
               }}
