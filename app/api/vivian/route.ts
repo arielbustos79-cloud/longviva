@@ -41,11 +41,11 @@ export async function POST(request: Request) {
 
     // hiddenHistory = memoria de sesiones pasadas → va en system prompt, no en messages[]
     const memoriaAnterior = hiddenHistory && hiddenHistory.length > 0
-      ? `\n\nFECHA DE HOY: ${hoy}\n\nTU MEMORIA (conversaciones reales anteriores con este usuario — son tus recuerdos, úsalos con naturalidad):\n${
+      ? `\n\nFECHA DE HOY: ${hoy}\n\nHISTORIAL PREVIO (mensajes reales de conversaciones anteriores con este usuario):\n${
           hiddenHistory.slice(-30).map((m: { role: string; content: string }) =>
-            `${m.role === "user" ? "Usuario" : "Tú"}: ${m.content}`
+            `${m.role === "user" ? "Usuario" : "VIVIAN"}: ${m.content}`
           ).join("\n")
-        }\n\nUSO DE LA MEMORIA: retoma naturalmente lo que ya hablaron si el usuario lo menciona. Nunca digas que no tienes acceso a conversaciones anteriores — sí las recuerdas. Respeta siempre las fechas: si algo es para el futuro, no lo trates como si fuera hoy.`
+        }\n\nREGLA DE MEMORIA: usa este historial solo si el usuario menciona algo que aparece textualmente aquí. NUNCA inventes ni infiereas conversaciones, búsquedas o respuestas que no estén en este listado. Si no encuentras el dato en el historial, di "no lo tengo registrado" — es mejor admitirlo que fabricarlo. Respeta siempre las fechas.`
       : `\n\nFECHA DE HOY: ${hoy}`;
 
     // web_search habilitado solo para AFP/previsión y ocio/cartelera — VIVIAN lo regula por system prompt
