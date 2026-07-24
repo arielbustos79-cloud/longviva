@@ -24,6 +24,10 @@ export const metadata: Metadata = {
     capable: true,
     statusBarStyle: "default",
     title: "LongVivIA",
+    startupImage: "/apple-touch-icon.png",
+  },
+  icons: {
+    apple: "/apple-touch-icon.png",
   },
   other: {
     "mobile-web-app-capable": "yes",
