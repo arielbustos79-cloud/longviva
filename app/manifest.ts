@@ -12,12 +12,12 @@ export default function manifest(): MetadataRoute.Manifest {
     orientation: "portrait",
     icons: [
       {
-        src: "/api/pwa-icon?s=192",
+        src: "/api/pwa-icon?s=192&v=2",
         sizes: "192x192",
         type: "image/png",
       },
       {
-        src: "/api/pwa-icon?s=512",
+        src: "/api/pwa-icon?s=512&v=2",
         sizes: "512x512",
         type: "image/png",
         purpose: "maskable",
