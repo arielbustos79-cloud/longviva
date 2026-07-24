@@ -17,7 +17,11 @@ function renderConLinks(text: string) {
     urlRegex.test(parte) ? (
       <a key={i} href={parte} target="_blank" rel="noopener noreferrer"
         style={{ color: "#2D8A5F", textDecoration: "underline", wordBreak: "break-all" }}>
-        {parte.includes("youtube.com") || parte.includes("youtu.be") ? "▶ Ver video en YouTube" : parte}
+        {parte.includes("youtube.com") || parte.includes("youtu.be")
+          ? "▶ Ver video en YouTube"
+          : parte.includes("google.com/search")
+          ? "↗ Buscar en Google"
+          : parte}
       </a>
     ) : (
       <span key={i}>{parte}</span>
@@ -424,7 +428,7 @@ export default function VivianPage() {
               padding: "0.75rem 1rem",
               borderRadius: msg.role === "user" ? "18px 18px 4px 18px" : "18px 18px 18px 4px",
               maxWidth: "75%", fontSize: "0.97rem", lineHeight: 1.6,
-              boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.07)", overflowWrap: "break-word", minWidth: 0,
             }}>
               {renderConLinks(msg.content)}
             </div>
