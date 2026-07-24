@@ -16,7 +16,7 @@ function renderConLinks(text: string) {
   return partes.map((parte, i) =>
     urlRegex.test(parte) ? (
       <a key={i} href={parte} target="_blank" rel="noopener noreferrer"
-        style={{ color: "#2D8A5F", textDecoration: "underline", wordBreak: "break-all" }}>
+        style={{ color: "#2D8A5F", textDecoration: "underline", wordBreak: "break-word", overflowWrap: "anywhere" }}>
         {parte.includes("youtube.com") || parte.includes("youtu.be")
           ? "▶ Ver video en YouTube"
           : parte.includes("google.com/search")
