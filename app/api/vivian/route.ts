@@ -6,9 +6,38 @@ const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
 
+// Rate limiting in-process: 20 requests/minuto por user_id.
+// LIMITACIÓN CONOCIDA: en Vercel serverless cada invocación puede correr en una
+// instancia distinta — el Map no comparte estado entre instancias. Frena loops
+// accidentales y abuso leve, pero no es defensa confiable contra abuso deliberado.
+// Para protección real se requiere Redis/Upstash (fuera del plan actual).
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT = 20;
+const RATE_WINDOW_MS = 60_000;
+
+function checkRateLimit(key: string): boolean {
+  const now = Date.now();
+  const entry = rateLimitMap.get(key);
+  if (!entry || now > entry.resetAt) {
+    rateLimitMap.set(key, { count: 1, resetAt: now + RATE_WINDOW_MS });
+    return true;
+  }
+  if (entry.count >= RATE_LIMIT) return false;
+  entry.count++;
+  return true;
+}
+
 export async function POST(request: Request) {
   try {
     const { message, userId, history, hiddenHistory } = await request.json();
+
+    const rateLimitKey = userId || request.headers.get("x-forwarded-for") || "anon";
+    if (!checkRateLimit(rateLimitKey)) {
+      return Response.json(
+        { error: "Demasiadas solicitudes. Espera un momento antes de continuar." },
+        { status: 429 }
+      );
+    }
 
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,

@@ -4,6 +4,25 @@ import { VIVIAN_SYSTEM_PROMPT } from "@/lib/vivian-prompt";
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
+// Rate limiting in-process: 10 requests/minuto por número de teléfono.
+// LIMITACIÓN CONOCIDA: no persiste entre instancias serverless de Vercel.
+// La firma Twilio ya es la primera línea de defensa real contra abuso externo.
+const waRateLimitMap = new Map<string, { count: number; resetAt: number }>();
+const WA_RATE_LIMIT = 10;
+const WA_RATE_WINDOW_MS = 60_000;
+
+function checkWaRateLimit(telefono: string): boolean {
+  const now = Date.now();
+  const entry = waRateLimitMap.get(telefono);
+  if (!entry || now > entry.resetAt) {
+    waRateLimitMap.set(telefono, { count: 1, resetAt: now + WA_RATE_WINDOW_MS });
+    return true;
+  }
+  if (entry.count >= WA_RATE_LIMIT) return false;
+  entry.count++;
+  return true;
+}
+
 // Twilio firma cada webhook — verificamos para evitar spam
 async function verificarFirmaTwilio(request: Request): Promise<{ body: URLSearchParams; ok: boolean }> {
   const body = await request.text();
@@ -49,6 +68,10 @@ export async function POST(request: Request) {
 
   // Extraer número limpio sin prefijo "whatsapp:"
   const telefono = from.replace("whatsapp:", "");
+
+  if (!checkWaRateLimit(telefono)) {
+    return twimlResponse("Estás enviando muchos mensajes seguidos. Espera un momento y vuelve a intentarlo 🙏");
+  }
 
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
