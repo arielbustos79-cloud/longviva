@@ -7,17 +7,24 @@ import { logEvento } from "@/lib/logEvento";
 type Message = { role: "user" | "assistant"; content: string };
 type MsgConFecha = Message & { id: string; created_at: string };
 
-const URL_SPLIT_REGEX = /(https?:\/\/[^\s)\]!?;:'"]+)/g;
-const URL_TEST_REGEX = /^https?:\/\//;
+const URL_REGEX = /https?:\/\/[^\s)\]!?;:'"]+/g;
 
 function renderConLinks(text: string) {
   const sinMarkdown = text.replace(/\[([^\]]*)\]\((https?:\/\/[^\s)]+)\)/g, "$2");
-  const partes = sinMarkdown.split(URL_SPLIT_REGEX);
-  return partes.map((parte, i) => {
-    if (!URL_TEST_REGEX.test(parte)) return <span key={i}>{parte}</span>;
-    const url = parte.replace(/[.,]+$/, "");
-    return (
-      <a key={i} href={url} target="_blank" rel="noopener noreferrer"
+  const nodes: React.ReactNode[] = [];
+  let lastIndex = 0;
+
+  for (const match of sinMarkdown.matchAll(URL_REGEX)) {
+    const raw = match[0];
+    const start = match.index!;
+    const url = raw.replace(/[.,]+$/, "");
+
+    if (start > lastIndex) {
+      nodes.push(<span key={lastIndex}>{sinMarkdown.slice(lastIndex, start)}</span>);
+    }
+
+    nodes.push(
+      <a key={start} href={url} target="_blank" rel="noopener noreferrer"
         style={{ color: "#2D8A5F", textDecoration: "underline", wordBreak: "break-word", overflowWrap: "anywhere" }}>
         {url.includes("youtube.com") || url.includes("youtu.be")
           ? "▶ Ver video en YouTube"
@@ -26,7 +33,15 @@ function renderConLinks(text: string) {
           : url}
       </a>
     );
-  });
+
+    lastIndex = start + raw.length;
+  }
+
+  if (lastIndex < sinMarkdown.length) {
+    nodes.push(<span key={lastIndex}>{sinMarkdown.slice(lastIndex)}</span>);
+  }
+
+  return nodes;
 }
 
 export default function VivianPage() {
