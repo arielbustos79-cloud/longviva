@@ -4,7 +4,10 @@
  * Si una institución no está aquí, VIVIAN debe derivar a Google en lugar de inventar.
  *
  * Para agregar una URL: verificar que el sitio responde antes de incluirla.
- * Última verificación: 2026-07-24
+ * Última verificación: 2026-07-24 (script verify-urls.mjs — HTTP real)
+ * Pendiente verificación manual: afp_cuprum, afp_planvital, afp_provida,
+ *   isapre_masvida, caja_los_andes, redsalud, compin, viajes_falabella,
+ *   radio_laclave, chile_cultura, municipio_vina_del_mar (FETCH_ERR en sandbox)
  */
 
 export const URLS_VERIFICADAS = {
@@ -18,11 +21,11 @@ export const URLS_VERIFICADAS = {
   afp_modelo: "https://www.afpmodelo.cl",
   afp_planvital: "https://www.afpplanvital.cl",
   afp_provida: "https://www.afpprovida.cl",
-  afp_uno: "https://www.afpuno.cl",
+  afp_uno: "https://www.uno.cl",
   spensiones: "https://www.spensiones.cl",
 
   // ── Previsión de salud ────────────────────────────────────────────────
-  fonasa: "https://www.fonasa.cl",
+  fonasa: "https://www.fonasa.gob.cl",
   // Isapres — solo las de mayor cobertura verificadas
   isapre_banmedica: "https://www.banmedica.cl",
   isapre_colmena: "https://www.colmena.cl",
@@ -35,7 +38,7 @@ export const URLS_VERIFICADAS = {
   caja_los_andes: "https://www.cajadelosandes.cl",
   caja_la_araucana: "https://www.laaraucana.cl",
   caja_los_heroes: "https://www.losheroes.cl",
-  caja_18_septiembre: "https://www.18septiembre.cl",
+  caja_18_septiembre: "https://www.caja18.cl",
 
   // ── Telemedicina ──────────────────────────────────────────────────────
   mediclic: "https://www.mediclic.cl",
@@ -49,12 +52,12 @@ export const URLS_VERIFICADAS = {
   sii: "https://www.sii.cl",
   registro_civil: "https://www.registrocivil.cl",
   compin: "https://www.compin.cl",
-  supersalud: "https://www.supersalud.gob.cl",
+  supersalud: "https://www.superdesalud.gob.cl",
 
   // ── Municipios (curados para pilar Comunidad) ─────────────────────────
   municipio_providencia: "https://www.providencia.cl",
   municipio_las_condes: "https://www.lascondes.cl",
-  municipio_santiago: "https://www.municipiodesantiago.cl",
+  municipio_santiago: "https://www.munistgo.cl",
   municipio_nunoa: "https://www.nunoa.cl",
   municipio_maipu: "https://www.maipu.cl",
   municipio_vina_del_mar: "https://www.vinadelmarmunicipal.cl",
@@ -67,7 +70,7 @@ export const URLS_VERIFICADAS = {
   sernatur: "https://www.sernatur.cl",
 
   // ── Viajes ────────────────────────────────────────────────────────────
-  despegar: "https://www.despegar.com/cl",
+  despegar: "https://www.despegar.cl",
   viajes_falabella: "https://viajes.falabella.com/cl",
 
   // ── Radios online ─────────────────────────────────────────────────────
@@ -93,7 +96,7 @@ export function generarCatalogoUrls(): string {
     `AFP Modelo → ${URLS_VERIFICADAS.afp_modelo}`,
     `AFP PlanVital → ${URLS_VERIFICADAS.afp_planvital}`,
     `AFP Provida → ${URLS_VERIFICADAS.afp_provida}`,
-    `AFP Uno → ${URLS_VERIFICADAS.afp_uno}`,
+    `AFP Uno (uno.cl) → ${URLS_VERIFICADAS.afp_uno}`,
     `Superintendencia de Pensiones → ${URLS_VERIFICADAS.spensiones}`,
   ].join("\n");
 
