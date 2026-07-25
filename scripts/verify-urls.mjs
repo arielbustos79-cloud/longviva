@@ -16,9 +16,9 @@ const CATALOGO = {
   afp_modelo:             "https://www.afpmodelo.cl",
   afp_planvital:          "https://www.afpplanvital.cl",
   afp_provida:            "https://www.afpprovida.cl",
-  afp_uno:                "https://www.afpuno.cl",
+  afp_uno:                "https://www.uno.cl",
   spensiones:             "https://www.spensiones.cl",
-  fonasa:                 "https://www.fonasa.cl",
+  fonasa:                 "https://www.fonasa.gob.cl",
   isapre_banmedica:       "https://www.banmedica.cl",
   isapre_colmena:         "https://www.colmena.cl",
   isapre_consalud:        "https://www.consalud.cl",
@@ -28,7 +28,7 @@ const CATALOGO = {
   caja_los_andes:         "https://www.cajadelosandes.cl",
   caja_la_araucana:       "https://www.laaraucana.cl",
   caja_los_heroes:        "https://www.losheroes.cl",
-  caja_18_septiembre:     "https://www.18septiembre.cl",
+  caja_18_septiembre:     "https://www.caja18.cl",
   mediclic:               "https://www.mediclic.cl",
   integramedica:          "https://www.integramedica.cl",
   redsalud:               "https://www.redsalud.cl",
@@ -38,31 +38,26 @@ const CATALOGO = {
   sii:                    "https://www.sii.cl",
   registro_civil:         "https://www.registrocivil.cl",
   compin:                 "https://www.compin.cl",
-  supersalud:             "https://www.supersalud.gob.cl",
+  supersalud:             "https://www.superdesalud.gob.cl",
   municipio_providencia:  "https://www.providencia.cl",
   municipio_las_condes:   "https://www.lascondes.cl",
-  municipio_santiago:     "https://www.municipiodesantiago.cl",
+  municipio_santiago:     "https://www.munistgo.cl",
   municipio_nunoa:        "https://www.nunoa.cl",
-  municipio_maipu:        "https://www.maipu.cl",
-  municipio_vina_del_mar: "https://www.vinadelmarmunicipal.cl",
+  municipio_maipu:        "https://www.municipalidadmaipu.cl",
+  municipio_vina_del_mar: "https://www.munivina.cl",
   bpdigital:              "https://www.bpdigital.cl",
   chile_cultura:          "https://www.chilecultura.gob.cl",
   punto_ticket:           "https://www.puntoticket.com",
   telon_ticket:           "https://www.telonticket.cl",
   sernatur:               "https://www.sernatur.cl",
-  despegar:               "https://www.despegar.com/cl",
+  despegar:               "https://www.despegar.cl",
   viajes_falabella:       "https://viajes.falabella.com/cl",
   radio_cooperativa:      "https://www.cooperativa.cl",
   radio_biobio:           "https://www.biobiochile.cl",
   radio_infinita:         "https://www.infinita.cl",
-  radio_laclave:          "https://www.laclave.cl",
+  radio_laclave:          "https://www.radiolaclave.cl",
 };
 
-// Dominios que el auditor ya confirmó como incorrectos
-const CORRECCIONES_CONFIRMADAS = {
-  municipio_santiago:  { vieja: "https://www.municipiodesantiago.cl", nueva: "https://www.munistgo.cl" },
-  caja_18_septiembre:  { vieja: "https://www.18septiembre.cl",        nueva: "https://www.caja18.cl"  },
-};
 
 async function checkUrl(key, url) {
   try {
@@ -95,12 +90,6 @@ console.log(`Fecha: ${new Date().toLocaleString("es-CL")}`);
 console.log(`Total URLs: ${Object.keys(CATALOGO).length}`);
 console.log("=".repeat(72) + "\n");
 
-console.log("⚠  CORRECCIONES YA CONFIRMADAS POR AUDITORÍA:");
-for (const [key, c] of Object.entries(CORRECCIONES_CONFIRMADAS)) {
-  console.log(`   ${key}: ${c.vieja} → CORREGIR A: ${c.nueva}`);
-}
-console.log();
-
 // Verificar todas en paralelo
 const resultados = await Promise.all(
   Object.entries(CATALOGO).map(([k, v]) => checkUrl(k, v))
@@ -122,9 +111,7 @@ for (const r of porResultado.OK) {
 
 console.log(`\n⏱  TIMEOUT (servidor existe pero no respondió — URL probablemente válida):`);
 for (const r of porResultado.TIMEOUT) {
-  const corr = CORRECCIONES_CONFIRMADAS[r.key];
-  const nota = corr ? `  ← CORREGIR A ${corr.nueva}` : "";
-  console.log(`   ${r.key.padEnd(26)} ${r.url}${nota}`);
+  console.log(`   ${r.key.padEnd(26)} ${r.url}`);
 }
 
 console.log(`\n⚠️  HTTP 4xx (servidor responde con error — URL existe, revisar):`);
@@ -137,17 +124,13 @@ if (porResultado.DNS_FAIL.length === 0) {
   console.log("   (ninguna)");
 } else {
   for (const r of porResultado.DNS_FAIL) {
-    const corr = CORRECCIONES_CONFIRMADAS[r.key];
-    const nota = corr ? `  ← CORREGIR A ${corr.nueva}` : "  ← SIN CORRECCIÓN CONOCIDA";
-    console.log(`   ${r.key.padEnd(26)} ${r.url}${nota}`);
+    console.log(`   ${r.key.padEnd(26)} ${r.url}  ← SIN CORRECCIÓN CONOCIDA`);
   }
 }
 
 console.log(`\n❓ FETCH_ERR (error de red no clasificado):`);
 for (const r of porResultado.FETCH_ERR) {
-  const corr = CORRECCIONES_CONFIRMADAS[r.key];
-  const nota = corr ? `  ← CORREGIR A ${corr.nueva}` : "";
-  console.log(`   ${r.key.padEnd(26)} ${r.url}  [${r.error?.slice(0, 60)}]${nota}`);
+  console.log(`   ${r.key.padEnd(26)} ${r.url}  [${r.error?.slice(0, 60)}]`);
 }
 
 console.log(`\n${"=".repeat(72)}`);
