@@ -235,7 +235,7 @@ export default function VivianPage() {
 
       {/* Header */}
       <div style={{ background: "#1B5E3B", padding: "0.75rem 1.25rem", display: "flex", alignItems: "center", gap: "0.75rem" }}>
-        <a href={userId ? "/dashboard" : "/"} style={{ color: "rgba(255,255,255,0.6)", textDecoration: "none", fontSize: "0.82rem", whiteSpace: "nowrap", flexShrink: 0 }}>
+        <a href={userId ? "/dashboard" : "/"} style={{ color: "rgba(255,255,255,0.6)", textDecoration: "none", fontSize: "0.82rem", whiteSpace: "nowrap", flexShrink: 0 }} suppressHydrationWarning>
           {new Date().toLocaleDateString("es-CL", { day: "numeric", month: "long" })} · ← Volver
         </a>
         <div style={{ flex: 1, textAlign: "center" }}>
