@@ -80,9 +80,8 @@ export const URLS_VERIFICADAS = {
   radio_biobio: "https://www.biobiochile.cl",
   radio_infinita: "https://www.infinita.cl",
   radio_laclave: "https://www.radiolaclave.cl",
-  // FETCH_ERR en sandbox (no DNS_FAIL — existen): verificar manualmente en browser
-  radio_beethoven: "https://www.radiobeethoven.cl",
-  radio_t13: "https://radio.t13.cl",
+  radio_beethoven: "https://www.beethoven.fm",
+  radio_t13: "https://www.t13.cl/en-vivo",
 
   // ── Fiestas y eventos ─────────────────────────────────────────────────
   sala_portugal: "https://www.salaportugal.cl",

@@ -50,8 +50,8 @@ const RADIOS = [
   { nombre: "Radio BioBío", url: "https://www.biobiochile.cl", desc: "Información regional y nacional en tiempo real." },
   { nombre: "Infinita", url: "https://www.infinita.cl", desc: "Música variada: pop, rock y clásicos. Sin noticias, puro entretenimiento." },
   { nombre: "Radio La Clave", url: "https://www.radiolaclave.cl", desc: "Rock clásico y música de los 70, 80 y 90. Para los que saben de buena música." },
-  { nombre: "Radio Beethoven", url: "https://www.radiobeethoven.cl", desc: "Música clásica las 24 horas. La radio de la sinfonía y la ópera en Chile." },
-  { nombre: "T13 Radio", url: "https://radio.t13.cl", desc: "Noticias y actualidad del Canal 13. Streaming oficial." },
+  { nombre: "Radio Beethoven", url: "https://www.beethoven.fm", desc: "Música clásica las 24 horas. La radio de la sinfonía y la ópera en Chile." },
+  { nombre: "T13 Radio", url: "https://www.t13.cl/en-vivo", desc: "Noticias y actualidad del Canal 13. Streaming oficial." },
 ];
 
 // ── Helpers de UI ─────────────────────────────────────────────
