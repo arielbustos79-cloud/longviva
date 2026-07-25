@@ -594,7 +594,7 @@ export default function Home() {
           <div className={`${s.srvCard} ${s.fadeIn}`} style={{ transitionDelay: "160ms" }}>
             <div className={s.srvIcon} style={{ color: "var(--v2)" }}>{IC.pill}</div>
             <h3>Gestión de salud</h3>
-            <p>Agenda tus citas médicas y registra tus medicamentos con recordatorios automáticos por WhatsApp.</p>
+            <p>Agenda tus citas médicas y registra tus medicamentos, todo en un solo lugar.</p>
             <a href="/agenda" className={s.srvLink}>Ver mi agenda →</a>
           </div>
 
