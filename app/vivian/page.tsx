@@ -7,26 +7,26 @@ import { logEvento } from "@/lib/logEvento";
 type Message = { role: "user" | "assistant"; content: string };
 type MsgConFecha = Message & { id: string; created_at: string };
 
-const URL_SPLIT_REGEX = /(https?:\/\/[^\s)\].,!?;:'"]+)/g;
+const URL_SPLIT_REGEX = /(https?:\/\/[^\s)\]!?;:'"]+)/g;
 const URL_TEST_REGEX = /^https?:\/\//;
 
 function renderConLinks(text: string) {
   const sinMarkdown = text.replace(/\[([^\]]*)\]\((https?:\/\/[^\s)]+)\)/g, "$2");
   const partes = sinMarkdown.split(URL_SPLIT_REGEX);
-  return partes.map((parte, i) =>
-    URL_TEST_REGEX.test(parte) ? (
-      <a key={i} href={parte} target="_blank" rel="noopener noreferrer"
+  return partes.map((parte, i) => {
+    if (!URL_TEST_REGEX.test(parte)) return <span key={i}>{parte}</span>;
+    const url = parte.replace(/[.,]+$/, "");
+    return (
+      <a key={i} href={url} target="_blank" rel="noopener noreferrer"
         style={{ color: "#2D8A5F", textDecoration: "underline", wordBreak: "break-word", overflowWrap: "anywhere" }}>
-        {parte.includes("youtube.com") || parte.includes("youtu.be")
+        {url.includes("youtube.com") || url.includes("youtu.be")
           ? "▶ Ver video en YouTube"
-          : parte.includes("google.com/search")
+          : url.includes("google.com/search")
           ? "↗ Buscar en Google"
-          : parte}
+          : url}
       </a>
-    ) : (
-      <span key={i}>{parte}</span>
-    )
-  );
+    );
+  });
 }
 
 export default function VivianPage() {
