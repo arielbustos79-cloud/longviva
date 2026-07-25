@@ -77,7 +77,7 @@ export const URLS_VERIFICADAS = {
   radio_cooperativa: "https://www.cooperativa.cl",
   radio_biobio: "https://www.biobiochile.cl",
   radio_infinita: "https://www.infinita.cl",
-  radio_laclave: "https://www.laclave.cl",
+  radio_laclave: "https://www.radiolaclave.cl",
 
   // ── Búsqueda segura (fallback cuando el proveedor no está en la lista) ─
   google_busqueda: (termino: string) =>
