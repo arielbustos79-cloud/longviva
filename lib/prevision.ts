@@ -6,7 +6,7 @@ export type Prevision =
   | "isapre_colmena"
   | "isapre_vida_tres"
   | "isapre_nueva_masvida"
-  | "isapre_cruz_del_norte"
+  | "isapre_esencial"
   | "caja"
   | "ninguna"
   | null;
@@ -19,7 +19,7 @@ export const PREVISION_LABELS: Record<string, string> = {
   isapre_colmena: "Isapre Colmena",
   isapre_vida_tres: "Isapre Vida Tres",
   isapre_nueva_masvida: "Isapre Nueva Masvida",
-  isapre_cruz_del_norte: "Isapre Cruz del Norte",
+  isapre_esencial: "Isapre Esencial",
   caja: "Caja de Compensación",
   ninguna: "Sin previsión registrada",
 };
@@ -35,7 +35,7 @@ export const PREVISION_OPTIONS = [
       { value: "isapre_colmena",       label: "Colmena" },
       { value: "isapre_vida_tres",     label: "Vida Tres" },
       { value: "isapre_nueva_masvida", label: "Nueva Masvida" },
-      { value: "isapre_cruz_del_norte","label": "Cruz del Norte" },
+      { value: "isapre_esencial",      label: "Esencial" },
     ],
   },
   { group: "Caja de Compensación", items: [{ value: "caja", label: "Caja de Compensación (La Araucana / Los Andes / Los Héroes)" }] },
@@ -61,28 +61,45 @@ export function getProveedoresTelemed(prevision: Prevision): ProveedorTelemed[] 
   switch (prevision) {
     case "fonasa":
       return [
-        { nombre: "RedSalud Telemedicina", url: "https://www.redsalud.cl",  nota: "Consulta si tu convenio Fonasa cubre esta atención antes de agendar." },
-        { nombre: "Mediglobal",            url: "https://www.mediglobal.cl", nota: "Verifica con tu ejecutiva(o) Fonasa qué prestaciones están cubiertas." },
+        { nombre: "RedSalud Telemedicina", url: "https://www.redsalud.cl",   nota: "Consulta si tu convenio Fonasa cubre esta atención antes de agendar." },
+        { nombre: "Mediglobal",            url: "https://www.mediglobal.cl", nota: "Verifica qué prestaciones están cubiertas en tu modalidad Fonasa." },
       ];
+    // Cruz Blanca → Bupa → IntegraMédica (convenio verificado en integramedica.cl)
+    // Mediclic también disponible vía cruzblanca.mediclic.cl (portal Mi Cruz Blanca)
     case "isapre_cruz_blanca":
-    case "isapre_colmena":
       return [
-        { nombre: "IntegraMédica", url: "https://www.integramedica.cl", nota: "Consulta si tu plan Isapre incluye telemedicina antes de reservar." },
+        { nombre: "IntegraMédica", url: "https://www.integramedica.cl", nota: "Convenio directo Cruz Blanca. Selecciona tu isapre al pagar el bono." },
+        { nombre: "Mediclic",      url: "https://www.mediclic.cl",      nota: "Disponible desde Mi Cruz Blanca (cruzblanca.mediclic.cl). Verifica cobertura de tu plan." },
       ];
+    // Banmédica y Vida Tres → UnitedHealth Group → IntegraMédica (verificado en integramedica.cl)
+    case "isapre_banmedica":
+    case "isapre_vida_tres":
+      return [
+        { nombre: "IntegraMédica", url: "https://www.integramedica.cl", nota: "Convenio Banmédica/Vida Tres verificado. Selecciona tu isapre en la pasarela de pago." },
+      ];
+    // Consalud → Cámara Chilena de la Construcción → RedSalud (red clínica principal, alta confianza)
+    case "isapre_consalud":
+      return [
+        { nombre: "RedSalud Telemedicina", url: "https://www.redsalud.cl", nota: "Red principal de Consalud. Consulta cobertura de tu plan antes de agendar." },
+      ];
+    // Cajas de Compensación → Mediclic (confirmado brief-5-pilares)
     case "caja":
       return [
-        { nombre: "Mediclic", url: "https://www.mediclic.cl", nota: "Verifica con tu Caja de Compensación qué cobertura aplica." },
+        { nombre: "Mediclic", url: "https://www.mediclic.cl", nota: "Verifica con tu Caja de Compensación (La Araucana, Los Andes, Los Héroes) qué cobertura aplica." },
+      ];
+    // Colmena, Nueva MasVida, Esencial — proveedor específico sin verificar en fuente oficial
+    // → lista genérica con disclaimer claro
+    case "isapre_colmena":
+    case "isapre_nueva_masvida":
+    case "isapre_esencial":
+      return [
+        { nombre: "IntegraMédica", url: "https://www.integramedica.cl", nota: "Consulta con tu Isapre qué plataforma de telemedicina cubre tu plan específico." },
+        { nombre: "Mediglobal",    url: "https://www.mediglobal.cl",    nota: "Verifica antes de agendar — la cobertura depende de tu plan contratado." },
       ];
     case "ninguna":
     case null:
       return PROVEEDORES_TELEMED_GENERICOS;
     default:
-      // Demás isapres
-      if (prevision && prevision.startsWith("isapre_")) {
-        return [
-          { nombre: "Mediglobal", url: "https://www.mediglobal.cl", nota: "Consulta con tu Isapre si cubre telemedicina y qué copago aplica." },
-        ];
-      }
       return PROVEEDORES_TELEMED_GENERICOS;
   }
 }
@@ -126,7 +143,7 @@ export const AFP_URLS: Record<string, string> = {
   modelo:    "https://www.afpmodelo.cl",
   planvital: "https://www.afpplanvital.cl",
   provida:   "https://www.afpprovida.cl",
-  uno:       "https://www.afpuno.cl",
+  uno:       "https://www.uno.cl",
 };
 
 // ── Nutrición ───────────────────────────────────────────────
