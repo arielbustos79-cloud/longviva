@@ -59,8 +59,8 @@ export const URLS_VERIFICADAS = {
   municipio_las_condes: "https://www.lascondes.cl",
   municipio_santiago: "https://www.munistgo.cl",
   municipio_nunoa: "https://www.nunoa.cl",
-  municipio_maipu: "https://www.maipu.cl",
-  municipio_vina_del_mar: "https://www.vinadelmarmunicipal.cl",
+  municipio_maipu: "https://www.municipalidadmaipu.cl",
+  municipio_vina_del_mar: "https://www.munivina.cl",
 
   // ── Ocio y cultura ────────────────────────────────────────────────────
   bpdigital: "https://www.bpdigital.cl",
