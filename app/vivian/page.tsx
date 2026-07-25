@@ -7,7 +7,7 @@ import { logEvento } from "@/lib/logEvento";
 type Message = { role: "user" | "assistant"; content: string };
 type MsgConFecha = Message & { id: string; created_at: string };
 
-const URL_REGEX = /https?:\/\/[^\s)\]!?;:'"]+/g;
+const URL_REGEX = /https?:\/\/[^\s)\]!;:'"]+/g;
 
 function renderConLinks(text: string) {
   const sinMarkdown = text.replace(/\[([^\]]*)\]\((https?:\/\/[^\s)]+)\)/g, "$2");
