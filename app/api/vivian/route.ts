@@ -1,6 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { VIVIAN_SYSTEM_PROMPT } from "@/lib/vivian-prompt";
-import { createClient } from "@supabase/supabase-js";
+import { createClient as createServiceClient } from "@supabase/supabase-js";
+import { createClient as createServerClient } from "@/lib/supabase-server";
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -29,7 +30,13 @@ function checkRateLimit(key: string): boolean {
 
 export async function POST(request: Request) {
   try {
-    const { message, userId, history, hiddenHistory } = await request.json();
+    const { message, history, hiddenHistory } = await request.json();
+
+    // userId se obtiene del JWT de sesión del lado servidor — nunca del body.
+    // Esto previene IDOR: un cliente no puede suplantar el userId de otro usuario.
+    const authClient = await createServerClient();
+    const { data: { user } } = await authClient.auth.getUser();
+    const userId = user?.id ?? null;
 
     const rateLimitKey = userId || request.headers.get("x-forwarded-for") || "anon";
     if (!checkRateLimit(rateLimitKey)) {
@@ -39,7 +46,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const supabase = createClient(
+    const supabase = createServiceClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     );
