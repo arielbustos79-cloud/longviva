@@ -7,14 +7,14 @@ import { logEvento } from "@/lib/logEvento";
 type Message = { role: "user" | "assistant"; content: string };
 type MsgConFecha = Message & { id: string; created_at: string };
 
+const URL_SPLIT_REGEX = /(https?:\/\/[^\s)\].,!?;:'"]+)/g;
+const URL_TEST_REGEX = /^https?:\/\//;
+
 function renderConLinks(text: string) {
-  // Convierte Markdown [texto](url) → url plana antes de parsear
   const sinMarkdown = text.replace(/\[([^\]]*)\]\((https?:\/\/[^\s)]+)\)/g, "$2");
-  // No captura puntuación al final de la URL (coma, punto, paréntesis, corchetes, etc.)
-  const urlRegex = /(https?:\/\/[^\s)\].,!?;:'"]+)/g;
-  const partes = sinMarkdown.split(urlRegex);
+  const partes = sinMarkdown.split(URL_SPLIT_REGEX);
   return partes.map((parte, i) =>
-    urlRegex.test(parte) ? (
+    URL_TEST_REGEX.test(parte) ? (
       <a key={i} href={parte} target="_blank" rel="noopener noreferrer"
         style={{ color: "#2D8A5F", textDecoration: "underline", wordBreak: "break-word", overflowWrap: "anywhere" }}>
         {parte.includes("youtube.com") || parte.includes("youtu.be")
