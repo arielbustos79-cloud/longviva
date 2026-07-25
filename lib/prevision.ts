@@ -79,26 +79,41 @@ export function getProveedoresTelemed(prevision: Prevision): ProveedorTelemed[] 
       return [
         { nombre: "IntegraMédica", url: "https://www.integramedica.cl", nota: "Convenio Banmédica/Vida Tres verificado. Selecciona tu isapre en la pasarela de pago." },
       ];
-    // Consalud — pendiente tercera verificación en sitio oficial (fuentes contradictorias:
-    // "Clinitel" vs "Click Doctor" — no fijar hasta confirmar en consalud.cl)
+    // Consalud → Click Doctor (One) — confirmado en consalud.cl/pagehome-clickdoctor.html
+    // Medicina General 24/7 sin agendamiento; especialidades con agenda previa vía Sucursal Digital
     case "isapre_consalud":
       return [
-        { nombre: "IntegraMédica", url: "https://www.integramedica.cl", nota: "Consulta con Consalud qué plataforma de telemedicina cubre tu plan específico." },
-        { nombre: "Mediglobal",    url: "https://www.mediglobal.cl",    nota: "Verifica antes de agendar — la cobertura depende de tu plan contratado." },
+        { nombre: "Click Doctor", url: "https://www.consalud.cl", nota: "Accede a Click Doctor desde tu Sucursal Digital Consalud. Medicina General 24/7 sin agendamiento previo." },
       ];
     // Cajas de Compensación → Mediclic (confirmado brief-5-pilares)
     case "caja":
       return [
         { nombre: "Mediclic", url: "https://www.mediclic.cl", nota: "Verifica con tu Caja de Compensación (La Araucana, Los Andes, Los Héroes) qué cobertura aplica." },
       ];
-    // Colmena, Nueva MasVida, Esencial — proveedor específico sin verificar en fuente oficial
-    // → lista genérica con disclaimer claro
+    // Colmena → Doctor Online (principal) + Mediclic según plan
+    // Confirmado en colmena.cl/doctor-online/ — Medicina General y Pediatría
+    // Mediclic disponible en planes PLENO, PLENO PLUS, PLENO MAX, PLENO SALUD, PLENO PLUS V/SUR/NORTE
     case "isapre_colmena":
+      return [
+        { nombre: "Doctor Online", url: "https://www.doctoronline.cl", nota: "Plataforma principal Colmena. Medicina General y Pediatría, agendada u on-demand." },
+        { nombre: "Mediclic",      url: "https://www.mediclic.cl",     nota: "Disponible como beneficio adicional en planes PLENO y PLENO PLUS. Verifica tu plan." },
+      ];
+    // Nueva MasVida → telemedicina base propia + Blue Doctor/Mediclic (complementario)
+    // Confirmado en nuevamasvida.cl/nuevo-beneficio-blue-doctor/
+    // Base incluida en todos los planes, 09:00–00:00 hrs
     case "isapre_nueva_masvida":
+      return [
+        { nombre: "Telemedicina Nueva MasVida", url: "https://www.nuevamasvida.cl", nota: "Incluida en todos los planes. Videoconferencia de 09:00 a 00:00 hrs. Accede desde tu portal." },
+        { nombre: "Mediclic (Blue Doctor)",     url: "https://www.mediclic.cl",     nota: "Beneficio complementario opcional. Activación vía correo — consulta en tu portal si está disponible en tu plan." },
+      ];
+    // Esencial → TeleUrgencia (Clínica Alemana) + IntegraMédica + RedSalud
+    // Dominio oficial confirmado: somosesencial.cl (no esencial.cl ni isapreesencial.cl)
+    // TeleUrgencia incluida en Plan Preferente Línea Esencial
     case "isapre_esencial":
       return [
-        { nombre: "IntegraMédica", url: "https://www.integramedica.cl", nota: "Consulta con tu Isapre qué plataforma de telemedicina cubre tu plan específico." },
-        { nombre: "Mediglobal",    url: "https://www.mediglobal.cl",    nota: "Verifica antes de agendar — la cobertura depende de tu plan contratado." },
+        { nombre: "TeleUrgencia Clínica Alemana", url: "https://www.somosesencial.cl",  nota: "Incluida en Plan Preferente Línea Esencial. Accede desde tu portal Esencial." },
+        { nombre: "IntegraMédica",                url: "https://www.integramedica.cl",  nota: "Convenio verificado con Isapre Esencial. Selecciona tu isapre al pagar el bono." },
+        { nombre: "RedSalud",                     url: "https://www.redsalud.cl",       nota: "Red en convenio con Esencial. Consulta cobertura de tu plan antes de agendar." },
       ];
     case "ninguna":
     case null:

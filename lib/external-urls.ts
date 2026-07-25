@@ -48,6 +48,12 @@ export const URLS_VERIFICADAS = {
   // Cruz Blanca — portales verificados 25-07-2026 (200 OK)
   cruzblanca_portal: "https://sitio.cruzblanca.cl/MiCruzBlanca",
   cruzblanca_mediclic: "https://cruzblanca.mediclic.cl",
+  // Colmena — Doctor Online verificado 25-07-2026 (200 OK)
+  doctoronline: "https://www.doctoronline.cl",
+  // Nueva MasVida — verificado 25-07-2026 (200 OK)
+  nuevamasvida: "https://www.nuevamasvida.cl",
+  // Esencial — dominio oficial confirmado somosesencial.cl (200 OK)
+  isapre_esencial: "https://www.somosesencial.cl",
 
   // ── Portales del Estado ───────────────────────────────────────────────
   chileatiende: "https://www.chileatiende.gob.cl",
@@ -124,6 +130,9 @@ export function generarCatalogoUrls(): string {
     `Telemedicina Mediglobal → ${URLS_VERIFICADAS.mediglobal}`,
     `Cruz Blanca — Portal Mi Cruz Blanca → ${URLS_VERIFICADAS.cruzblanca_portal}`,
     `Cruz Blanca — Mediclic exclusivo → ${URLS_VERIFICADAS.cruzblanca_mediclic}`,
+    `Colmena — Doctor Online → ${URLS_VERIFICADAS.doctoronline}`,
+    `Nueva MasVida → ${URLS_VERIFICADAS.nuevamasvida}`,
+    `Isapre Esencial (somosesencial.cl) → ${URLS_VERIFICADAS.isapre_esencial}`,
     `Superintendencia de Salud → ${URLS_VERIFICADAS.supersalud}`,
   ].join("\n");
 
