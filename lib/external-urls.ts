@@ -64,10 +64,12 @@ export const URLS_VERIFICADAS = {
 
   // ── Ocio y cultura ────────────────────────────────────────────────────
   bpdigital: "https://www.bpdigital.cl",
-  chile_cultura: "https://www.chilecultura.gob.cl",
+  // chile_cultura (chilecultura.gob.cl) descartado 24-07-2026: certificado SSL inválido
+  cultura_agenda: "https://www.cultura.gob.cl/agendacultural",
   punto_ticket: "https://www.puntoticket.com",
   telon_ticket: "https://www.telonticket.cl",
   sernatur: "https://www.sernatur.cl",
+  gastronomia_800: "https://www.800.cl",
 
   // ── Viajes ────────────────────────────────────────────────────────────
   despegar: "https://www.despegar.cl",
@@ -78,6 +80,12 @@ export const URLS_VERIFICADAS = {
   radio_biobio: "https://www.biobiochile.cl",
   radio_infinita: "https://www.infinita.cl",
   radio_laclave: "https://www.radiolaclave.cl",
+  // FETCH_ERR en sandbox (no DNS_FAIL — existen): verificar manualmente en browser
+  radio_beethoven: "https://www.radiobeethoven.cl",
+  radio_t13: "https://radio.t13.cl",
+
+  // ── Fiestas y eventos ─────────────────────────────────────────────────
+  sala_portugal: "https://www.salaportugal.cl",
 
   // ── Búsqueda segura (fallback cuando el proveedor no está en la lista) ─
   google_busqueda: (termino: string) =>
@@ -141,16 +149,20 @@ export function generarCatalogoUrls(): string {
 
   const ocio = [
     `Biblioteca Pública Digital → ${URLS_VERIFICADAS.bpdigital}`,
-    `Chile Cultura → ${URLS_VERIFICADAS.chile_cultura}`,
+    `Agenda Cultural (Ministerio de las Culturas) → ${URLS_VERIFICADAS.cultura_agenda}`,
     `PuntoTicket → ${URLS_VERIFICADAS.punto_ticket}`,
     `TelonTicket → ${URLS_VERIFICADAS.telon_ticket}`,
     `SERNATUR → ${URLS_VERIFICADAS.sernatur}`,
+    `Gastronomía 800.cl (guía curada) → ${URLS_VERIFICADAS.gastronomia_800}`,
     `Despegar Chile → ${URLS_VERIFICADAS.despegar}`,
     `Viajes Falabella → ${URLS_VERIFICADAS.viajes_falabella}`,
     `Radio Cooperativa → ${URLS_VERIFICADAS.radio_cooperativa}`,
     `Radio Biobío → ${URLS_VERIFICADAS.radio_biobio}`,
     `Radio Infinita → ${URLS_VERIFICADAS.radio_infinita}`,
     `Radio La Clave → ${URLS_VERIFICADAS.radio_laclave}`,
+    `Radio Beethoven → ${URLS_VERIFICADAS.radio_beethoven}`,
+    `T13 Radio → ${URLS_VERIFICADAS.radio_t13}`,
+    `Sala Portugal (fiestas retro, Av. Portugal 1284 Santiago) → ${URLS_VERIFICADAS.sala_portugal}`,
   ].join("\n");
 
   return `CATÁLOGO DE URLs VERIFICADAS — REGLA ABSOLUTA:

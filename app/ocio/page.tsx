@@ -49,7 +49,9 @@ const RADIOS = [
   { nombre: "Radio Cooperativa", url: "https://www.cooperativa.cl", desc: "Noticias, análisis y música. Una de las radios más escuchadas de Chile." },
   { nombre: "Radio BioBío", url: "https://www.biobiochile.cl", desc: "Información regional y nacional en tiempo real." },
   { nombre: "Infinita", url: "https://www.infinita.cl", desc: "Música variada: pop, rock y clásicos. Sin noticias, puro entretenimiento." },
-  { nombre: "La Clave", url: "https://www.laclave.cl", desc: "Rock clásico y música de los 70, 80 y 90. Para los que saben de buena música." },
+  { nombre: "Radio La Clave", url: "https://www.radiolaclave.cl", desc: "Rock clásico y música de los 70, 80 y 90. Para los que saben de buena música." },
+  { nombre: "Radio Beethoven", url: "https://www.radiobeethoven.cl", desc: "Música clásica las 24 horas. La radio de la sinfonía y la ópera en Chile." },
+  { nombre: "T13 Radio", url: "https://radio.t13.cl", desc: "Noticias y actualidad del Canal 13. Streaming oficial." },
 ];
 
 // ── Helpers de UI ─────────────────────────────────────────────
@@ -164,9 +166,9 @@ export default function OcioPage() {
         <SeccionHeader titulo="Cartelera cultural" />
         <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
           <CardStandard
-            nombre="Chile Cultura"
-            url="https://www.chilecultura.gob.cl"
-            desc="Cartelera oficial del Ministerio de las Culturas. Teatro, cine, música y festivales en las 16 regiones — gratis o con valor. El punto de partida para saber qué pasa cerca tuyo."
+            nombre="Agenda Cultural"
+            url="https://www.cultura.gob.cl/agendacultural"
+            desc="Agenda oficial del Ministerio de las Culturas, las Artes y el Patrimonio. Teatro, cine, música y festivales en las 16 regiones — gratis o con valor. El punto de partida para saber qué pasa cerca tuyo."
             badge="Ministerio de las Culturas"
             destacado={false}
           />
@@ -206,7 +208,30 @@ export default function OcioPage() {
           </a>
         </div>
 
-        {/* ── 4. Radios ── */}
+        {/* ── 4. Gastronomía ── */}
+        <SeccionHeader titulo="Gastronomía" />
+        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          <CardStandard
+            nombre="800.cl"
+            url="https://www.800.cl"
+            desc="Guía gastronómica curada por críticos especializados, con reservas integradas. La referencia para elegir bien en Santiago y regiones."
+            badge="Guía curada"
+            destacado={false}
+          />
+          <div style={{ background: "white", borderRadius: 16, padding: "18px 20px", border: "1.5px solid var(--v5)" }}>
+            <h3 style={{ fontFamily: "Cormorant Garamond, serif", fontSize: 18, fontWeight: 700, color: "var(--n2)", margin: "0 0 6px" }}>
+              TripAdvisor Chile
+            </h3>
+            <p style={{ fontSize: 13, color: "var(--gris)", margin: "0 0 14px", lineHeight: 1.55 }}>
+              Opiniones de otros comensales y opciones en todo el país. Útil para explorar más allá de las recomendaciones curadas.
+            </p>
+            <a href="https://www.tripadvisor.cl" target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, color: "var(--v2)", fontWeight: 700, textDecoration: "none" }}>
+              Explorar en TripAdvisor →
+            </a>
+          </div>
+        </div>
+
+        {/* ── 5. Radios ── */}
         <SeccionHeader titulo="Radios en línea" />
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 12 }}>
           {RADIOS.map(r => (
@@ -220,7 +245,7 @@ export default function OcioPage() {
           ))}
         </div>
 
-        {/* ── 5. Fiestas y eventos ── */}
+        {/* ── 6. Fiestas y eventos ── */}
         <SeccionHeader titulo="Fiestas y eventos" subtitulo="Actualizado periódicamente" />
         {eventos.length === 0 ? (
           <div style={{ background: "white", borderRadius: 16, padding: "24px", border: "1.5px solid var(--v5)", textAlign: "center" }}>

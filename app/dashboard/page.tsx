@@ -130,7 +130,7 @@ export default function DashboardPage() {
 
         {/* Saludo */}
         <div style={{ marginBottom: 48 }}>
-          <p style={{ fontSize: 16, color: "var(--gris)", marginBottom: 6 }}>Buenos días,</p>
+          <p style={{ fontSize: 16, color: "var(--gris)", marginBottom: 6 }}>Hola,</p>
           <h1 style={{
             fontFamily: "Cormorant Garamond, serif",
             fontSize: "clamp(36px, 4vw, 52px)",
@@ -208,8 +208,8 @@ export default function DashboardPage() {
             },
             {
               svg: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M10.5 20H4a2 2 0 01-2-2V6a2 2 0 012-2h16a2 2 0 012 2v7.5"/><circle cx="17" cy="17" r="5"/><path d="M14 17h6"/></svg>,
-              title: "Farmacias", desc: "Descuentos en remedios y cuidado personal",
-              activo: false, href: "#", destacado: false,
+              title: "Farmacias", desc: "Farmacias comunitarias y populares cerca de ti",
+              activo: true, href: "/farmacias", destacado: false,
             },
           ].map((card) => (
             <a
