@@ -64,23 +64,27 @@ export function getProveedoresTelemed(prevision: Prevision): ProveedorTelemed[] 
         { nombre: "RedSalud Telemedicina", url: "https://www.redsalud.cl",   nota: "Consulta si tu convenio Fonasa cubre esta atención antes de agendar." },
         { nombre: "Mediglobal",            url: "https://www.mediglobal.cl", nota: "Verifica qué prestaciones están cubiertas en tu modalidad Fonasa." },
       ];
-    // Cruz Blanca → Bupa → IntegraMédica (convenio verificado en integramedica.cl)
-    // Mediclic también disponible vía cruzblanca.mediclic.cl (portal Mi Cruz Blanca)
+    // Cruz Blanca → Bupa → IntegraMédica (verificado integramedica.cl convenios)
+    // Portal Mi Cruz Blanca: sitio.cruzblanca.cl/MiCruzBlanca (200 OK verificado 25-07-2026)
+    // Mediclic portal dedicado: cruzblanca.mediclic.cl (200 OK verificado 25-07-2026)
     case "isapre_cruz_blanca":
       return [
-        { nombre: "IntegraMédica", url: "https://www.integramedica.cl", nota: "Convenio directo Cruz Blanca. Selecciona tu isapre al pagar el bono." },
-        { nombre: "Mediclic",      url: "https://www.mediclic.cl",      nota: "Disponible desde Mi Cruz Blanca (cruzblanca.mediclic.cl). Verifica cobertura de tu plan." },
+        { nombre: "IntegraMédica",  url: "https://www.integramedica.cl",             nota: "Convenio directo Cruz Blanca. Selecciona tu isapre al pagar el bono." },
+        { nombre: "Mediclic",       url: "https://cruzblanca.mediclic.cl",            nota: "Portal Mediclic exclusivo para afiliados Cruz Blanca." },
+        { nombre: "Mi Cruz Blanca", url: "https://sitio.cruzblanca.cl/MiCruzBlanca", nota: "Portal oficial Cruz Blanca — accede a tus prestaciones y telemedicina desde aquí." },
       ];
-    // Banmédica y Vida Tres → UnitedHealth Group → IntegraMédica (verificado en integramedica.cl)
+    // Banmédica y Vida Tres → UnitedHealth Group → IntegraMédica (verificado integramedica.cl)
     case "isapre_banmedica":
     case "isapre_vida_tres":
       return [
         { nombre: "IntegraMédica", url: "https://www.integramedica.cl", nota: "Convenio Banmédica/Vida Tres verificado. Selecciona tu isapre en la pasarela de pago." },
       ];
-    // Consalud → Cámara Chilena de la Construcción → RedSalud (red clínica principal, alta confianza)
+    // Consalud — pendiente tercera verificación en sitio oficial (fuentes contradictorias:
+    // "Clinitel" vs "Click Doctor" — no fijar hasta confirmar en consalud.cl)
     case "isapre_consalud":
       return [
-        { nombre: "RedSalud Telemedicina", url: "https://www.redsalud.cl", nota: "Red principal de Consalud. Consulta cobertura de tu plan antes de agendar." },
+        { nombre: "IntegraMédica", url: "https://www.integramedica.cl", nota: "Consulta con Consalud qué plataforma de telemedicina cubre tu plan específico." },
+        { nombre: "Mediglobal",    url: "https://www.mediglobal.cl",    nota: "Verifica antes de agendar — la cobertura depende de tu plan contratado." },
       ];
     // Cajas de Compensación → Mediclic (confirmado brief-5-pilares)
     case "caja":

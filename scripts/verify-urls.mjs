@@ -31,6 +31,8 @@ const CATALOGO = {
   caja_18_septiembre:     "https://www.caja18.cl",
   mediclic:               "https://www.mediclic.cl",
   integramedica:          "https://www.integramedica.cl",
+  cruzblanca_portal:      "https://sitio.cruzblanca.cl/MiCruzBlanca",
+  cruzblanca_mediclic:    "https://cruzblanca.mediclic.cl",
   redsalud:               "https://www.redsalud.cl",
   mediglobal:             "https://www.mediglobal.cl",
   chileatiende:           "https://www.chileatiende.gob.cl",

@@ -45,6 +45,9 @@ export const URLS_VERIFICADAS = {
   integramedica: "https://www.integramedica.cl",
   redsalud: "https://www.redsalud.cl",
   mediglobal: "https://www.mediglobal.cl",
+  // Cruz Blanca — portales verificados 25-07-2026 (200 OK)
+  cruzblanca_portal: "https://sitio.cruzblanca.cl/MiCruzBlanca",
+  cruzblanca_mediclic: "https://cruzblanca.mediclic.cl",
 
   // ── Portales del Estado ───────────────────────────────────────────────
   chileatiende: "https://www.chileatiende.gob.cl",
@@ -119,6 +122,8 @@ export function generarCatalogoUrls(): string {
     `Telemedicina IntegraMédica → ${URLS_VERIFICADAS.integramedica}`,
     `Telemedicina RedSalud → ${URLS_VERIFICADAS.redsalud}`,
     `Telemedicina Mediglobal → ${URLS_VERIFICADAS.mediglobal}`,
+    `Cruz Blanca — Portal Mi Cruz Blanca → ${URLS_VERIFICADAS.cruzblanca_portal}`,
+    `Cruz Blanca — Mediclic exclusivo → ${URLS_VERIFICADAS.cruzblanca_mediclic}`,
     `Superintendencia de Salud → ${URLS_VERIFICADAS.supersalud}`,
   ].join("\n");
 
