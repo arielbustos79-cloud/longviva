@@ -742,9 +742,15 @@ export default function Home() {
               {[
                 { label: "VIVIAN IA", href: "/vivian" },
                 { label: "Artículos", href: "/articulos" },
-                { label: "Telemedicina", href: "#" },
-                { label: "Bienestar", href: "#" },
-                { label: "Tours", href: "#" },
+                { label: "Entrena tu mente", href: "/juegos" },
+                { label: "Agenda", href: "/agenda" },
+                { label: "Medicamentos", href: "/medicamentos" },
+                { label: "Comunidad", href: "/comunidad" },
+                { label: "Telemedicina", href: "/telemedicina" },
+                { label: "Bienestar activo", href: "/bienestar" },
+                { label: "Ocio y experiencias", href: "/ocio" },
+                { label: "Nutrición", href: "/nutricion" },
+                { label: "Farmacias", href: "/farmacias" },
               ].map(l => <li key={l.label}><a href={l.href}>{l.label}</a></li>)}
             </ul>
           </div>
@@ -753,8 +759,8 @@ export default function Home() {
             <ul className={s.footerLinks}>
               {[
                 { label: "Quiénes somos", href: "/quienes-somos" },
-                { label: "Proveedores", href: "mailto:hola@longvivia.cl" },
-                { label: "Anunciantes", href: "mailto:hola@longvivia.cl" },
+                { label: "Proveedores", href: "/proveedores" },
+                { label: "Anunciantes", href: "/anunciantes" },
                 { label: "Trabaja aquí", href: "/trabaja" },
               ].map(l => <li key={l.label}><a href={l.href}>{l.label}</a></li>)}
             </ul>
@@ -763,7 +769,7 @@ export default function Home() {
             <h4>Ayuda</h4>
             <ul className={s.footerLinks}>
               {[
-                { label: "Centro de ayuda", href: "mailto:hola@longvivia.cl" },
+                { label: "Centro de ayuda", href: "/ayuda" },
                 { label: "Términos", href: "/terminos" },
                 { label: "Privacidad", href: "/privacidad" },
                 { label: "Accesibilidad", href: "mailto:hola@longvivia.cl" },
