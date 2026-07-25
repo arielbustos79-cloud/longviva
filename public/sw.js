@@ -1,4 +1,4 @@
-const CACHE_NAME = "longvivia-v3";
+const CACHE_NAME = "longvivia-v4";
 
 // Assets to pre-cache on install
 const PRECACHE_URLS = ["/", "/manifest.webmanifest"];
