@@ -56,7 +56,7 @@ const CATALOGO = {
   radio_biobio:           "https://www.biobiochile.cl",
   radio_infinita:         "https://www.infinita.cl",
   radio_laclave:          "https://www.radiolaclave.cl",
-  radio_beethoven:        "https://www.beethoven.fm",
+  radio_beethoven:        "https://www.beethovenfm.cl",
   radio_t13:              "https://www.t13.cl/en-vivo",
 };
 
