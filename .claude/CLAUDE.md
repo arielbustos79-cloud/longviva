@@ -229,7 +229,7 @@ Cards próximamente: Telemedicina, Bienestar activo, Tours y experiencias.
 ---
 ## Artículos
 - Tabla `articulos` en Supabase: `slug, titulo, pilar, resumen, contenido, publicado`
-- Pilares (valores reales en BD, con CHECK constraint desde 27-07-2026): `salud_activa`, `bienestar_energia`, `vida_social`, `tecnologia_simple`, `finanzas_prevision`
+- Pilares (valores reales en BD, con CHECK constraint `articulos_pilar_check` activo): `salud_activa`, `bienestar_energia`, `vida_social`, `tecnologia_simple`, `finanzas_prevision`
 - 10 artículos publicados (2 por pilar), todos tipo `original` o `curado`
 - `ArticuloTracker.tsx`: dispara `articulo_leido` tras 30s O 80% de scroll (lo que ocurra primero), sin duplicados (ref `registrado`)
 ---
