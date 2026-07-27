@@ -229,8 +229,8 @@ Cards próximamente: Telemedicina, Bienestar activo, Tours y experiencias.
 ---
 ## Artículos
 - Tabla `articulos` en Supabase: `slug, titulo, pilar, resumen, contenido, publicado`
-- Pilares: salud, bienestar, nutricion, movimiento, mente
-- 5 artículos publicados con contenido aprobado
+- Pilares (valores reales en BD, con CHECK constraint desde 27-07-2026): `salud_activa`, `bienestar_energia`, `vida_social`, `tecnologia_simple`, `finanzas_prevision`
+- 10 artículos publicados (2 por pilar), todos tipo `original` o `curado`
 - `ArticuloTracker.tsx`: dispara `articulo_leido` tras 30s O 80% de scroll (lo que ocurra primero), sin duplicados (ref `registrado`)
 ---
 ## Juegos — Entrena tu mente (`/juegos`)
@@ -349,7 +349,7 @@ NEXT_PUBLIC_APP_URL=https://longvivia.cl
 - Dashboard de usuario con cards de acceso rápido + tarjeta "Resumen de hoy"
 - VIVIAN web (chat completo con historial, búsqueda, micrófono)
 - VIVIAN WhatsApp (Twilio webhook con verificación de firma)
-- 5 artículos publicados con tracker de lectura
+- 10 artículos publicados con tracker de lectura (2 por pilar, pilares verificados 27-07-2026)
 - **Juegos cognitivos rediseñados** (commit `87f5de9`): 4 juegos nuevos Unobrain (Caza objetos, Secuencia, Diferencias, Stroop) con guardado de puntaje en Supabase
 - **Mi agenda** — CRUD de citas + exportación a calendario (.ics)
 - **Mis medicamentos** — CRUD de recordatorios + exportación a calendario recurrente (.ics)
