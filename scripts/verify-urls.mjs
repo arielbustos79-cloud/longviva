@@ -63,6 +63,8 @@ const CATALOGO = {
   radio_laclave:          "https://www.radiolaclave.cl",
   radio_beethoven:        "https://www.beethovenfm.cl",
   radio_t13:              "https://www.t13.cl/en-vivo",
+  gastronomia_800:        "https://www.800.cl",
+  sala_portugal:          "https://www.salaportugal.cl",
 };
 
 
