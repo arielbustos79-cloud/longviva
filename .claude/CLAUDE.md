@@ -429,8 +429,40 @@ Triple verificación en fuente oficial. Ver tabla en sección "Telemedicina — 
 `radiobeethoven.cl` (DNS_FAIL) → `beethovenfm.cl`. `radio.t13.cl` (DNS_FAIL) → `t13.cl/en-vivo`.
 ### 20. Navbar simplificado
 Desktop y mobile unificados: eliminados "¿Cómo funciona?", "Artículos", "Entrena tu mente". Agregado "Centro de ayuda" → /ayuda. Menú final: Quiénes somos · Servicios · VIVIAN IA · Centro de ayuda · Contacto.
-### 21. Próximo enfoque
-Con desarrollo técnico y auditoría en buen estado, el foco pasa a: comercial (Conecta Mayor UC), legal (SII, Términos/Privacidad, INAPI), Twilio producción. El chat de estrategia toma estas decisiones; el chat de código y auditor siguen disponibles para verificar avances técnicos.
+### 21. Hallazgo — documentación desactualizada en `articulos.pilar` (cerrado 27-07-2026)
+CLAUDE.md tenía la taxonomía de pilares equivocada y el conteo de artículos desactualizado (decía 5, son 10). Verificado con query directa a Supabase (27-07-2026): los 10 artículos usan exactamente `salud_activa`, `bienestar_energia`, `vida_social`, `tecnologia_simple`, `finanzas_prevision` (2 por pilar, 0 filas fuera de rango). CHECK constraint `articulos_pilar_check` ya preexistía en la base — el hallazgo original fue un falso positivo. Corregido en commits `8404767`, `f8c2b14`.
+
+---
+## Decisiones de estrategia — 27 de julio de 2026
+
+### 22. Hallazgo — regresión de consentimiento en VIVIAN (H1), cerrado 27-07-2026
+**Detectado en auditoría manual de VIVIAN (no en código):** ante mención casual de previsión por primera vez ("tengo Colmena y no sé bien cómo funciona"), VIVIAN respondía con información personalizada de Colmena sin pedir consentimiento — pese a que el texto de la regla seguía intacto en `lib/vivian-prompt.ts`.
+
+**Causa raíz:** ambigüedad semántica. La regla prohibía "guardar" y "derivar" sin consentimiento, pero no prohibía "responder con el dato personalizado" sin guardarlo ni derivarlo formalmente. El modelo usó ese hueco.
+
+**Fix (commit `a587dad`):** regla reescrita con tres prohibiciones explícitas (guardar / derivar / responder con dato personalizado) + ejemplo concreto del caso Colmena.
+
+**Evidencia de producción post-fix:** VIVIAN respondió: *"Antes de orientarte con info personalizada de Colmena, ¿quieres que recuerde tu previsión para la próxima vez?..."* — pregunta antes de personalizar.
+
+**Lección meta:** una regla correcta en el prompt no garantiza que el modelo la siga siempre — el prompt ha crecido y las reglas pueden quedar compitiendo con instrucciones más directas. Las otras reglas críticas de VIVIAN (WhatsApp/recordatorios, AFP, catálogo de URLs) merecen prueba conversacional real periódica, no solo verificación de que el texto sigue en el prompt.
+
+### 23. Hallazgo — routing genérico en vez de proveedor específico (B1/G1/G2) — parcialmente cerrado 27-07-2026
+**Detectado en auditoría manual:** VIVIAN deriva genéricamente a `/telemedicina` o `/nutricion` sin nombrar el proveedor específico de la matriz verificada.
+
+**Diagnóstico:** gap real, no diseño intencional. La matriz completa de `lib/prevision.ts` (por isapre) y las fuentes curadas de Nutrición nunca se inyectaron al system prompt. Contraste: el bloque de AFP (líneas 99-101 del prompt) sí tiene el detalle completo por AFP y funciona bien — ese es el patrón que faltaba aplicar.
+
+**Fix Telemedicina — cerrado (commit `ce4fe31`):** matriz de isapres agregada al prompt con URLs verificadas por proveedor. Solo se activa cuando el dato de previsión está disponible con consentimiento (compatible con commit `a587dad`).
+- Test B1 confirmado con evidencia literal en producción: ante "tengo Isapre Banmédica, quiero una hora online" (consentimiento confirmado en el chat), VIVIAN respondió *"Para telemedicina con Banmédica, tu mejor opción es IntegraMédica — entra directo a https://www.integramedica.cl..."*
+
+**Fix Nutrición — pendiente (G1/G2):** Mayo Clinic, MedlinePlus y DoctorPlus no están en el catálogo de URLs verificado (`lib/external-urls.ts`). No se agregaron al prompt sin esa validación — mismo estándar del catálogo. G1/G2 quedan pendientes hasta que Ariel defina y valide el contenido curado de Nutrición.
+
+### 24. Próximo enfoque
+Con desarrollo técnico y auditoría de seguridad en buen estado, el foco pasa a:
+- **Comercial:** primer aliado B2B (Conecta Mayor UC, propuesta enviada 19-07-2026, sin respuesta aún)
+- **Legal:** SII Inicio de Actividades (pausado en domicilio/usufructo), revisión legal Términos/Privacidad, registro de marca INAPI (checklist listo, ejecución pendiente)
+- **Infraestructura:** salida de Twilio Sandbox a producción (ticket #28132027, requiere Meta Business Manager)
+- **Nutrición:** validar contenido curado (Mayo Clinic/MedlinePlus/DoctorPlus) para cerrar tests G1/G2
+El chat de estrategia toma las decisiones de los tres primeros frentes; el chat de código y auditor siguen disponibles para verificar avances técnicos.
 ---
 ## Sub-proyecto: Parkin&Son / NORITA (movido a otra rama)
 Separado a rama `parkinandson-draft` (18 jul 2026). Proyecto en pausa intencional. Detalle en `.claude/CLAUDE.md` de esa rama.
