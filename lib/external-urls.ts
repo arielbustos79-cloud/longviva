@@ -108,6 +108,14 @@ export const URLS_VERIFICADAS = {
   farmacia_salcobrand: "https://salcobrand.cl",
   // Pendientes: Remedia (timeout, no clasificable), Farmam (pendiente decisión producto)
 
+  // ── Contenido curado Nutrición (aprobado por Ariel, verificado 27-07-2026) ─
+  // Mayo Clinic en español — desnutrición en personas mayores, señales de alerta
+  nutricion_mayoclinic_tercera_edad: "https://newsnetwork.mayoclinic.org/es/2018/03/03/consejos-de-salud-salud-en-adultos-mayores/",
+  // Mayo Clinic — vitamina D, fibra, hidratación en el envejecimiento (actualizado junio 2026)
+  nutricion_mayoclinic_envejecimiento: "https://www.mayoclinic.org/es/healthy-lifestyle/healthy-aging/in-depth/aging/art-20046070",
+  // MedlinePlus — Biblioteca Nacional de Medicina de EEUU, sin fines comerciales
+  nutricion_medlineplus: "https://medlineplus.gov/spanish/nutritionforolderadults.html",
+
   // ── Búsqueda segura (fallback cuando el proveedor no está en la lista) ─
   google_busqueda: (termino: string) =>
     `https://www.google.com/search?q=${encodeURIComponent(termino + " Chile sitio oficial")}`,
