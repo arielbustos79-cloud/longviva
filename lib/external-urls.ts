@@ -95,6 +95,19 @@ export const URLS_VERIFICADAS = {
   // ── Fiestas y eventos ─────────────────────────────────────────────────
   sala_portugal: "https://www.salaportugal.cl",
 
+  // ── Farmacias — catálogo (modelo CPC, verificadas HTTP 200, 27-07-2026) ────
+  // Capa 1: link profundo con búsqueda pre-cargada (patrón verificado)
+  farmacia_cruzverde:  "https://www.cruzverde.cl",
+  farmacia_drsimi:     "https://www.drsimi.cl",
+  farmacia_fraccion:   "https://www.fraccion.cl",
+  farmacia_farmex:     "https://farmex.cl",
+  farmacia_meki:       "https://farmaciameki.cl",
+  farmacia_ahumada:    "https://www.farmaciasahumada.cl",
+  farmacia_elquimico:  "https://farmaciaelquimico.cl",
+  // Capa 2: fallback clipboard (Salcobrand no expone búsqueda por URL)
+  farmacia_salcobrand: "https://salcobrand.cl",
+  // Pendientes: Remedia (timeout, no clasificable), Farmam (pendiente decisión producto)
+
   // ── Búsqueda segura (fallback cuando el proveedor no está en la lista) ─
   google_busqueda: (termino: string) =>
     `https://www.google.com/search?q=${encodeURIComponent(termino + " Chile sitio oficial")}`,

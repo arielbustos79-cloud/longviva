@@ -65,6 +65,15 @@ const CATALOGO = {
   radio_t13:              "https://www.t13.cl/en-vivo",
   gastronomia_800:        "https://www.800.cl",
   sala_portugal:          "https://www.salaportugal.cl",
+  // Farmacias (modelo CPC, verificadas 27-07-2026)
+  farmacia_cruzverde:     "https://www.cruzverde.cl",
+  farmacia_drsimi:        "https://www.drsimi.cl",
+  farmacia_fraccion:      "https://www.fraccion.cl",
+  farmacia_farmex:        "https://farmex.cl",
+  farmacia_meki:          "https://farmaciameki.cl",
+  farmacia_ahumada:       "https://www.farmaciasahumada.cl",
+  farmacia_elquimico:     "https://farmaciaelquimico.cl",
+  farmacia_salcobrand:    "https://salcobrand.cl",
 };
 
 
