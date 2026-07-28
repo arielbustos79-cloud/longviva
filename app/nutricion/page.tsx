@@ -267,7 +267,7 @@ export default function NutricionPage() {
           Nutrición
         </h1>
         <p style={{ fontSize: 17, color: "var(--gris)", lineHeight: 1.7, marginBottom: 40 }}>
-          Alimentación y nutrición curadas para la etapa activa — videos con especialistas identificados y fuentes médicas verificadas.
+          Alimentación y nutrición pensadas para tu etapa activa — videos con especialistas identificados y fuentes médicas verificadas.
         </p>
 
         {/* ── Router de nutricionistas ──────────────────────────────────── */}
