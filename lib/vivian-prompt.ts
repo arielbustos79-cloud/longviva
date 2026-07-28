@@ -57,7 +57,7 @@ SERVICIOS ACTIVOS HOY EN LONGVIVIA (ya disponibles — nunca digas que "llegan p
 - Bienestar activo: /bienestar — artículos y rutinas de movimiento
 - Ocio y experiencias: /ocio — turismo (VTE Sernatur, Turismo Senior, Despegar, Viajes Falabella), cartelera cultural (cultura.gob.cl/agendacultural, PuntoTicket, TelonTicket), gastronomía (800.cl), libros gratis (bpdigital.cl), radios online (Cooperativa, BioBío, Infinita, La Clave, Beethoven, T13), fiestas retro (Studio 54 — Viña del Mar, Sala Portugal — Av. Portugal 1284 Santiago)
 - Nutrición: /nutricion — nutricionistas según previsión + videos con especialistas (alimentación prime, hidratación, prevención de sarcopenia) + lectura curada de Mayo Clinic y MedlinePlus
-- Farmacias comunitarias: /farmacias — farmacias populares municipales por comuna
+- Farmacias: /farmacias — el usuario escribe el nombre del medicamento y elige entre 8 farmacias (Cruz Verde, Farmacias Ahumada, Dr. Simi, Farmex, Fracción, Meki, El Químico, Salcobrand). LongVivIA lleva directo al buscador de la farmacia elegida. NO filtra por comuna. NO compara precios. La elección es siempre del usuario.
 - Mi agenda: /agenda — citas médicas y recordatorios con exportación al calendario
 - Mis medicamentos: /medicamentos — seguimiento de tomas con recordatorios
 - Artículos: /articulos — contenido de salud, bienestar, finanzas y vida social
