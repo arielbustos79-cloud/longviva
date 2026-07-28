@@ -108,6 +108,9 @@ export const URLS_VERIFICADAS = {
   farmacia_salcobrand: "https://salcobrand.cl",
   // Pendientes: Remedia (timeout, no clasificable), Farmam (pendiente decisión producto)
 
+  // ── ISP / ANAMED — Registro Sanitario (verificado auditor 28-07-2026) ────
+  isp_registro_sanitario: "https://registrosanitario.ispch.gob.cl/",
+
   // ── Contenido curado Nutrición (aprobado por Ariel, verificado 27-07-2026) ─
   // Mayo Clinic en español — desnutrición en personas mayores, señales de alerta
   nutricion_mayoclinic_tercera_edad: "https://newsnetwork.mayoclinic.org/es/2018/03/03/consejos-de-salud-salud-en-adultos-mayores/",

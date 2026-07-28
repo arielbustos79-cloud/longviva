@@ -74,6 +74,8 @@ const CATALOGO = {
   farmacia_ahumada:       "https://www.farmaciasahumada.cl",
   farmacia_elquimico:     "https://farmaciaelquimico.cl",
   farmacia_salcobrand:    "https://salcobrand.cl",
+  // ISP / ANAMED — Registro Sanitario (verificado auditor 28-07-2026)
+  isp_registro_sanitario:               "https://registrosanitario.ispch.gob.cl/",
   // Nutrición — fuentes curadas (aprobadas por Ariel 27-07-2026)
   // Mayo Clinic devuelve 403 (bloqueo de bots) — URL válida, el artículo existe
   nutricion_mayoclinic_tercera_edad:    "https://newsnetwork.mayoclinic.org/es/2018/03/03/consejos-de-salud-salud-en-adultos-mayores/",
