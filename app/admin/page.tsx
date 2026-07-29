@@ -63,6 +63,13 @@ export default async function AdminPage() {
     ? (totalMensajes / usuariosVivian.size).toFixed(1)
     : "0";
 
+  // Feedback del formulario de ayuda
+  const { data: feedbacks, count: totalFeedback } = await supabase
+    .from("feedback")
+    .select("nombre, que_hacias, que_fue_dificil, comentario, created_at", { count: "exact" })
+    .order("created_at", { ascending: false })
+    .limit(20);
+
   // Eventos recientes
   const { data: recientes } = await supabase
     .from("eventos")
@@ -144,6 +151,51 @@ export default async function AdminPage() {
               </div>
             )}
           </div>
+        </div>
+
+        {/* Feedback de usuarios */}
+        <div style={{ background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.1)", borderRadius: 16, padding: "24px", marginBottom: 24 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 20 }}>
+            <h2 style={{ fontSize: 16, fontWeight: 600, color: "white", margin: 0 }}>Feedback — Centro de ayuda</h2>
+            <span style={{ fontSize: 13, color: "rgba(255,255,255,.4)" }}>{totalFeedback ?? 0} total</span>
+          </div>
+          {(feedbacks ?? []).length === 0 ? (
+            <p style={{ color: "rgba(255,255,255,.4)", fontSize: 14 }}>Sin feedback aún</p>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              {(feedbacks ?? []).map((f, i) => {
+                const fecha = new Date(f.created_at).toLocaleString("es-CL", {
+                  day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit",
+                });
+                return (
+                  <div key={i} style={{
+                    borderBottom: i < (feedbacks?.length ?? 0) - 1 ? "1px solid rgba(255,255,255,.06)" : "none",
+                    paddingBottom: i < (feedbacks?.length ?? 0) - 1 ? 16 : 0,
+                  }}>
+                    <div style={{ display: "flex", gap: 12, alignItems: "baseline", marginBottom: 8 }}>
+                      <span style={{ fontSize: 12, color: "rgba(255,255,255,.35)" }}>{fecha}</span>
+                      {f.nombre && <span style={{ fontSize: 13, fontWeight: 600, color: "#C9973A" }}>{f.nombre}</span>}
+                    </div>
+                    {f.que_hacias && (
+                      <p style={{ fontSize: 13, color: "rgba(255,255,255,.6)", margin: "0 0 4px" }}>
+                        <span style={{ color: "rgba(255,255,255,.35)" }}>Hacía: </span>{f.que_hacias}
+                      </p>
+                    )}
+                    {f.que_fue_dificil && (
+                      <p style={{ fontSize: 13, color: "rgba(255,255,255,.6)", margin: "0 0 4px" }}>
+                        <span style={{ color: "rgba(255,255,255,.35)" }}>Difícil: </span>{f.que_fue_dificil}
+                      </p>
+                    )}
+                    {f.comentario && (
+                      <p style={{ fontSize: 13, color: "rgba(255,255,255,.6)", margin: 0 }}>
+                        <span style={{ color: "rgba(255,255,255,.35)" }}>Comentario: </span>{f.comentario}
+                      </p>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         {/* Actividad reciente */}
