@@ -139,9 +139,28 @@ export default function ComunidadPage() {
             </p>
 
             {programa.direccion && (
-              <div style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 12 }}>
+              <div style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 10 }}>
                 <span style={{ fontSize: 14, color: "var(--gris)" }}>📍</span>
                 <span style={{ fontSize: 14, color: "var(--gris)" }}>{programa.direccion}</span>
+              </div>
+            )}
+
+            {programa.telefono && (
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+                <span style={{ fontSize: 14, color: "var(--gris)" }}>📞</span>
+                <span style={{ fontSize: 14, color: "var(--gris)" }}>{programa.telefono}</span>
+              </div>
+            )}
+
+            {programa.correo && (
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+                <span style={{ fontSize: 14, color: "var(--gris)" }}>✉️</span>
+                <a
+                  href={`mailto:${programa.correo}`}
+                  style={{ fontSize: 14, color: "var(--v2)", textDecoration: "none" }}
+                >
+                  {programa.correo}
+                </a>
               </div>
             )}
 
@@ -156,7 +175,7 @@ export default function ComunidadPage() {
               </div>
             )}
 
-            {programa.link && (
+            {programa.link && programa.tipo_link !== "PORTADA" && programa.tipo_link !== "DIDECO" && (
               <a
                 href={programa.link}
                 target="_blank"
@@ -166,9 +185,26 @@ export default function ComunidadPage() {
                   background: "var(--v2)", color: "white",
                   padding: "12px 24px", borderRadius: 50,
                   fontSize: 14, fontWeight: 700, textDecoration: "none",
+                  marginTop: 8,
                 }}
               >
-                Ver sitio municipal →
+                Ver programa en el sitio municipal →
+              </a>
+            )}
+            {programa.link && (programa.tipo_link === "PORTADA" || programa.tipo_link === "DIDECO") && (
+              <a
+                href={programa.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "inline-block",
+                  background: "var(--gris)", color: "white",
+                  padding: "12px 24px", borderRadius: 50,
+                  fontSize: 14, fontWeight: 700, textDecoration: "none",
+                  marginTop: 8,
+                }}
+              >
+                Sitio municipal →
               </a>
             )}
           </div>
