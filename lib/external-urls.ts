@@ -63,13 +63,46 @@ export const URLS_VERIFICADAS = {
   compin: "https://www.compin.cl",
   supersalud: "https://www.superdesalud.gob.cl",
 
-  // ── Municipios (curados para pilar Comunidad) ─────────────────────────
-  municipio_providencia: "https://www.providencia.cl",
-  municipio_las_condes: "https://www.lascondes.cl",
-  municipio_santiago: "https://www.munistgo.cl",
-  municipio_nunoa: "https://www.nunoa.cl",
-  municipio_maipu: "https://www.municipalidadmaipu.cl",
+  // ── Municipios — portadas genéricas (solo para referencias indirectas) ──
   municipio_vina_del_mar: "https://www.munivina.cl",
+
+  // ── Comunidad — Programas Adulto Mayor (verificados 30-07-2026) ──────
+  // DEDICADA = página propia del programa | TAG = noticias/categoría | PORTADA = último recurso
+  comunidad_cerrillos:        "https://www.mcerrillos.cl",                                                                                          // PORTADA
+  comunidad_cerro_navia:      "https://www.cerronavia.cl/oficina-personas-mayores/",                                                                 // DEDICADA 200
+  comunidad_conchali:         "https://conchali.cl/adulto-mayor/",                                                                                  // DEDICADA 200
+  comunidad_el_bosque:        "https://www.municipalidadelbosque.cl/tramites-y-beneficios/adultos-mayores-centro-gerontologico/",                    // DEDICADA 200
+  comunidad_estacion_central: "https://muniecentral.cl",                                                                                            // PORTADA (sitio inestable)
+  comunidad_huechuraba:       "https://www.huechuraba.cl/dideco/area-integracion-social/oficina-comunal-para-personas-mayores",                     // DEDICADA 200
+  comunidad_independencia:    "https://www.independencia.cl/oficinas-municipales/adulto-mayor/",                                                      // DEDICADA 200 (redirect verificado)
+  comunidad_la_cisterna:      "http://www.cisterna.cl/011-casa-del-adulto-mayor.php",                                                               // DEDICADA 403* Google confirma
+  comunidad_la_florida:       "https://www.laflorida.cl/sitio/programas/programa-adulto-mayor/",                                                    // DEDICADA 200
+  comunidad_la_granja:        "https://www.municipalidadlagranja.cl/tag/adulto-mayor/",                                                             // TAG (URL directa da 404)
+  comunidad_la_pintana:       "https://pintana.cl/?page_id=3415",                                                                                   // DEDICADA 200 (URL dinámica WP)
+  comunidad_la_reina:         "https://www.lareina.cl/oficina-de-proteccion-al-adulto-mayor/",                                                      // DEDICADA 200
+  comunidad_las_condes:       "https://www.lascondes.cl/soy-vecino/adulto-mayor/",                                                                  // DEDICADA 200
+  comunidad_lo_barnechea:     "https://lobarnechea.cl/comunidades/adulto-mayor/",                                                                   // DEDICADA 403* Google confirma
+  comunidad_lo_espejo:        "https://www.loespejo.cl",                                                                                            // PORTADA
+  comunidad_lo_prado:         "https://loprado.cl/dideco/proteccion-social/adulto-mayor/",                                                          // DEDICADA 200
+  comunidad_macul:            "https://www.munimacul.cl/portalnv/index.php/centro-integral-del-adulto-mayor-ciam/",                                 // DEDICADA 200
+  comunidad_maipu:            "https://municipalidadmaipu.cl/tag/oficina-del-adulto-mayor/",                                                        // TAG
+  comunidad_nunoa:            "https://www.nunoa.cl/direcciones-y-coorporaciones/direccion-de-desarrollo-comunitario/departamento-de-la-persona-mayor/", // DEDICADA 200
+  comunidad_padre_hurtado:    "https://portal.mph.cl/?cat=2",                                                                                       // TAG 200
+  comunidad_pac:              "https://www.pedroaguirrecerda.cl/dideco-2/",                                                                         // DIDECO
+  comunidad_penalolen:        "https://www.penalolen.cl/comuna-amigable-2/",                                                                        // DEDICADA 200
+  comunidad_providencia:      "https://providencia.cl/provi/comunidad/personas-mayores/personas-mayores-departamento",                              // DEDICADA 200
+  comunidad_pudahuel:         "https://www.mpudahuel.cl",                                                                                           // PORTADA
+  comunidad_puente_alto:      "https://mpuentealto.cl/oficina-del-adulto-mayor/",                                                                   // DEDICADA 200
+  comunidad_quilicura:        "https://ww2.muniquilicura.cl/adultos-mayores-2/",                                                                    // DEDICADA 403* Google confirma
+  comunidad_quinta_normal:    "https://www.quintanormal.cl",                                                                                        // PORTADA
+  comunidad_recoleta:         "https://www.recoleta.cl/category/adulto-mayor/",                                                                      // TAG 200 (URL /programa-adulto-mayor/ da 404)
+  comunidad_renca:            "https://renca.cl/unidades-municipales/direccion-de-desarrollo-comunitario/departamento-adulto-mayor/",               // DEDICADA ECONNRESET* Google confirma
+  comunidad_san_bernardo:     "https://www.sanbernardo.cl/oficina-del-adulto-mayor/",                                                               // DEDICADA 403* Google confirma
+  comunidad_san_joaquin:      "https://sanjoaquin.cl/personas-mayores/",                                                                            // DEDICADA 200
+  comunidad_san_miguel:       "https://web.sanmiguel.cl/category/adulto-mayor/",                                                                    // TAG 200
+  comunidad_san_ramon:        "https://municipalidadsanramon.cl/tag/adultos-mayores/",                                                              // TAG 200
+  comunidad_santiago:         "https://www.munistgo.cl/adulto-mayor/",                                                                              // DEDICADA 200
+  comunidad_vitacura:         "https://vitacura.cl/vecinos/centro-de-dia-para-personas-mayores/",                                                   // DEDICADA 200
 
   // ── Ocio y cultura ────────────────────────────────────────────────────
   bpdigital: "https://www.bpdigital.cl",
