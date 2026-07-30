@@ -602,11 +602,11 @@ export default function Home() {
           {[
             { icon: IC.salud,     title: "Telemedicina",        desc: "Consultas médicas online con proveedores que calzan con tu previsión. Consulta cobertura antes de agendar.",   href: "/telemedicina", activo: true },
             { icon: IC.bienestar, title: "Bienestar activo",    desc: "Rutinas simples y validadas para mantenerte en movimiento. Sin gimnasio ni complicaciones.",                   href: "/bienestar",    activo: true },
-            { icon: IC.tours,     title: "Ocio y experiencias", desc: "Grupos pequeños, pensado para tu ritmo. Incluye el Programa Vacaciones Tercera Edad de Sernatur.",             href: "/ocio",         activo: true },
-            { icon: IC.nutricion, title: "Nutrición",           desc: "Nutricionistas especializados en personas en su prime. Verifica con tu previsión qué cubre tu plan.",          href: "/nutricion",    activo: true },
+            { icon: IC.tours,     title: "Ocio y experiencias", desc: "Panoramas, radio, gastronomía y turismo social a tu ritmo — grupos pequeños, sin apuro.",                        href: "/ocio",         activo: true },
+            { icon: IC.nutricion, title: "Nutrición",           desc: "Videos con especialistas, fuentes médicas confiables, y nutricionistas si necesitas algo más específico.",      href: "/nutricion",    activo: true },
             { icon: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>,
               title: "Comunidad",   desc: "Te conectamos con talleres, clubes y actividades cerca de ti — según tu comuna.",                                                              href: "/comunidad",    activo: true },
-            { icon: IC.pill,      title: "Farmacias",           desc: "Farmacias comunitarias y populares municipales — medicamentos a precio justo, sin intermediarios.",           href: "/farmacias",    activo: true  },
+            { icon: IC.pill,      title: "Farmacias",           desc: "Encuentra tu medicamento y accede directo a la farmacia de tu preferencia.",                                   href: "/farmacias",    activo: true  },
           ].map((srv, i) => (
             srv.activo ? (
               <a key={srv.title} href={srv.href} className={`${s.srvCard} ${s.fadeIn}`} style={{ transitionDelay: `${(i + 1) * 80}ms`, textDecoration: "none" }}>

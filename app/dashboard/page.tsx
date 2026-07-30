@@ -198,7 +198,7 @@ export default function DashboardPage() {
             },
             {
               svg: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M11 2C6.5 2 3 6 3 11c0 5.25 7.5 12 9 12s9-6.75 9-12c0-5-3.5-9-9-9z"/><path d="M11 7v10M7 11h8"/></svg>,
-              title: "Nutrición", desc: "Nutricionistas especializados en tu prime",
+              title: "Nutrición", desc: "Videos con especialistas y fuentes médicas confiables",
               activo: true, href: "/nutricion", destacado: false,
             },
             {
@@ -208,7 +208,7 @@ export default function DashboardPage() {
             },
             {
               svg: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M10.5 20H4a2 2 0 01-2-2V6a2 2 0 012-2h16a2 2 0 012 2v7.5"/><circle cx="17" cy="17" r="5"/><path d="M14 17h6"/></svg>,
-              title: "Farmacias", desc: "Farmacias comunitarias y populares cerca de ti",
+              title: "Farmacias", desc: "Encuentra tu medicamento y elige tu farmacia",
               activo: true, href: "/farmacias", destacado: false,
             },
           ].map((card) => (
