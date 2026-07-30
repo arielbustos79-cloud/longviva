@@ -279,7 +279,6 @@ Tipos válidos (`TipoEvento`):
 - `vivian_mensaje` — mensaje enviado a VIVIAN (web o whatsapp)
 - `articulo_leido` — artículo leído (30s o 80% scroll)
 - `juego_completado` — juego terminado (memoria o sopa_letras)
-- `farmacia_click` — clic en derivación a farmacia (incluye `{ farmacia, medicamento, capa }`)
 
 Patrón: fire-and-forget (`void promise`) — nunca bloquea la UI.
 
@@ -371,7 +370,7 @@ NEXT_PUBLIC_APP_URL=https://longvivia.cl
 - LongViva SpA constituida (13-07-2026, vía RES)
 - **PWA instalable** — confirmada funcional (23-07-2026), verificado vía commits `4be1cdc` (manifest, service worker, iconos, instalación) y `ef36c43` (fix de redirección tras magic link). Bug abierto: ícono del launcher no coincide con logo real de marca — pendiente de corregir asset del manifest.
 - **Pilar de derivación AFP / Previsión financiera** (commits `d6a6d34`→`6f946b5`): campo `prevision_afp` en `profiles`, selector "Mi AFP" en dashboard con consentimiento explícito, VIVIAN deriva al sitio oficial sin comparar AFPs ni recomendar fondos/estrategias.
-- **Pilar Comunidad** (commits `e8d2578`, `da82276`): página `/comunidad`, selector de comuna → programa municipal específico para 6 comunas (Las Condes, Providencia, Santiago, Ñuñoa, San Miguel, Quinta Normal), mensaje genérico + búsqueda Google para comunas no curadas, sección SENAMA complementaria. Confirmado: solo directorio de derivación, sin interacción usuario-a-usuario.
+- **Pilar Comunidad — expandido a 35 comunas (30-07-2026, commits `033ef1c`, `62e6133`):** de 6 comunas con links a portada genérica (hallazgo QA de Ariel, 29-07-2026) a las 35 comunas del Gran Santiago con URL específica al programa/oficina del Adulto Mayor. Verificado con `scripts/verify-urls.mjs` (98 URLs en catálogo): 33/35 responden 200 OK, 1 con 403 (La Cisterna, bloqueo de bot, contenido confirmado vía Google), 1 con error de red (Estación Central, sitio inestable, contacto directo disponible como respaldo). 0 DNS_FAIL. Clasificación: 23 DEDICADA (página propia), 6 TAG (categoría/noticias), 5 PORTADA (sin página específica, contacto directo en ficha: Cerrillos, Estación Central, Lo Espejo, Pudahuel, Quinta Normal), 1 DIDECO. Verificado independientemente por el auditor (San Bernardo, Recoleta) sin encontrar fabricación. Confirmado: solo directorio de derivación, sin interacción usuario-a-usuario. **Alertas de mantención a futuro:** La Granja (URL dedicada da 404, usa TAG como respaldo — confirmar si el municipio migró la URL) y La Pintana (URL dinámica de WordPress, puede romperse si migran el sitio).
 - **Bienestar activo — biblioteca de videos** (commit `cac53d6`): 7 videos aprobados manualmente por Ariel (23-07-2026) — Yoga en silla x2, Tai Chi x2, Musculatura x3 — con filtros por disciplina, player embebido y disclaimer médico visible por video.
 - **Fix historial VIVIAN** (commits `68c1833`, `90b211a`, `c240b44`): historial ahora muestra todas las conversaciones ordenadas por fecha, expansión por grupo, eliminación individual y "borrar todo" con confirmación, bug de timezone corregido (UTC explícito).
 - **Alerta de privacidad (previsión de salud + AFP) — mayormente resuelta (23-07-2026):**
@@ -383,15 +382,14 @@ NEXT_PUBLIC_APP_URL=https://longvivia.cl
 - **Ocio y experiencias** — 5 nuevas secciones de derivación (commit `8adaf07`), incluyendo Studio 54 (fiesta retro) en **Viña del Mar** — confirmado en `scripts/eventos-ocio.sql` y URL de Passline (`d0b122b`). El brief original (`brief-ocio-recursos-adicionales.md`) tenía el dato de ubicación equivocado ("Santiago Oriente") — la corrección del commit es legítima, no un error.
 - **Quiénes somos** actualizado con modelo financiero y oferta corregidos (commit `345a1ff`)
 - **QA landing** — los 11 puntos del brief original confirmados implementados vía revisión de `app/page.tsx` (23-07-2026): corrección gramatical hero, estadística 4.1M INE 2026, subtítulos de pilares sin promesas de gratuidad, párrafo de financiamiento actualizado, "Bienestar activo" como nombre de card, ícono de favoritos (estrella, no rama de olivo), tercera opción de tamaño de texto (A++), sección "Historias Reales" eliminada. El commit `dadc44b` decía "7 correcciones" porque parte de los puntos ya existían o se resolvieron en otros commits — el resultado neto cubre el brief completo.
-- **Farmacias — modelo CPC** (commit `7a5063b`, 28-07-2026): búsqueda por nombre de medicamento, 8 farmacias (Cruz Verde, Ahumada, Dr. Simi, Farmex, Fracción, Meki, El Químico, Salcobrand), Capa 1 deep link + Capa 2 clipboard fallback, evento `farmacia_click`. Sin comparación de precios, sin ranking, sin logos. Ver sección 27 para detalle completo.
-- **Nutrición — biblioteca de videos + fuentes escritas** (commit `ecbedba`, 28-07-2026): 8 videos en 3 categorías (Alimentación prime, Hidratación, Sarcopenia), 3 fuentes escritas verificadas (Mayo Clinic x2, MedlinePlus x1), router de nutricionistas por previsión preservado. Ver sección 23 para detalle.
 
 ### Próximamente (features en roadmap — ver sección "Decisiones de estrategia 22-23 de julio de 2026" para el detalle completo)
 - Notificaciones push/WhatsApp reales para agenda y medicamentos (hoy solo hay export manual a calendario)
+- Farmacias — **confirmado no implementado** (23-07-2026): no existe `app/farmacias/` ni ruta activa. Existe solo como card placeholder en `app/page.tsx` línea 611, con `activo: false`, `href: "#"` y badge "Próximamente". De los 5 pilares originales del brief, los otros 4 (Telemedicina, Bienestar activo, Ocio, Nutrición) sí tienen páginas y rutas propias — Farmacias quedó parcialmente pendiente dentro de ese mismo brief.
 - Entrena tu mente — rediseño completo: reemplazo de Memoria/Sopa de letras por 4 juegos nuevos (Atención, Memoria, Percepción, Ejecución) — sin commits asociados aún, único brief de la ronda 22-23/07 que sigue sin implementar
 - App React Native (Expo) — publicación en Google Play
 
-### Briefs sin ningún commit asociado (actualizado 28-07-2026)
+### Briefs sin ningún commit asociado (actualizado 23-07-2026)
 Confirmado por Claude Code — solo queda 1 brief sin implementación iniciada:
 - `brief-nuevos-juegos-entrena-mente.md`
 
@@ -401,10 +399,6 @@ Confirmado por Claude Code — solo queda 1 brief sin implementación iniciada:
 - Twilio: salir del Sandbox (RUT resuelto vía SpA activa; ticket #28132027 activo; pendiente verificación Facebook Business Manager)
 - Primer aliado B2B — propuesta enviada a Conecta Mayor UC (19-07-2026), respuesta pendiente
 - Registro de marca INAPI — decidido registrar "LongVivIA" denominativa, Clase 42, primero; checklist preparado, ejecución pendiente
-- PWA — corregir ícono del launcher (no coincide con logo real de marca)
-- npm audit — actualizar `next@16.2.7` → `16.2.11` (5 CVEs high, no urgente)
-- Catálogo informativo ISP/ANAMED en `/farmacias` — URL verificada (`registrosanitario.ispch.gob.cl`), flujo de producto pendiente
-- Confirmación visual RLS `profiles` en Supabase (pendiente desde 23-07-2026)
 
 ---
 
@@ -485,7 +479,7 @@ Invitación recibida a "Claude Impact Lab – Longevidad 2026" (organizado por C
 - `brief-ocio-recursos-adicionales.md`
 - `brief-nuevos-juegos-entrena-mente.md`
 
-### 14. Checklist de auditoría — actualizado 28-07-2026
+### 14. Checklist de auditoría — actualizado 23-07-2026
 
 - [x] Fix de consentimiento de datos de previsión de salud en `lib/vivian-prompt.ts` — confirmado vía diff (commit `d6a6d34`)
 - [x] Fix de consentimiento para `prevision_afp` — confirmado, regla espejada en el mismo diff
@@ -496,13 +490,10 @@ Invitación recibida a "Claude Impact Lab – Longevidad 2026" (organizado por C
 - [x] Sección "Historias Reales" eliminada — confirmado, no existe en `app/page.tsx`
 - [x] Pilares AFP y Comunidad agregados — confirmado con commits y archivos nuevos
 - [x] Comunidad sigue siendo solo derivación (sin interacción usuario-a-usuario) — confirmado
-- [x] Farmacias modelo CPC en producción — commit `7a5063b`, 8 farmacias, auditado 28-07-2026
-- [x] Nutrición biblioteca de videos + fuentes escritas — commit `ecbedba`, auditado 28-07-2026
-- [x] H1 consentimiento VIVIAN — cerrado commit `a587dad`, evidencia de producción ✓
-- [x] H2 alucinación de memoria — cerrado commit `fa39892`, evidencia de producción ✓
-- [x] H3 sustancias controladas — cerrado commit `cb971c2`, evidencia 5 turnos bajo presión ✓
 - [ ] RLS de `profiles` con `WITH CHECK (auth.uid() = id)` — **pendiente de confirmación visual de Ariel en Supabase** (Claude Code entregó el SQL, falta verificar en el panel)
-- [ ] Rediseño de juegos (Atención/Memoria/Percepción/Ejecución) — **no implementado**, brief sin commits
+- [ ] Pilar Farmacias — **confirmado NO implementado**, sigue como placeholder visual sin ruta
+- [x] Rediseño de juegos (Atención/Memoria/Percepción/Ejecución reemplazando Memoria/Sopa de letras) — implementado y confirmado (commit `87f5de9`), incluye guardado de puntaje en Supabase
+
 
 ---
 
@@ -640,7 +631,13 @@ Detectado en auditoría manual: VIVIAN deriva genéricamente a `longvivia.cl/tel
 
 **Con esto, van 3 hallazgos de reglas del prompt con el mismo patrón meta (H1, H2, H3): una regla correcta en el prompt no garantiza que el modelo la siga siempre — necesita prueba conversacional real, y en este caso además prueba bajo presión, que es un estándar más alto y vale la pena replicar en futuras auditorías de reglas críticas.**
 
-### 30. Próximo enfoque — retomar con chat de estrategia
+### 31. Hallazgo H4 — nomenclatura obsoleta en el prompt de VIVIAN, cerrado 30-07-2026
+
+**Detectado:** el bloque "TU PANEL" del prompt de VIVIAN (`lib/vivian-prompt.ts`) seguía describiendo el pilar Farmacias con el nombre del modelo anterior — "Farmacias comunitarias" — pese a que el pivote a modelo CPC se cerró el 28-07-2026 (sección 27). Mismo tipo de residuo que el hallazgo original de WhatsApp: un pilar cambia, pero una referencia puntual en el prompt no se actualiza en el mismo commit.
+
+**Fix (commit `e46b78b`):** corregido a "Farmacias (busca tu medicamento y elige tu farmacia)", consistente con el modelo vigente.
+
+### 32. Próximo enfoque — retomar con chat de estrategia
 
 Con el desarrollo técnico y la auditoría de seguridad en buen estado (ver checklist arriba), el foco pasa a retomar los pendientes que no son de código:
 
@@ -675,5 +672,3 @@ espera queda sin resolver a propósito. Detalle completo en el `.claude/CLAUDE.m
 4. **Contenido de salud:** NUNCA generar estadísticas o citas médicas — solo usar contenido aprobado
 5. **Privacidad:** RLS en Supabase, nunca exponer service_role_key al cliente
 6. **Sin tecnicismos de marca:** respetar vocabulario permitido/prohibido en TODO el copy
-7. **URLs verificadas:** VIVIAN nunca genera URLs de memoria — solo usa `lib/external-urls.ts`
-8. **Sin promesas inexistentes:** no mencionar features que no están en producción (ej. recordatorios WhatsApp)
