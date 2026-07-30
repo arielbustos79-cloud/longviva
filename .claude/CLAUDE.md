@@ -370,7 +370,7 @@ NEXT_PUBLIC_APP_URL=https://longvivia.cl
 - LongViva SpA constituida (13-07-2026, vía RES)
 - **PWA instalable** — confirmada funcional (23-07-2026), verificado vía commits `4be1cdc` (manifest, service worker, iconos, instalación) y `ef36c43` (fix de redirección tras magic link). Bug abierto: ícono del launcher no coincide con logo real de marca — pendiente de corregir asset del manifest.
 - **Pilar de derivación AFP / Previsión financiera** (commits `d6a6d34`→`6f946b5`): campo `prevision_afp` en `profiles`, selector "Mi AFP" en dashboard con consentimiento explícito, VIVIAN deriva al sitio oficial sin comparar AFPs ni recomendar fondos/estrategias.
-- **Pilar Comunidad — expandido a 35 comunas (30-07-2026, commits `033ef1c`, `62e6133`):** de 6 comunas con links a portada genérica (hallazgo QA de Ariel, 29-07-2026) a las 35 comunas del Gran Santiago con URL específica al programa/oficina del Adulto Mayor. Verificado con `scripts/verify-urls.mjs` (98 URLs en catálogo): 33/35 responden 200 OK, 1 con 403 (La Cisterna, bloqueo de bot, contenido confirmado vía Google), 1 con error de red (Estación Central, sitio inestable, contacto directo disponible como respaldo). 0 DNS_FAIL. Clasificación: 23 DEDICADA (página propia), 6 TAG (categoría/noticias), 5 PORTADA (sin página específica, contacto directo en ficha: Cerrillos, Estación Central, Lo Espejo, Pudahuel, Quinta Normal), 1 DIDECO. Verificado independientemente por el auditor (San Bernardo, Recoleta) sin encontrar fabricación. Confirmado: solo directorio de derivación, sin interacción usuario-a-usuario. **Alertas de mantención a futuro:** La Granja (URL dedicada da 404, usa TAG como respaldo — confirmar si el municipio migró la URL) y La Pintana (URL dinámica de WordPress, puede romperse si migran el sitio).
+- **Pilar Comunidad — expandido a 35 comunas (30-07-2026, commits `033ef1c`, `62e6133`):** de 6 comunas con links a portada genérica (hallazgo QA de Ariel, 29-07-2026) a las 35 comunas del Gran Santiago con URL específica al programa/oficina del Adulto Mayor. Verificado con `scripts/verify-urls.mjs` (98 URLs en catálogo): 33/35 responden 200 OK, 1 con 403 (La Cisterna, bloqueo de bot, contenido confirmado vía Google), 1 con error de red (Estación Central, sitio inestable, contacto directo disponible como respaldo). 0 DNS_FAIL. Clasificación: 23 DEDICADA (página propia), 6 TAG (categoría/noticias), 5 PORTADA (sin página específica, contacto directo en ficha: Cerrillos, Estación Central, Lo Espejo, Pudahuel, Quinta Normal), 1 DIDECO. Verificado independientemente por el auditor (San Bernardo, Recoleta) sin encontrar fabricación. Confirmado: solo directorio de derivación, sin interacción usuario-a-usuario. **Alertas de mantención a futuro:** La Granja (URL dedicada da 404, usa TAG como respaldo — confirmar si el municipio migró la URL) y La Pintana (URL dinámica de WordPress, puede romperse si migran el sitio). Confirmado en producción el 31-07-2026 tras resolver un incidente de deploy (push faltante — ver sección 33) — las 35 comunas están visibles y funcionando.
 - **Bienestar activo — biblioteca de videos** (commit `cac53d6`): 7 videos aprobados manualmente por Ariel (23-07-2026) — Yoga en silla x2, Tai Chi x2, Musculatura x3 — con filtros por disciplina, player embebido y disclaimer médico visible por video.
 - **Fix historial VIVIAN** (commits `68c1833`, `90b211a`, `c240b44`): historial ahora muestra todas las conversaciones ordenadas por fecha, expansión por grupo, eliminación individual y "borrar todo" con confirmación, bug de timezone corregido (UTC explícito).
 - **Alerta de privacidad (previsión de salud + AFP) — mayormente resuelta (23-07-2026):**
@@ -493,7 +493,6 @@ Invitación recibida a "Claude Impact Lab – Longevidad 2026" (organizado por C
 - [ ] RLS de `profiles` con `WITH CHECK (auth.uid() = id)` — **pendiente de confirmación visual de Ariel en Supabase** (Claude Code entregó el SQL, falta verificar en el panel)
 - [ ] Pilar Farmacias — **confirmado NO implementado**, sigue como placeholder visual sin ruta
 - [x] Rediseño de juegos (Atención/Memoria/Percepción/Ejecución reemplazando Memoria/Sopa de letras) — implementado y confirmado (commit `87f5de9`), incluye guardado de puntaje en Supabase
-
 
 ---
 
@@ -637,7 +636,23 @@ Detectado en auditoría manual: VIVIAN deriva genéricamente a `longvivia.cl/tel
 
 **Fix (commit `e46b78b`):** corregido a "Farmacias (busca tu medicamento y elige tu farmacia)", consistente con el modelo vigente.
 
-### 32. Próximo enfoque — retomar con chat de estrategia
+### 33. Incidente de deploy — Comunidad no visible en producción, cerrado 31-07-2026
+
+**Tipo:** incidente de despliegue, no de código ni seguridad. Detectado por Ariel el 31-07-2026 al revisar `/comunidad` en producción y no ver las comunas nuevas reportadas como cerradas el día anterior.
+
+**Causa raíz confirmada con evidencia literal:** los 4 commits del 30-07 (`e46b78b`, `033ef1c`, `62e6133`, `3d1e5db`) se crearon correctamente en local, pero nunca se ejecutó `git push`. `origin/master` quedó en `9114bcf` (29-07). `git status` confirmó *"Your branch is ahead of 'origin/master' by 4 commits"* — sin ambigüedad. `lib/comunidad.ts` sí tenía las 35 entradas correctas en local (`grep "comuna:" | wc` → 38, correcto). No hubo corrupción de datos, problema de webhook, ni cache de Vercel — solo el push faltante.
+
+**Resolución:** `git push origin master` → Vercel desplegó automáticamente. Confirmado por Ariel: 35 comunas visibles en producción.
+
+**Severidad:** impacto en usuarios bajo (las 6 comunas originales seguían funcionando, nada se degradó), sin impacto en datos ni seguridad, duración ~1 día, resolución inmediata.
+
+**Medida correctiva — dos capas:**
+1. Regla en memoria persistente de Claude Code: verificar `git status` y confirmar "up to date with origin/master" antes de reportar cualquier sesión como desplegada.
+2. Resguardo adicional del Auditor: de ahora en más, pedir explícitamente el output de `git status`/`git log origin/master` como parte de cualquier reporte de cierre de sesión con commits — no depender solo de que la memoria de Claude Code lo recuerde. Mismo patrón meta que H1-H4: una regla en un solo lugar es frágil, verificar en dos capas es más robusto.
+
+Con esto, Pilar Comunidad queda confirmado cerrado y en producción (35 comunas, confirmado visualmente por Ariel en `/comunidad`).
+
+### 34. Próximo enfoque — retomar con chat de estrategia
 
 Con el desarrollo técnico y la auditoría de seguridad en buen estado (ver checklist arriba), el foco pasa a retomar los pendientes que no son de código:
 
