@@ -23,7 +23,7 @@ export default function AnunciantesPage() {
 
         <div style={{ background: "white", borderRadius: 20, padding: "32px", border: "1.5px solid var(--v5)", marginBottom: 24 }}>
           <p style={{ fontSize: 17, color: "var(--gris)", lineHeight: 1.75, margin: "0 0 20px" }}>
-            LongVivIA tiene acceso a un segmento de alto valor: personas en su prime (+55 años), activas, con poder de decisión y tiempo disponible para consumir. Un público que las plataformas masivas no priorizan — nosotros sí.
+            LongVivIA tiene acceso a un segmento de alto valor: personas en su prime (+60 años), activas, con poder de decisión y tiempo disponible para consumir. Un público que las plataformas masivas no priorizan — nosotros sí.
           </p>
           <p style={{ fontSize: 17, color: "var(--gris)", lineHeight: 1.75, margin: "0 0 20px" }}>
             Ofrecemos publicidad contextual y segmentada alineada con los pilares de la plataforma: salud, bienestar, experiencias y finanzas. Sin saturación, sin formatos intrusivos — integrado naturalmente en la experiencia del usuario.
