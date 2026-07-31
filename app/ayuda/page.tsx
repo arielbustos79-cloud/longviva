@@ -29,7 +29,7 @@ const FAQS = [
   },
   {
     q: "¿Puedo usarlo por WhatsApp?",
-    a: "Sí, VIVIAN también está disponible por WhatsApp. Si ya tienes una cuenta en LongVivIA, escríbenos al número de WhatsApp que aparece en tu panel y VIVIAN te reconocerá por tu número registrado.",
+    a: "Por ahora VIVIAN está disponible en la web. Estamos trabajando para sumar WhatsApp como otro canal — te avisaremos cuando esté listo.",
   },
   {
     q: "¿VIVIAN guarda lo que le cuento?",
