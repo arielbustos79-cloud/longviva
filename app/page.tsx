@@ -349,6 +349,11 @@ export default function Home() {
             </>
           ) : (
             <>
+              <li>
+                <a href="https://www.facebook.com/profile.php?id=61591994294647" target="_blank" rel="noopener noreferrer" aria-label="Facebook" style={{ display:"flex", alignItems:"center", justifyContent:"center", width:36, height:36, borderRadius:"50%", background:"#1877F2", flexShrink:0 }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="white" aria-hidden="true"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.874v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+                </a>
+              </li>
               <li><a href="/login" className={s.btnNavOutline}>Ingresar</a></li>
               <li><a href="/registro" className={s.btnNav}>Comenzar gratis →</a></li>
             </>
@@ -384,6 +389,9 @@ export default function Home() {
                 </>
               ) : (
                 <>
+                  <a href="https://www.facebook.com/profile.php?id=61591994294647" target="_blank" rel="noopener noreferrer" aria-label="Facebook" style={{ display:"inline-flex", alignItems:"center", justifyContent:"center", width:40, height:40, borderRadius:"50%", background:"#1877F2", marginBottom:4 }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white" aria-hidden="true"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.874v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+                  </a>
                   <a href="/login" className={s.mobileLinkBtn} onClick={() => setMenuOpen(false)}>Ingresar</a>
                   <a href="/registro" className={s.mobileLinkPrimary} onClick={() => setMenuOpen(false)}>Comenzar gratis →</a>
                 </>
@@ -757,7 +765,6 @@ export default function Home() {
                 { label: "Quiénes somos", href: "/quienes-somos" },
                 { label: "Proveedores", href: "/proveedores" },
                 { label: "Anunciantes", href: "/anunciantes" },
-                { label: "Trabaja aquí", href: "/trabaja" },
               ].map(l => <li key={l.label}><a href={l.href}>{l.label}</a></li>)}
             </ul>
           </div>
@@ -773,30 +780,16 @@ export default function Home() {
             </ul>
           </div>
         </div>
-        <div style={{ borderTop: "1px solid rgba(255,255,255,.08)", paddingTop: 28, paddingBottom: 28 }}>
-          <a
-            href="https://www.facebook.com/profile.php?id=61591994294647"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ display: "inline-flex", alignItems: "center", gap: 14, textDecoration: "none", color: "rgba(255,255,255,.7)", fontSize: 16, fontWeight: 600 }}
-          >
-            <span style={{
-              width: 44, height: 44, borderRadius: "50%",
-              background: "#1877F2",
-              display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
-            }}>
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="white" aria-hidden="true">
-                <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.874v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/>
-              </svg>
-            </span>
-            Síguenos también en Facebook
-          </a>
-        </div>
         <div className={s.footerBottom}>
-          <span>© 2026 LongViva SpA · Santiago, Chile</span>
           <div className={s.footerContact}>
+            <a href="https://www.facebook.com/profile.php?id=61591994294647" target="_blank" rel="noopener noreferrer" aria-label="Facebook" style={{ display:"flex", alignItems:"center", justifyContent:"center", width:40, height:40, borderRadius:"50%", background:"#1877F2", flexShrink:0 }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="white" aria-hidden="true"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.874v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+            </a>
             <a href="mailto:hola@longvivia.cl" style={{ color: "inherit", textDecoration: "none", display:"flex", alignItems:"center", gap:6 }}>{IC.mail} hola@longvivia.cl</a>
           </div>
+        </div>
+        <div style={{ borderTop: "1px solid rgba(255,255,255,.08)", paddingTop: 20, marginTop: 8, fontSize: 14, color: "rgba(255,255,255,.38)" }}>
+          <span>© 2026 LongViva SpA · Santiago, Chile</span>
         </div>
       </footer>
     </>
