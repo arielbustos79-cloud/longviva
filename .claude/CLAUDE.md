@@ -125,9 +125,11 @@ longviva/
 │   │       ├── page.tsx      ← Artículo individual
 │   │       └── ArticuloTracker.tsx  ← Evento articulo_leido
 │   ├── juegos/
-│   │   ├── page.tsx          ← Selección de juegos
-│   │   ├── memoria/page.tsx  ← Juego de memoria (4x3, 6 pares)
-│   │   └── sopa-letras/page.tsx ← Sopa de letras (12x12)
+│   │   ├── page.tsx            ← Selección de juegos
+│   │   ├── atencion/page.tsx   ← Caza objetos (Atención)
+│   │   ├── memoria/page.tsx    ← Secuencia tipo Simon (Memoria)
+│   │   ├── percepcion/page.tsx ← Encuentra las diferencias (Percepción)
+│   │   └── ejecucion/page.tsx  ← Test de colores/Stroop (Ejecución)
 │   ├── admin/page.tsx        ← Panel interno (solo ariel.bustos79@gmail.com)
 │   ├── quienes-somos/page.tsx
 │   ├── terminos/page.tsx
@@ -182,15 +184,15 @@ longviva/
 
 ## Landing page (`/`) — Secciones
 
-1. **Navbar** — Logo + links (Quiénes somos, ¿Cómo funciona?, Servicios, VIVIAN IA, Artículos, Entrena tu mente, Contacto) + botón Ingresar/Mi panel + hamburguesa mobile
+1. **Navbar** — Logo + links (Quiénes somos · Servicios · VIVIAN IA · Centro de ayuda · Contacto) + ícono Facebook azul `#1877F2` + botón Ingresar/Mi panel + hamburguesa mobile (commit `c90e590`, 01-08-2026)
 2. **Hero** — Tagline principal + CTA registro
-3. **Prime** — 4 tarjetas: Telemedicina gratis, Clases ilimitadas, Tours a tu ritmo, VIVIAN 24/7
+3. **Prime** — 4 tarjetas: Telemedicina, Bienestar activo, Ocio y experiencias, VIVIAN 24/7
 4. **VIVIAN section** — Mockup chat (no clickeable) + features + botón "Hablar con VIVIAN →"
-5. **Servicios** — Card destacada VIVIAN IA + cards secundarias (Entrena tu mente ✅, Gestión de salud 🔜, Telemedicina 🔜, Bienestar activo 🔜, Ocio y experiencias 🔜, Nutrición 🔜)
+5. **Servicios** — Card destacada VIVIAN IA + 8 cards secundarias, todas activas ✅: Entrena tu mente, Gestión de salud, Telemedicina, Bienestar activo, Ocio y experiencias, Nutrición, Comunidad, Farmacias
 6. **¿Cómo funciona?** — 3 pasos animados
-7. **Testimonios** — Citas editoriales con OliveBranch + "Usuario LongVivIA"
-8. **Marquee** — Pilares: salud, bienestar, juegos, VIVIAN, nutrición...
-9. **Contacto / Footer** — Email, WhatsApp, redes, links legales
+7. **Marquee** — Pilares: salud, bienestar, juegos, VIVIAN, nutrición...
+8. **CTA final** — Tagline + botones Comenzar gratis / Ya tengo cuenta
+9. **Footer** — Grid de links (Servicios, Empresa, Ayuda) + fila con ícono Facebook + email + copyright separado. "Trabaja aquí" eliminado del footer (commit `c90e590`) — la ruta `/trabaja` sigue activa para link directo
 
 **Motivos visuales:** OliveBranch SVG como separador de secciones y decoración en card VIVIAN.
 
@@ -200,14 +202,19 @@ longviva/
 
 **Resumen de hoy** (`ResumenHoy.tsx`): tarjeta sobre las cards de acceso, muestra próxima cita agendada y próximo medicamento a tomar.
 
-Cards activas:
+Cards activas (todas activas desde commit `8941d81`):
 - **Hablar con VIVIAN** → `/vivian` (card destacada verde)
 - **Artículos** → `/articulos`
 - **Entrena tu mente** → `/juegos`
 - **Mi agenda** → `/agenda`
 - **Mis medicamentos** → `/medicamentos`
-
-Cards próximamente: Telemedicina, Bienestar activo, Tours y experiencias.
+- **Telemedicina** → `/telemedicina`
+- **Bienestar activo** → `/bienestar`
+- **Ocio y experiencias** → `/ocio`
+- **Nutrición** → `/nutricion`
+- **Comunidad** → `/comunidad`
+- **Farmacias** → `/farmacias`
+- **AFP / Previsión** → `/afp`
 
 **Toast de bienvenida:** Al llegar desde magic link (`?bienvenida=1`), muestra toast verde "🌿 ¡Listo, [nombre]! Ya iniciaste sesión." por 4 segundos. El parámetro se limpia del URL automáticamente.
 
@@ -353,7 +360,7 @@ NEXT_PUBLIC_APP_URL=https://longvivia.cl
 
 ---
 
-## Estado actual — Julio 2026
+## Estado actual — Julio-Agosto 2026
 
 ### Construido y en producción ✅
 - Landing page completa con todas las secciones y diseño de marca
@@ -385,8 +392,6 @@ NEXT_PUBLIC_APP_URL=https://longvivia.cl
 
 ### Próximamente (features en roadmap — ver sección "Decisiones de estrategia 22-23 de julio de 2026" para el detalle completo)
 - Notificaciones push/WhatsApp reales para agenda y medicamentos (hoy solo hay export manual a calendario)
-- Farmacias — **confirmado no implementado** (23-07-2026): no existe `app/farmacias/` ni ruta activa. Existe solo como card placeholder en `app/page.tsx` línea 611, con `activo: false`, `href: "#"` y badge "Próximamente". De los 5 pilares originales del brief, los otros 4 (Telemedicina, Bienestar activo, Ocio, Nutrición) sí tienen páginas y rutas propias — Farmacias quedó parcialmente pendiente dentro de ese mismo brief.
-- Entrena tu mente — rediseño completo: reemplazo de Memoria/Sopa de letras por 4 juegos nuevos (Atención, Memoria, Percepción, Ejecución) — sin commits asociados aún, único brief de la ronda 22-23/07 que sigue sin implementar
 - App React Native (Expo) — publicación en Google Play
 
 ### Briefs sin ningún commit asociado (actualizado 23-07-2026)
@@ -662,6 +667,49 @@ Con el desarrollo técnico y la auditoría de seguridad en buen estado (ver chec
 - **Infraestructura:** salida de Twilio Sandbox a producción para WhatsApp (ticket #28132027, requiere verificación de Meta Business Manager)
 
 Este chat (Auditor) sigue disponible para verificar con evidencia cualquier avance técnico que resulte de esas conversaciones, pero las decisiones de estos 4 frentes se toman en el chat de estrategia, no aquí.
+
+---
+
+## Sesión 01-08-2026 — QA navbar/footer, copy y canal Facebook
+
+### 35. Facebook como canal principal — implementación completa (01-08-2026)
+
+**Contexto estratégico (30-07-2026):** migración de Twilio Sandbox a producción pausada por decisión de negocio (costo sin estrategia de lanzamiento definida). Facebook pasa a ser el canal principal de comunicación dado el perfil del público (+60 años, alta presencia en Facebook). WhatsApp sigue funcional en el código sin cambios.
+
+**Commits de implementación (31-07 → 01-08):**
+
+| Commit | Fix |
+|---|---|
+| `1bed460` | Ícono Facebook inicial en footer |
+| `125839a` | Fix layout mobile: Facebook a fila propia — en la implementación inicial el texto "Síguenos en Facebook" se fragmentaba en 3 líneas en viewport 375px al compartir fila con el correo |
+| `7954113` | Color corregido de dorado de marca a azul oficial `#1877F2` — el dorado generaba desconfianza (no es el color reconocido de Facebook en el celular del usuario) |
+| `c90e590` | Facebook agregado al navbar (ícono solo, sin texto, 36px desktop / 40px mobile), footer reorganizado (ícono + email en una fila, copyright en fila separada), "Trabaja aquí" eliminado del footer (la ruta `/trabaja` sigue existiendo para link directo) |
+| `f563c62` | URL de Facebook agregada a `lib/external-urls.ts` (clave `longvivia_facebook`) y al bloque "SOBRE LONGVIVIA" de `lib/vivian-prompt.ts` — VIVIAN ahora puede responder directo ante "¿tienen Facebook?" con el link real, sin inventar usuario ni seguidores. **Nota de proceso:** mismo patrón que B1/G1/G2 (Telemedicina/Nutrición) — al agregar un canal nuevo, el prompt de VIVIAN no se actualiza automáticamente. Checklist de cierre de cualquier brief que agregue URL o canal: incluir explícitamente "actualizar `lib/vivian-prompt.ts` y `lib/external-urls.ts`". |
+
+**URL verificada:** `https://www.facebook.com/profile.php?id=61591994294647` — página "Longvivia | Santiago", confirmada por WebFetch antes de publicar.
+
+**Verificación post-fix:** VIVIAN respondió con el link real ante "¿tienen página en Facebook?" — confirmado por Ariel en producción.
+
+### 36. Correcciones de copy — 4 hallazgos (01-08-2026)
+
+| Commit | Archivo | Hallazgo | Fix |
+|---|---|---|---|
+| `069e5a9` | `app/page.tsx` | "Ocio y tours" en la card de la sección Prime — nombre inconsistente con el resto del sitio (Servicios, dashboard, footer usaban "Ocio y experiencias") | → "Ocio y experiencias" |
+| `069e5a9` | `app/page.tsx` | Copy de card Comunidad en Servicios sobre-implicaba cobertura universal: "Te conectamos con talleres, clubes y actividades cerca de ti — según tu comuna." — 5 de 35 comunas no tienen página dedicada (Cerrillos, Estación Central, Lo Espejo, Pudahuel, Quinta Normal) | → "Programas municipales para personas en su prime, por comuna, donde estén disponibles." |
+| `2c3c346` | `app/page.tsx` | Vocabulario prohibido introducido al corregir el copy anterior: "Programas municipales del **Adulto Mayor**" — "adulto mayor" está en la lista explícita de términos prohibidos de marca (igual categoría que "tercera edad", "vejez") | → "personas en su prime" |
+| `279be10` | `app/anunciantes/page.tsx` | Edad del segmento incorrecta: "+55 años" en vez de "+60 años" — residuo de una versión temprana, detectado al revisar la página de Anunciantes | → "+60 años" |
+
+**Nota sobre el commit `2c3c346`:** el vocabulario prohibido se coló al hacer la corrección de copy en el mismo commit — el texto no pasó por el checklist de marca antes de commitear. Identificado por el Auditor en la revisión post-commit. Patrón a recordar: cualquier copy nuevo en páginas de cara al usuario debe verificarse contra el listado de términos prohibidos del CLAUDE.md antes de hacer commit.
+
+### 37. FAQ WhatsApp corregida — hallazgo de contenido falso (01-08-2026)
+
+**Commit `083faf9`** — `app/ayuda/page.tsx`
+
+**Detectado:** la pregunta frecuente "¿Puedo usarlo por WhatsApp?" respondía: *"Sí, VIVIAN también está disponible por WhatsApp. Si ya tienes una cuenta en LongVivIA, escríbenos al número de WhatsApp que aparece en tu panel y VIVIAN te reconocerá por tu número registrado."* — dos problemas: (1) contradice la pausa estratégica de WhatsApp, (2) describe un sistema que no existe (número dedicado visible en el panel, reconocimiento automático por número registrado).
+
+**Fix:** *"Por ahora VIVIAN está disponible en la web. Estamos trabajando para sumar WhatsApp como otro canal — te avisaremos cuando esté listo."*
+
+**Barrido completo post-fix:** `grep -ri "whatsapp"` sobre `app/`, `lib/`, `components/` — resultado: 5 menciones legítimas (`app/api/whatsapp/route.ts` código del webhook, `lib/vivian-prompt.ts` regla de bloqueo, `lib/comunidad.ts` número de tercero de Providencia, `app/privacidad/privacidad-draft.tsx` mención legal de Twilio como proveedor). Solo la FAQ era problemática.
 
 ---
 
