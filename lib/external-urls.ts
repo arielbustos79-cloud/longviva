@@ -13,6 +13,7 @@
 export const URLS_VERIFICADAS = {
   // ── Plataforma propia ──────────────────────────────────────────────────
   longvivia: "https://longvivia.cl",
+  longvivia_facebook: "https://www.facebook.com/profile.php?id=61591994294647", // verificado 31-07-2026, página "Longvivia | Santiago"
 
   // ── AFP ───────────────────────────────────────────────────────────────
   afp_capital: "https://www.afpcapital.cl",
