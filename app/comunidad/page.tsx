@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase-browser";
 import { COMUNAS_DATA, getComunaData } from "@/lib/comunidad";
+import { HOSPITALES_PUBLICOS, CLINICAS_PRIVADAS } from "@/lib/hospitales";
 
 const COMUNAS_LIST = COMUNAS_DATA.map(c => c.comuna).sort();
 
@@ -295,6 +296,76 @@ export default function ComunidadPage() {
           >
             Ver programas en senama.gob.cl →
           </a>
+        </div>
+
+        {/* Hospitales y Clínicas RM */}
+        <div style={{
+          background: "white", borderRadius: 20, padding: "28px 28px",
+          border: "1.5px solid var(--v5)", boxShadow: "0 2px 8px rgba(27,94,59,.06)",
+          marginBottom: 28,
+        }}>
+          <div style={{ display: "flex", alignItems: "flex-start", gap: 16, marginBottom: 20 }}>
+            <div style={{
+              width: 48, height: 48, borderRadius: 14, background: "#FFF0F0",
+              display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+            }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C0392B" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+                <line x1="12" y1="8" x2="12" y2="14"/>
+                <line x1="9" y1="11" x2="15" y2="11"/>
+              </svg>
+            </div>
+            <div>
+              <p style={{ fontSize: 12, fontWeight: 700, color: "#C0392B", letterSpacing: 1, textTransform: "uppercase", margin: "0 0 4px" }}>
+                Directorio RM
+              </p>
+              <h2 style={{ fontFamily: "Cormorant Garamond, serif", fontSize: 22, fontWeight: 700, color: "var(--n2)", margin: 0 }}>
+                Hospitales y clínicas principales
+              </h2>
+            </div>
+          </div>
+
+          <p style={{ fontSize: 15, color: "var(--gris)", lineHeight: 1.6, marginBottom: 24 }}>
+            Directorio curado de los centros de mayor tamaño en la Región Metropolitana. Verifica horarios directamente con cada centro antes de ir.
+          </p>
+
+          {/* Red pública */}
+          <p style={{ fontSize: 12, fontWeight: 700, color: "var(--n2)", letterSpacing: 1, textTransform: "uppercase", marginBottom: 12 }}>
+            Red pública
+          </p>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 24 }}>
+            {HOSPITALES_PUBLICOS.map((h) => (
+              <div key={h.nombre} style={{
+                background: "var(--v6)", borderRadius: 12, padding: "12px 16px",
+                display: "flex", flexDirection: "column", gap: 2,
+              }}>
+                <span style={{ fontSize: 14, fontWeight: 700, color: "var(--n2)" }}>{h.nombre}</span>
+                <span style={{ fontSize: 13, color: "var(--gris)" }}>📍 {h.direccion}, {h.comuna}</span>
+                <span style={{ fontSize: 13, color: "var(--gris)" }}>📞 {h.telefono}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Clínicas privadas */}
+          <p style={{ fontSize: 12, fontWeight: 700, color: "var(--n2)", letterSpacing: 1, textTransform: "uppercase", marginBottom: 12 }}>
+            Clínicas privadas
+          </p>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 20 }}>
+            {CLINICAS_PRIVADAS.map((c) => (
+              <div key={c.nombre} style={{
+                background: "var(--v6)", borderRadius: 12, padding: "12px 16px",
+                display: "flex", flexDirection: "column", gap: 2,
+              }}>
+                <span style={{ fontSize: 14, fontWeight: 700, color: "var(--n2)" }}>{c.nombre}</span>
+                <span style={{ fontSize: 13, color: "var(--gris)" }}>📍 {c.direccion}, {c.comuna}</span>
+                <span style={{ fontSize: 13, color: "var(--gris)" }}>📞 {c.telefono}</span>
+              </div>
+            ))}
+          </div>
+
+          <p style={{ fontSize: 12, color: "var(--gris)", margin: 0 }}>
+            Datos verificados agosto 2026. Los teléfonos pueden cambiar — confirma antes de llamar.
+          </p>
         </div>
 
         {/* Link al artículo */}
