@@ -244,6 +244,9 @@ export default function Home() {
   const [scrolled, setScrolled] = useState(false);
   const [sesionActiva, setSesionActiva] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [marqueePaused, setMarqueePaused] = useState(
+    () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
 
   // Restaurar preferencia de tamaño de texto
   useEffect(() => {
@@ -284,6 +287,9 @@ export default function Home() {
 
   return (
     <>
+      {/* SKIP LINK — visible solo con foco (WCAG 2.4.1) */}
+      <a href="#contenido-principal" className={s.skipLink}>Saltar al contenido</a>
+
       {/* A11Y BAR — discreta, solo texto */}
       <div className={s.a11yBar}>
         <span>¿Necesitas ayuda? <a href="mailto:hola@longvivia.cl" style={{ color: "var(--v2)", fontWeight: 600, textDecoration: "none" }}>hola@longvivia.cl</a></span>
@@ -308,7 +314,7 @@ export default function Home() {
 
       {/* NAV */}
       <nav className={`${s.nav} ${scrolled ? s.navScrolled : ""}`}>
-        <a href="#" className={s.logoWrap}>
+        <a href="/" className={s.logoWrap}>
           <svg width="32" height="38" viewBox="0 0 32 38" fill="none" xmlns="http://www.w3.org/2000/svg">
             {/* Tallo principal: curva elegante */}
             <path d="M 17,37 C 16,30 13,22 15,12 C 16,6 20,2 20,2" stroke="#1B5E3B" strokeWidth="1.8" strokeLinecap="round" fill="none"/>
@@ -401,6 +407,8 @@ export default function Home() {
         </div>
       )}
 
+      <main id="contenido-principal">
+
       {/* HERO */}
       <section className={s.hero}>
         <div className={s.heroBg}>
@@ -477,11 +485,21 @@ export default function Home() {
       </section>
 
       {/* MARQUEE */}
-      <div className={s.marqueeWrap} aria-hidden="true">
-        <div className={s.marqueeTrack}>
-          {[...STRIP, ...STRIP].map((item, i) => (
-            <span key={i} className={s.marqueeItem}>{item}</span>
-          ))}
+      <div className={s.marqueeOuter}>
+        <button
+          className={s.marqueePauseBtn}
+          onClick={() => setMarqueePaused(p => !p)}
+          aria-label={marqueePaused ? "Reanudar animación del marquee" : "Pausar animación del marquee"}
+          aria-pressed={marqueePaused}
+        >
+          {marqueePaused ? "▶" : "⏸"}
+        </button>
+        <div className={s.marqueeWrap} aria-hidden="true">
+          <div className={s.marqueeTrack} style={{ animationPlayState: marqueePaused ? "paused" : "running" }}>
+            {[...STRIP, ...STRIP].map((item, i) => (
+              <span key={i} className={s.marqueeItem}>{item}</span>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -715,11 +733,13 @@ export default function Home() {
         <p className={s.ctaNote}>Sin tarjeta de crédito. Sin letra chica. ¿Dudas? <a href="mailto:hola@longvivia.cl" style={{ color: "var(--v4)", textDecoration: "none", fontWeight: 600 }}>hola@longvivia.cl</a></p>
       </section>
 
+      </main>
+
       {/* FOOTER */}
       <footer className={s.footer} id="contacto">
         <div className={s.footerGrid}>
           <div>
-            <a href="#" className={s.logoWrap} style={{ marginBottom: 14, display: "inline-flex" }}>
+            <a href="/" className={s.logoWrap} style={{ marginBottom: 14, display: "inline-flex" }}>
               <svg width="28" height="34" viewBox="0 0 32 38" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M 17,37 C 16,30 13,22 15,12 C 16,6 20,2 20,2" stroke="#52B788" strokeWidth="1.8" strokeLinecap="round" fill="none"/>
                 <path d="M 15,30 C 7,28 4,22 7,18 C 9,16 15,20 15,26 Z" fill="#52B788"/>

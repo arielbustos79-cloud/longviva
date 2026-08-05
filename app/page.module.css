@@ -4,6 +4,16 @@
   --n1:#0A150D;--n2:#1A2E22;--crema:#FAF8F3;--gris:#4A5E52;--gris2:#E8EDE9;--blanco:#FFFFFF;
 }
 
+/* ─── SKIP LINK (WCAG 2.4.1) ───────────────────────────── */
+.skipLink {
+  position:absolute;left:50%;transform:translateX(-50%);
+  top:-100px;background:var(--v2);color:white;
+  padding:12px 28px;border-radius:0 0 12px 12px;
+  font-size:16px;font-weight:600;text-decoration:none;
+  z-index:9999;white-space:nowrap;transition:top .15s;
+}
+.skipLink:focus { top:0;outline:3px solid var(--v4);outline-offset:2px; }
+
 /* ─── LOGO ─────────────────────────────────────────────── */
 .logoWrap { display:flex;align-items:center;gap:10px;text-decoration:none; }
 .logoText { font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--v2);line-height:1; }
@@ -204,6 +214,20 @@
 .floatCard.right { right:-56px;bottom:22%; }
 .fcIco { width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px; }
 @keyframes float { 0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)} }
+
+/* ─── MARQUEE — wrapper + botón pausa ──────────────────── */
+.marqueeOuter { position:relative; }
+.marqueePauseBtn {
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);
+  border-radius:50%;
+  width:44px;height:44px;
+  color:white;font-size:13px;cursor:pointer;z-index:10;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .2s;
+}
+.marqueePauseBtn:hover { background:rgba(255,255,255,.28); }
+.marqueePauseBtn:focus-visible { outline:2px solid var(--v4);outline-offset:2px; }
 
 /* ─── MARQUEE ────────────────────────────────────────────── */
 .marqueeWrap {
@@ -502,6 +526,19 @@
   .h1 { font-size:clamp(42px,8vw,62px); }
   .ctaInputGroup { flex-direction:column; }
   .ctaInput,.btnGold { width:100%; }
+}
+
+/* ─── PREFERS-REDUCED-MOTION (W4) ──────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .blob1, .blob2, .blob3 { animation: none; }
+  .heroPill { animation: none; opacity: 1; transform: translateY(0); }
+  .wr { animation: none; opacity: 1; transform: translateY(0); }
+  .entryFade { animation: none; opacity: 1; transform: translateY(0); }
+  .floatCard { animation: none; }
+  .dots b { animation: none; opacity: 1; transform: scale(1); }
+  .msgIn { animation: none; opacity: 1; transform: translateY(0); }
+  .marqueeTrack { animation: none; }
+  .fadeIn { opacity: 1; transform: translateY(0); transition: none; }
 }
 
 @media(max-width:600px) {
