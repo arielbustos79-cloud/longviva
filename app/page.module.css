@@ -410,7 +410,7 @@
 .footerPill { display:inline-flex;align-items:center;gap:6px;background:rgba(82,183,136,.15);border:1px solid rgba(82,183,136,.28);color:var(--v4);padding:6px 16px;border-radius:20px;font-size:13px;font-weight:700; }
 .footerCol h4 { font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:white;margin-bottom:20px; }
 .footerLinks { list-style:none;display:flex;flex-direction:column;gap:12px; }
-.footerLinks a { color:rgba(255,255,255,.55);text-decoration:none;font-size:16px;transition:color .2s;padding:2px 0; }
+.footerLinks a { color:rgba(255,255,255,.55);text-decoration:none;font-size:16px;transition:color .2s;min-height:44px;display:flex;align-items:center; }
 .footerLinks a:hover { color:var(--v4); }
 .footerLinks a:focus-visible { outline:2px solid var(--v4);outline-offset:3px;border-radius:3px; }
 .footerBottom { border-top:1px solid rgba(255,255,255,.08);padding-top:28px;display:flex;justify-content:space-between;align-items:center;font-size:14px;color:rgba(255,255,255,.38); }

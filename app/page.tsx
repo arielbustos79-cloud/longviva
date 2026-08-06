@@ -247,6 +247,18 @@ export default function Home() {
   const [marqueePaused, setMarqueePaused] = useState(
     () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches
   );
+  const hamburgerRef = useRef<HTMLButtonElement>(null);
+
+  // Focus trap — mover foco al abrir menú, restaurar al cerrar
+  useEffect(() => {
+    if (menuOpen) {
+      const inner = document.querySelector<HTMLElement>(`.${s.mobileMenuInner}`);
+      const first = inner?.querySelector<HTMLElement>("button, a[href]");
+      first?.focus();
+    } else {
+      hamburgerRef.current?.focus();
+    }
+  }, [menuOpen]);
 
   // Restaurar preferencia de tamaño de texto
   useEffect(() => {
@@ -315,7 +327,7 @@ export default function Home() {
       {/* NAV */}
       <nav className={`${s.nav} ${scrolled ? s.navScrolled : ""}`}>
         <a href="/" className={s.logoWrap}>
-          <svg width="32" height="38" viewBox="0 0 32 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width="32" height="38" viewBox="0 0 32 38" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             {/* Tallo principal: curva elegante */}
             <path d="M 17,37 C 16,30 13,22 15,12 C 16,6 20,2 20,2" stroke="#1B5E3B" strokeWidth="1.8" strokeLinecap="round" fill="none"/>
             {/* Hoja 1 inferior-izquierda */}
@@ -368,9 +380,12 @@ export default function Home() {
 
         {/* Hamburger — solo mobile */}
         <button
+          ref={hamburgerRef}
           className={s.hamburger}
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
+          aria-expanded={menuOpen}
+          aria-controls="mobile-menu-panel"
         >
           {menuOpen ? "✕" : "☰"}
         </button>
@@ -378,8 +393,27 @@ export default function Home() {
 
       {/* Menú mobile */}
       {menuOpen && (
-        <div className={s.mobileMenu} onClick={() => setMenuOpen(false)}>
-          <div className={s.mobileMenuInner} onClick={(e) => e.stopPropagation()}>
+        <div
+          className={s.mobileMenu}
+          onClick={() => setMenuOpen(false)}
+          onKeyDown={(e) => {
+            if (e.key === "Escape") { setMenuOpen(false); return; }
+            if (e.key !== "Tab") return;
+            const inner = e.currentTarget.querySelector<HTMLElement>(`.${s.mobileMenuInner}`);
+            const focusable = Array.from(
+              inner?.querySelectorAll<HTMLElement>("button:not([disabled]), a[href]") ?? []
+            );
+            if (!focusable.length) return;
+            const first = focusable[0];
+            const last = focusable[focusable.length - 1];
+            if (e.shiftKey) {
+              if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+            } else {
+              if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+            }
+          }}
+        >
+          <div className={s.mobileMenuInner} id="mobile-menu-panel" onClick={(e) => e.stopPropagation()}>
             <button className={s.mobileClose} onClick={() => setMenuOpen(false)}>✕</button>
             <nav style={{ display: "flex", flexDirection: "column", gap: 8, width: "100%" }}>
               <a href="/quienes-somos" className={s.mobileLink} onClick={() => setMenuOpen(false)}>Quiénes somos</a>
@@ -403,6 +437,14 @@ export default function Home() {
                 </>
               )}
             </nav>
+            <div style={{ marginTop: 20, paddingTop: 16, borderTop: "1px solid var(--gris2)" }}>
+              <span style={{ fontSize: 13, color: "var(--gris)", marginBottom: 10, display: "block" }}>Tamaño de texto:</span>
+              <div style={{ display: "flex", gap: 8 }}>
+                <button className={s.a11yBtn} onClick={() => { document.documentElement.classList.remove("text-grande", "text-muy-grande"); localStorage.setItem("textSize", "normal"); }}>A</button>
+                <button className={s.a11yBtn} onClick={() => { document.documentElement.classList.remove("text-muy-grande"); document.documentElement.classList.add("text-grande"); localStorage.setItem("textSize", "grande"); }}>A+</button>
+                <button className={s.a11yBtn} onClick={() => { document.documentElement.classList.remove("text-grande"); document.documentElement.classList.add("text-muy-grande"); localStorage.setItem("textSize", "muy-grande"); }}>A++</button>
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -740,7 +782,7 @@ export default function Home() {
         <div className={s.footerGrid}>
           <div>
             <a href="/" className={s.logoWrap} style={{ marginBottom: 14, display: "inline-flex" }}>
-              <svg width="28" height="34" viewBox="0 0 32 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg width="28" height="34" viewBox="0 0 32 38" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path d="M 17,37 C 16,30 13,22 15,12 C 16,6 20,2 20,2" stroke="#52B788" strokeWidth="1.8" strokeLinecap="round" fill="none"/>
                 <path d="M 15,30 C 7,28 4,22 7,18 C 9,16 15,20 15,26 Z" fill="#52B788"/>
                 <path d="M 16,26 C 24,24 27,18 24,15 C 22,14 16,17 16,23 Z" fill="#4AA87A" opacity=".88"/>
