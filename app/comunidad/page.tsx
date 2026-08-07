@@ -342,6 +342,11 @@ export default function ComunidadPage() {
                 <span style={{ fontSize: 14, fontWeight: 700, color: "var(--n2)" }}>{h.nombre}</span>
                 <span style={{ fontSize: 13, color: "var(--gris)" }}>📍 {h.direccion}, {h.comuna}</span>
                 <span style={{ fontSize: 13, color: "var(--gris)" }}>📞 {h.telefono}</span>
+                {h.web && (
+                  <a href={h.web} target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, color: "var(--v2)", fontWeight: 700, textDecoration: "none" }}>
+                    🔗 Sitio web →
+                  </a>
+                )}
               </div>
             ))}
           </div>
@@ -359,6 +364,11 @@ export default function ComunidadPage() {
                 <span style={{ fontSize: 14, fontWeight: 700, color: "var(--n2)" }}>{c.nombre}</span>
                 <span style={{ fontSize: 13, color: "var(--gris)" }}>📍 {c.direccion}, {c.comuna}</span>
                 <span style={{ fontSize: 13, color: "var(--gris)" }}>📞 {c.telefono}</span>
+                {c.web && (
+                  <a href={c.web} target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, color: "var(--v2)", fontWeight: 700, textDecoration: "none" }}>
+                    🔗 Sitio web →
+                  </a>
+                )}
               </div>
             ))}
           </div>

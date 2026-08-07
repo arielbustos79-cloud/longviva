@@ -12,13 +12,6 @@ export type Centro = {
 
 export const HOSPITALES_PUBLICOS: Centro[] = [
   {
-    nombre: "Complejo Hospitalario San José",
-    comuna: "Independencia",
-    direccion: "San José 1196",
-    telefono: "22 568 0000",
-    web: "https://complejohospitalariosanjose.cl",
-  },
-  {
     nombre: "Hospital del Salvador",
     comuna: "Providencia",
     direccion: "Av. Salvador 364",
