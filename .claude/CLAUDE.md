@@ -130,7 +130,7 @@ Log: `logEvento("vivian_mensaje", { canal: "web" })` �� WhatsApp: HMAC-SHA1 
 
 Tabla `articulos`: `slug, titulo, pilar, resumen, contenido, publicado`
 Pilares: `salud_activa · bienestar_energia · vida_social · tecnologia_simple · finanzas_prevision`
-10 artículos publicados (2/pilar). CHECK constraint activo en DB.
+18 artículos publicados (10 + batch-3 de 8, agosto 2026). CHECK constraint activo en DB.
 `ArticuloTracker.tsx`: dispara `articulo_leido` tras 30s O 80% scroll, sin duplicados.
 
 ---
@@ -206,8 +206,8 @@ Instituciones (AFP/Isapre/Caja/Conecta Mayor UC) = canal de distribución gratui
 | Bienestar activo | `/bienestar` | 7 videos curados (Yoga silla ×2, Tai Chi ×2, Musculatura ×3) |
 | Ocio y experiencias | `/ocio` | BPDigital, Chile Cultura, radios, agencias viaje, Studio 54 (Viña del Mar) |
 | Nutrición | `/nutricion` | 8 videos + 3 fuentes escritas (Mayo Clinic ×2, MedlinePlus ×1) |
-| Comunidad | `/comunidad` | 35 comunas Gran Santiago; 5 solo con contacto directo (sin página dedicada) |
-| Farmacias | `/farmacias` | 8 farmacias modelo CPC; nota legal pendiente (abogada) |
+| Comunidad | `/comunidad` | 35 comunas Gran Santiago; 5 solo con contacto directo (sin página dedicada) + directorio de 11 hospitales/clínicas RM |
+| Farmacias | `/farmacias` | 8 farmacias modelo CPC; nota legal pendiente (abogada) + sección "Farmacias de turno hoy" (dato dinámico API MINSAL) |
 | AFP/Previsión | `/afp` | Deriva al sitio oficial; nunca recomienda fondos ni montos |
 
 **Telemedicina — matriz isapres** (`lib/prevision.ts`):
@@ -217,6 +217,26 @@ Cruz Blanca → IntegraMédica + Mediclic · Banmédica/Vida Tres → IntegraMé
 ISP/ANAMED: `registrosanitario.ispch.gob.cl` (en prompt VIVIAN, no expuesto en UI aún)
 
 **Comunidad (35 comunas):** 23 DEDICADA · 6 TAG · 5 PORTADA · 1 DIDECO. Alertas de mantención: La Granja (URL dedicada da 404, usa TAG), La Pintana (URL dinámica WordPress).
+
+---
+
+## Hospitales/clínicas en Comunidad (03-08-2026 → 07-08-2026)
+
+`lib/hospitales.ts`: 5 hospitales públicos + 6 clínicas privadas RM, datos verificados contra sitios oficiales/Superintendencia de Salud. Cada entrada: nombre, dirección, comuna, teléfono, `web?` opcional.
+Renderizado en `/comunidad` bajo "Directorio RM", separado en Red pública / Clínicas privadas, con atribución de fecha de verificación.
+Complejo San José removido del listado (sitio con SSL roto, confirmado con curl). Clínica Indisa se mantiene pese a dar 403 en verificación automatizada — confirmado que el sitio carga normal en navegador real, el 403 es bloqueo anti-bot del script, no del sitio.
+Cards de landing (`app/page.tsx`) y dashboard (`app/dashboard/page.tsx`) actualizadas para mencionar hospitales/clínicas, no solo talleres municipales.
+Commits: `3d98f97`, `71f434d`.
+
+---
+
+## Farmacias de turno RM (07-08-2026 → 12-08-2026)
+
+Dato dinámico — no se cachea como catálogo estático. Fuente: API pública MINSAL, endpoint `getLocalesTurnos.php`, filtro `fk_region="7"` (código interno de la API para RM, no coincide con el código INE oficial).
+`app/api/farmacias-turno/route.ts`: proxy server-side, `export const revalidate = 3600` (cache 1h vía Next, sin backend propio ni cron jobs). Devuelve `{ farmacias, fuente, consultado }` o 502 con mensaje de error si MINSAL no responde.
+`app/farmacias/page.tsx`: sección "Farmacias de turno hoy" — filtro por comuna, atribución CC-Attribution a MINSAL visible en la UI. Estados manejados explícitamente: cargando / error (nunca listado vacío sin explicación) / vacío / con datos.
+VIVIAN (`lib/vivian-prompt.ts`) deriva a `/farmacias` ante preguntas de turno — nunca intenta responder con nombre de farmacia específico desde el chat porque el dato cambia por hora.
+Verificado con datos reales del día y con estado de error simulado en navegador. Commit `df040fd`.
 
 ---
 
@@ -308,8 +328,7 @@ Correr `verify-urls.mjs` antes de cada push que modifique el catálogo.
 - **Legal:** Términos y Privacidad (Ley 19.628, B2B, publicidad) · SII Inicio de Actividades (pausado, domicilio/usufructo) · INAPI "LongVivIA" Clase 42 (checklist listo)
 - **Infra:** Twilio Sandbox → producción (ticket #28132027, pendiente Meta Business Manager)
 - **Comercial:** Conecta Mayor UC (propuesta enviada 19-07-2026, sin respuesta)
-- **PWA:** ícono del launcher no coincide con logo real (pendiente asset del manifest)
-- **Farmacias:** nota legal pendiente confirmación de abogada
+- **Farmacias:** nota legal pendiente confirmación de abogada (modelo CPC medicamentos — no aplica a farmacias de turno)
 
 ---
 
