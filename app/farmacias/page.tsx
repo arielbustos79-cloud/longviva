@@ -45,7 +45,7 @@ function FarmaciasTurnoSection() {
             href={f.url}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => void logEvento("farmacia_turno_click", { farmacia: f.nombre })}
+            onClick={() => void logEvento("farmacia_click", { farmacia: f.nombre, turno: true })}
             style={{
               background: "var(--v6)", borderRadius: 12, padding: "14px 18px",
               display: "flex", justifyContent: "space-between", alignItems: "center",
