@@ -1,63 +1,28 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import Link from "next/link";
 import OliveBranch from "@/components/OliveBranch";
 import { logEvento } from "@/lib/logEvento";
 
-// ── Farmacias de turno RM — dato dinámico vía API MINSAL ──────────────────
-type FarmaciaTurno = {
-  local_nombre: string;
-  comuna_nombre: string;
-  local_direccion: string;
-  local_telefono: string;
-  funcionamiento_hora_apertura: string;
-  funcionamiento_hora_cierre: string;
-  funcionamiento_dia: string;
+// ── Farmacias de turno — derivación por clic ───────────────────────────────
+// El listado dinámico vía API MINSAL (getLocalesTurnos.php) se descartó
+// 12-08-2026: MINSAL bloquea con 403 tanto llamadas serverless (AWS) como
+// Edge (Cloudflare) de Vercel — confirmado en runtime logs de producción.
+// Modelo de derivación: mismo patrón que el resto de esta página, sin
+// depender de que LongVivIA aloje o proxee el dato.
+type FarmaciaTurnoLink = {
+  nombre: string;
+  url: string;
 };
 
-function tituloCase(s: string) {
-  return s
-    .toLowerCase()
-    .split(" ")
-    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(" ")
-    .trim();
-}
-
-function horaCorta(h: string) {
-  return h ? h.slice(0, 5) : "—";
-}
+const FARMACIAS_TURNO: FarmaciaTurnoLink[] = [
+  { nombre: "Cruz Verde", url: "https://www.cruzverde.cl/turnos" },
+  { nombre: "Salcobrand", url: "https://salcobrand.cl/content/servicios/mapa" },
+  { nombre: "Farmacias Ahumada", url: "https://www.farmaciasahumada.cl/farmacias-operativas-feriado.html" },
+];
 
 function FarmaciasTurnoSection() {
-  const [farmacias, setFarmacias] = useState<FarmaciaTurno[] | null>(null);
-  const [error, setError] = useState(false);
-  const [comunaFiltro, setComunaFiltro] = useState("");
-
-  useEffect(() => {
-    let cancelado = false;
-    fetch("/api/farmacias-turno")
-      .then(res => {
-        if (!res.ok) throw new Error("Respuesta no OK");
-        return res.json();
-      })
-      .then(json => {
-        if (!cancelado) setFarmacias(json.farmacias || []);
-      })
-      .catch(() => {
-        if (!cancelado) setError(true);
-      });
-    return () => { cancelado = true; };
-  }, []);
-
-  const comunasDisponibles = farmacias
-    ? [...new Set(farmacias.map(f => f.comuna_nombre))].sort()
-    : [];
-
-  const visibles = farmacias
-    ? (comunaFiltro ? farmacias.filter(f => f.comuna_nombre === comunaFiltro) : farmacias)
-    : [];
-
   return (
     <div style={{
       background: "white", borderRadius: 20, padding: "28px 28px",
@@ -67,70 +32,31 @@ function FarmaciasTurnoSection() {
         Dato del día
       </p>
       <h2 style={{ fontFamily: "Cormorant Garamond, serif", fontSize: 22, fontWeight: 700, color: "var(--n2)", margin: "0 0 12px" }}>
-        Farmacias de turno hoy — Región Metropolitana
+        Farmacia de turno hoy
       </h2>
+      <p style={{ fontSize: 14, color: "var(--gris)", lineHeight: 1.6, margin: "0 0 16px" }}>
+        Elige tu cadena — te llevamos directo a su buscador oficial de turnos por comuna.
+      </p>
 
-      {error && (
-        <div style={{ background: "#FFF0F0", borderRadius: 12, padding: "14px 18px", borderLeft: "3px solid #C0392B" }}>
-          <p style={{ fontSize: 14, color: "var(--n2)", margin: 0, lineHeight: 1.6 }}>
-            No pudimos cargar las farmacias de turno en este momento, intenta más tarde.
-          </p>
-        </div>
-      )}
-
-      {!error && farmacias === null && (
-        <p style={{ fontSize: 14, color: "var(--gris)" }}>Cargando farmacias de turno…</p>
-      )}
-
-      {!error && farmacias !== null && farmacias.length === 0 && (
-        <div style={{ background: "var(--v6)", borderRadius: 12, padding: "14px 18px", borderLeft: "3px solid var(--v3)" }}>
-          <p style={{ fontSize: 14, color: "var(--n2)", margin: 0, lineHeight: 1.6 }}>
-            No hay información de farmacias de turno disponible en este momento para la RM. Intenta más tarde.
-          </p>
-        </div>
-      )}
-
-      {!error && farmacias && farmacias.length > 0 && (
-        <>
-          <select
-            value={comunaFiltro}
-            onChange={e => setComunaFiltro(e.target.value)}
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {FARMACIAS_TURNO.map(f => (
+          <a
+            key={f.nombre}
+            href={f.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => void logEvento("farmacia_turno_click", { farmacia: f.nombre })}
             style={{
-              width: "100%", padding: "12px 14px", borderRadius: 12,
-              border: "1.5px solid var(--v5)", fontSize: 15,
-              fontFamily: "DM Sans, sans-serif", background: "var(--v6)",
-              color: "var(--n2)", marginBottom: 16, boxSizing: "border-box", cursor: "pointer",
+              background: "var(--v6)", borderRadius: 12, padding: "14px 18px",
+              display: "flex", justifyContent: "space-between", alignItems: "center",
+              textDecoration: "none",
             }}
           >
-            <option value="">Todas las comunas ({farmacias.length})</option>
-            {comunasDisponibles.map(c => (
-              <option key={c} value={c}>{tituloCase(c)}</option>
-            ))}
-          </select>
-
-          <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 16 }}>
-            {visibles.map((f, i) => (
-              <div key={`${f.local_nombre}-${f.local_direccion}-${i}`} style={{
-                background: "var(--v6)", borderRadius: 12, padding: "12px 16px",
-                display: "flex", flexDirection: "column", gap: 2,
-              }}>
-                <span style={{ fontSize: 14, fontWeight: 700, color: "var(--n2)" }}>{tituloCase(f.local_nombre)}</span>
-                <span style={{ fontSize: 13, color: "var(--gris)" }}>📍 {tituloCase(f.local_direccion)}, {tituloCase(f.comuna_nombre)}</span>
-                {f.local_telefono && (
-                  <span style={{ fontSize: 13, color: "var(--gris)" }}>📞 {f.local_telefono}</span>
-                )}
-                <span style={{ fontSize: 13, color: "var(--gris)" }}>
-                  🕐 {horaCorta(f.funcionamiento_hora_apertura)} – {horaCorta(f.funcionamiento_hora_cierre)}
-                </span>
-              </div>
-            ))}
-          </div>
-
-          <p style={{ fontSize: 12, color: "var(--gris)", margin: 0, lineHeight: 1.6 }}>
-            Fuente: Ministerio de Salud de Chile (MINSAL). Dato actualizado en el día — verifica antes de ir, el turno puede cambiar.
-          </p>
-        </>
-      )}
+            <span style={{ fontSize: 15, fontWeight: 700, color: "var(--n2)" }}>{f.nombre}</span>
+            <span style={{ fontSize: 14, fontWeight: 700, color: "var(--v2)" }}>Ver turnos →</span>
+          </a>
+        ))}
+      </div>
     </div>
   );
 }

@@ -207,7 +207,7 @@ Instituciones (AFP/Isapre/Caja/Conecta Mayor UC) = canal de distribución gratui
 | Ocio y experiencias | `/ocio` | BPDigital, Chile Cultura, radios, agencias viaje, Studio 54 (Viña del Mar) |
 | Nutrición | `/nutricion` | 8 videos + 3 fuentes escritas (Mayo Clinic ×2, MedlinePlus ×1) |
 | Comunidad | `/comunidad` | 35 comunas Gran Santiago; 5 solo con contacto directo (sin página dedicada) + directorio de 11 hospitales/clínicas RM |
-| Farmacias | `/farmacias` | 8 farmacias modelo CPC; nota legal pendiente (abogada) + sección "Farmacias de turno hoy" (dato dinámico API MINSAL) |
+| Farmacias | `/farmacias` | 8 farmacias modelo CPC; nota legal pendiente (abogada) + sección "Farmacia de turno hoy" (derivación por clic a Cruz Verde/Salcobrand/Ahumada) |
 | AFP/Previsión | `/afp` | Deriva al sitio oficial; nunca recomienda fondos ni montos |
 
 **Telemedicina — matriz isapres** (`lib/prevision.ts`):
@@ -230,13 +230,15 @@ Commits: `3d98f97`, `71f434d`.
 
 ---
 
-## Farmacias de turno RM (07-08-2026 → 12-08-2026)
+## Farmacias de turno RM (07-08-2026 → 12-08-2026) — pivote a derivación
 
-Dato dinámico — no se cachea como catálogo estático. Fuente: API pública MINSAL, endpoint `getLocalesTurnos.php`, filtro `fk_region="7"` (código interno de la API para RM, no coincide con el código INE oficial).
-`app/api/farmacias-turno/route.ts`: proxy server-side, `export const revalidate = 3600` (cache 1h vía Next, sin backend propio ni cron jobs). Devuelve `{ farmacias, fuente, consultado }` o 502 con mensaje de error si MINSAL no responde.
-`app/farmacias/page.tsx`: sección "Farmacias de turno hoy" — filtro por comuna, atribución CC-Attribution a MINSAL visible en la UI. Estados manejados explícitamente: cargando / error (nunca listado vacío sin explicación) / vacío / con datos.
-VIVIAN (`lib/vivian-prompt.ts`) deriva a `/farmacias` ante preguntas de turno — nunca intenta responder con nombre de farmacia específico desde el chat porque el dato cambia por hora.
-Verificado con datos reales del día y con estado de error simulado en navegador. Commit `df040fd`.
+**Intento 1 (descartado):** proxy server-side a la API pública MINSAL (`getLocalesTurnos.php`, filtro `fk_region="7"`), cache 1h vía Next `revalidate`. Funcionaba en local y en el entorno de investigación de factibilidad, pero en producción MINSAL devolvía 403 — confirmado en runtime logs de Vercel. Se probó también Edge runtime (Cloudflare) pensando que el bloqueo era específico de IPs AWS — también bloqueado. El bloqueo de MINSAL es amplio, no específico de un proveedor cloud. `app/api/farmacias-turno/route.ts` fue eliminado.
+
+**Lección:** la investigación de factibilidad probó el endpoint desde un entorno fuera de Chile pero con un rango de IP distinto al que usa Vercel en producción real — nunca se probó desde el rango real antes del deploy. Antes de comprometer una integración con una fuente externa que pueda hacer geo/IP-blocking, probar desde el entorno de producción real (o el más parecido posible), no solo desde un entorno de desarrollo.
+
+**Solución final:** sección "Farmacia de turno hoy" en `app/farmacias/page.tsx` con derivación por clic a los buscadores oficiales de turno de Cruz Verde, Salcobrand y Farmacias Ahumada — mismo patrón que el resto de la página, sin que LongVivIA aloje ni proxee el dato. Cero riesgo de bloqueo porque el usuario navega directo al sitio de la cadena.
+VIVIAN (`lib/vivian-prompt.ts`) deriva a la tarjeta Farmacias del panel — nunca intenta responder con nombre de farmacia específico desde el chat.
+Commits: `df040fd` (intento API, revertido), `3c02b3c` (intento Edge, revertido), commit de cierre pendiente.
 
 ---
 
