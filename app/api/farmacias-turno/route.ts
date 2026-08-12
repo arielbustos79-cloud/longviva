@@ -24,6 +24,12 @@ type FarmaciaMinsal = {
 // consultar la API en cada carga de página. No se persiste en base de datos.
 export const revalidate = 3600;
 
+// Edge runtime: MINSAL bloquea con 403 las IPs de las funciones serverless
+// normales de Vercel (AWS) — confirmado en logs del deployment
+// dpl_3SC69skHeUrbUDThSUThs6NVvdKm (12-08-2026). Edge corre en la red de
+// Cloudflare, rango de IP distinto — probando si esquiva el bloqueo.
+export const runtime = "edge";
+
 export async function GET() {
   try {
     const res = await fetch(MINSAL_ENDPOINT, { next: { revalidate: 3600 } });
