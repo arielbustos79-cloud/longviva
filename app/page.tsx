@@ -666,6 +666,20 @@ export default function Home() {
             <a href="/agenda" className={s.srvLink}>Ver mi agenda →</a>
           </div>
 
+          {/* Card próxima — Educación Continua */}
+          <div className={`${s.srvCard} ${s.fadeIn}`} style={{ transitionDelay: "240ms", opacity: 0.75 }}>
+            <div className={s.srvIcon} style={{ color: "rgba(255,255,255,.75)" }}>
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+              </svg>
+            </div>
+            <h3>Educación Continua{" "}
+              <span style={{ fontSize: "10px", background: "rgba(201,151,58,.15)", color: "var(--d2)", borderRadius: "20px", padding: "2px 9px", fontWeight: 600, letterSpacing: .5 }}>Próximamente</span>
+            </h3>
+            <p>Cursos, talleres y contenidos pensados para tu etapa. Tecnología, arte, finanzas y más — a tu ritmo, sin presión.</p>
+          </div>
+
           {/* Cards activas — pilares de derivación */}
           {[
             { icon: IC.salud,     title: "Telemedicina",        desc: "Consultas médicas online con proveedores que calzan con tu previsión. Consulta cobertura antes de agendar.",   href: "/telemedicina", activo: true },
