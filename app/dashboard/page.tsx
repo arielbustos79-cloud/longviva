@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase-browser";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import OliveBranch from "@/components/OliveBranch";
 import s from "./page.module.css";
 import { logEvento } from "@/lib/logEvento";
@@ -110,7 +111,7 @@ export default function DashboardPage() {
 
       {/* Header */}
       <header className={s.header}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
+        <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0, textDecoration: "none" }}>
           <OliveBranch size={36} variant="light" />
           <div style={{
             fontFamily: "Cormorant Garamond, serif",
@@ -118,7 +119,7 @@ export default function DashboardPage() {
           }}>
             LongViv<span style={{ color: "var(--d2)" }}>IA</span>
           </div>
-        </div>
+        </Link>
         <div className={s.headerRight}>
           <span className={s.headerEmail}>{email}</span>
           <button onClick={handleLogout} className={s.logoutBtn}>Salir</button>
