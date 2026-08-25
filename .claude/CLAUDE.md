@@ -60,7 +60,7 @@ app/
 ├── page.tsx / page.module.css / globals.css / layout.tsx
 ├── login · registro · dashboard · vivian · agenda · medicamentos
 ├── articulos/[slug] · juegos/(atencion|memoria|percepcion|ejecucion)
-├── telemedicina · bienestar · ocio · nutricion · comunidad · farmacias · afp
+├── telemedicina · bienestar · ocio · nutricion · comunidad · farmacias · afp · educacion
 ├── admin · quienes-somos · terminos · privacidad · trabaja · ayuda · anunciantes
 ├── auth/callback/route.ts
 └── api/(vivian|whatsapp)/route.ts
@@ -77,7 +77,7 @@ Sub-proyecto Parkin&Son/NORITA → rama `parkinandson-draft` (pausa intencional)
 |-------|--------|
 | `/` · `/login` · `/registro` · `/dashboard` · `/vivian` · `/agenda` · `/medicamentos` | ✅ |
 | `/articulos` · `/articulos/[slug]` · `/juegos` (4 juegos) · `/admin` | ✅ |
-| `/telemedicina` · `/bienestar` · `/ocio` · `/nutricion` · `/comunidad` · `/farmacias` · `/afp` | ✅ |
+| `/telemedicina` · `/bienestar` · `/ocio` · `/nutricion` · `/comunidad` · `/farmacias` · `/afp` · `/educacion` | ✅ |
 | `/quienes-somos` · `/trabaja` · `/ayuda` · `/anunciantes` | ✅ |
 | `/terminos` · `/privacidad` | Draft — pendiente revisión legal |
 
@@ -146,8 +146,8 @@ Pilares: `salud_activa · bienestar_energia · vida_social · tecnologia_simple 
 ```sql
 eventos: id UUID, tipo TEXT, user_id UUID, metadata JSONB, created_at TIMESTAMPTZ
 ```
-`TipoEvento`: `registro_completado` · `vivian_mensaje` · `articulo_leido` · `juego_completado`
-`lib/logEvento.ts`: fire-and-forget. Panel `/admin`: `ADMIN_EMAILS = ["ariel.bustos79@gmail.com"]`
+`TipoEvento`: `registro_completado` · `vivian_mensaje` · `articulo_leido` · `juego_completado` · `farmacia_click`
+`lib/logEvento.ts`: fire-and-forget. Panel `/admin`: `ADMIN_EMAILS = ["ariel.bustos79@gmail.com"]` — no existe columna `role` en `profiles`, se mantiene este patrón a propósito (ver sección Panel /admin más abajo)
 
 ---
 
@@ -167,6 +167,7 @@ articulos:     id, slug, titulo, pilar, resumen, contenido, publicado
 agenda:        id, user_id, titulo, tipo, fecha, proveedor, notas, confirmado
 medicamentos:  id, user_id, nombre, dosis, horarios[], activo
 eventos:       id, tipo, user_id, metadata JSONB, created_at
+educacion_interes: id, nombre, caja, email, created_at (creada 21-08-2026)
 ```
 RLS activo en todas las tablas. `prevision_afp` con consentimiento explícito via UI.
 
@@ -198,7 +199,7 @@ Instituciones (AFP/Isapre/Caja/Conecta Mayor UC) = canal de distribución gratui
 
 ---
 
-## Pilares de derivación (7)
+## Pilares de derivación (8)
 
 | Pilar | Ruta | Detalle |
 |-------|------|---------|
@@ -209,6 +210,7 @@ Instituciones (AFP/Isapre/Caja/Conecta Mayor UC) = canal de distribución gratui
 | Comunidad | `/comunidad` | 35 comunas Gran Santiago; 5 solo con contacto directo (sin página dedicada) + directorio de 11 hospitales/clínicas RM |
 | Farmacias | `/farmacias` | 8 farmacias modelo CPC; nota legal pendiente (abogada) + sección "Farmacia de turno hoy" (derivación por clic a Cruz Verde/Salcobrand/Ahumada) |
 | AFP/Previsión | `/afp` | Deriva al sitio oficial; nunca recomienda fondos ni montos |
+| Educación Continua | `/educacion` | Catálogo curado por tema, derivación por clic — ver sección propia más abajo |
 
 **Telemedicina — matriz isapres** (`lib/prevision.ts`):
 Cruz Blanca → IntegraMédica + Mediclic · Banmédica/Vida Tres → IntegraMédica · Consalud → Click Doctor · Colmena → Doctor Online + Mediclic · Nueva MasVida → propia + Mediclic · Esencial → TeleUrgencia + IntegraMédica + RedSalud
@@ -238,7 +240,27 @@ Commits: `3d98f97`, `71f434d`.
 
 **Solución final:** sección "Farmacia de turno hoy" en `app/farmacias/page.tsx` con derivación por clic a los buscadores oficiales de turno de Cruz Verde, Salcobrand y Farmacias Ahumada — mismo patrón que el resto de la página, sin que LongVivIA aloje ni proxee el dato. Cero riesgo de bloqueo porque el usuario navega directo al sitio de la cadena.
 VIVIAN (`lib/vivian-prompt.ts`) deriva a la tarjeta Farmacias del panel — nunca intenta responder con nombre de farmacia específico desde el chat.
-Commits: `df040fd` (intento API, revertido), `3c02b3c` (intento Edge, revertido), commit de cierre pendiente.
+Commits: `df040fd` (intento API, revertido), `3c02b3c` (intento Edge, revertido), `8115c27` + `07c22ab` (pivote final, verificado en producción 12-08-2026).
+
+---
+
+## Panel /admin extendido (13-08-2026 → 21-08-2026)
+
+Extendido, no reescrito — se preservaron Feedback y Actividad reciente ya en producción. Acceso: `ADMIN_EMAILS` (no `role` en `profiles`, decisión de mínima intervención).
+
+Agregado: botón "Actualizar" (`RefreshButton.tsx`, client component) + timestamp `America/Santiago` · usuarios +30 días y gráfico de barras por semana (CSS puro) · VIVIAN "conversaciones" — heurística `user_id` + día calendario sobre `chat_messages` (no existe ID de sesión real en el schema) · Top 10 artículos con título/pilar/fecha (cruce `eventos` × `articulos`) · aviso "tracking no implementado" para clicks de cards del dashboard (confirmado que no existe ese evento) · sección Formularios lee `educacion_interes` · números formato chileno, fechas `America/Santiago` · redirect diferenciado: sin sesión → `/login`, con sesión sin admin → `/`.
+Commit: `d2151cc`.
+
+---
+
+## Educación Continua (21-08-2026)
+
+`lib/educacion.ts`: catálogo estático tipado, 7 temas (`tecnologia · finanzas · idiomas · salud · oficios · arte · digital_basico`), 10 cursos verificados a mano en navegador real (no scraping) el 21-08-2026 — fuentes: SENCE (portal general, no cursos específicos — cambian por convocatoria), Coursera (auditoría gratis, certificado pago, universidades PUC/Anáhuac/UAB), Udemy (3 cursos confirmados `Gratis` en la propia página, no por título — precios cambian sin aviso), YouTube (Academia Play, tutorial WhatsApp), Santander Open Academy (registro gratis).
+`app/educacion/page.tsx` + `page.module.css`: selector de 7 temas, cards con proveedor/aclaración/fecha de verificación, mismo layout que `/comunidad` pero en CSS Module.
+Card activada en landing (`app/page.tsx`) y dashboard (`app/dashboard/page.tsx`) — ya no dice "Próximamente".
+`lib/vivian-prompt.ts`: VIVIAN deriva a la tarjeta del panel, nunca da URL de curso como primera respuesta. Regla de gratuidad: nunca promete que una plataforma completa (esp. Udemy) es gratis — solo confirma el curso específico verificado en la fecha indicada. Recomendación de tema solo si el usuario lo menciona en la conversación, no usa `preferencias` del perfil sin consentimiento explícito.
+
+**Mantenimiento (responsabilidad Ariel/equipo editorial):** Udemy re-verificar mensualmente (precios inestables), resto trimestral. LinkedIn Learning excluido de esta versión — trials genéricos inestables, evaluar solo con cursos puntuales liberados permanentemente.
 
 ---
 

@@ -183,6 +183,11 @@ export default function DashboardPage() {
               activo: true, href: "/medicamentos", destacado: false,
             },
             {
+              svg: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><path d="M9 7h6M9 11h6"/></svg>,
+              title: "Educación Continua", desc: "Cursos gratuitos según tu tema de interés",
+              activo: true, href: "/educacion", destacado: false,
+            },
+            {
               svg: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>,
               title: "Telemedicina", desc: "Consultas online según tu previsión",
               activo: true, href: "/telemedicina", destacado: false,
