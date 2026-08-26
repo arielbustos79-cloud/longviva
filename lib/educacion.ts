@@ -31,19 +31,38 @@ export type CursoEducacion = {
   titulo: string;
   proveedor: string;
   url: string;
-  tema: TemaEducacion;
+  temas: TemaEducacion[]; // la mayoría aplica a 1 tema; portales tipo PUCV aplican a varios
   esGratuito: boolean;
+  requiereRegistro?: boolean; // muestra badge "Gratuito · Requiere registro"
   aclaracion: string | null;
   fechaVerificacion: string; // YYYY-MM-DD
+  mostrarFechaVerificacion?: boolean; // false para portales generales (no cursos individuales) — default true
 };
 
 export const CATALOGO_EDUCACION: CursoEducacion[] = [
+  // ── Multi-tema — portales, no cursos individuales ──────────────────────
+  // PUCV: verificado 25-08-2026 que la URL del brief (/masterclass) redirige
+  // a un evento puntual ya vencido (abril 2025) — justo lo que el brief pide
+  // evitar. Se usa /todos-los-eventos/ en su lugar: listado en vivo,
+  // confirmado con eventos reales de septiembre-octubre 2026 al verificar.
+  {
+    titulo: "Masterclass gratuitas PUCV",
+    proveedor: "PUCV — Formación Continua",
+    url: "https://formacioncontinuapucv.cl/todos-los-eventos/",
+    temas: ["tecnologia", "salud", "finanzas", "arte", "digital_basico"],
+    esGratuito: true,
+    requiereRegistro: true,
+    aclaracion: "Webinars gratuitos de la Pontificia Universidad Católica de Valparaíso. La oferta varía según convocatoria — revisa el portal para ver las próximas fechas disponibles.",
+    fechaVerificacion: "2026-08-25",
+    mostrarFechaVerificacion: false,
+  },
+
   // ── Tecnología y computación ──────────────────────────────────────────
   {
     titulo: "Conceptos Bilingües Básicos de Tecnología de la Información",
     proveedor: "Udemy",
     url: "https://www.udemy.com/course/conceptos-bilingues-basicos-de-tecnologia-de-la-informacion/",
-    tema: "tecnologia",
+    temas: ["tecnologia"],
     esGratuito: true,
     aclaracion: "Curso gratuito confirmado. Los precios en Udemy pueden cambiar sin aviso — re-verificar mensualmente.",
     fechaVerificacion: "2026-08-21",
@@ -52,7 +71,7 @@ export const CATALOGO_EDUCACION: CursoEducacion[] = [
     titulo: "Competencias digitales de ofimática: Microsoft Excel",
     proveedor: "Coursera — Universitat Autònoma de Barcelona",
     url: "https://www.coursera.org/learn/competencias-digitales-ofimatica-excel",
-    tema: "tecnologia",
+    temas: ["tecnologia"],
     esGratuito: true,
     aclaracion: "El contenido del curso es gratuito en modalidad auditoría; el certificado de finalización tiene costo.",
     fechaVerificacion: "2026-08-21",
@@ -63,7 +82,7 @@ export const CATALOGO_EDUCACION: CursoEducacion[] = [
     titulo: "Finanzas Personales: Curso básico expreso GRATIS",
     proveedor: "Udemy",
     url: "https://www.udemy.com/course/finanzas-personales-curso-basico-expreso-gratis/",
-    tema: "finanzas",
+    temas: ["finanzas"],
     esGratuito: true,
     aclaracion: "Curso gratuito confirmado. Los precios en Udemy pueden cambiar sin aviso — re-verificar mensualmente.",
     fechaVerificacion: "2026-08-21",
@@ -74,7 +93,7 @@ export const CATALOGO_EDUCACION: CursoEducacion[] = [
     titulo: "Curso de Inglés: Vocabulario Base para Principiantes",
     proveedor: "Udemy",
     url: "https://www.udemy.com/course/ingles-nivel-1-ingles-basico-para-tu-dia-a-dia/",
-    tema: "idiomas",
+    temas: ["idiomas"],
     esGratuito: true,
     aclaracion: "Curso gratuito confirmado. Los precios en Udemy pueden cambiar sin aviso — re-verificar mensualmente.",
     fechaVerificacion: "2026-08-21",
@@ -85,7 +104,7 @@ export const CATALOGO_EDUCACION: CursoEducacion[] = [
     titulo: "Gestión del estrés y Mindfulness",
     proveedor: "Coursera — Universidad Anáhuac",
     url: "https://www.coursera.org/learn/gestion-del-estres-y-mindfulness",
-    tema: "salud",
+    temas: ["salud"],
     esGratuito: true,
     aclaracion: "El contenido del curso es gratuito en modalidad auditoría; el certificado de finalización tiene costo.",
     fechaVerificacion: "2026-08-21",
@@ -96,7 +115,7 @@ export const CATALOGO_EDUCACION: CursoEducacion[] = [
     titulo: "Gestión Empresarial Exitosa para Pymes",
     proveedor: "Coursera — Pontificia Universidad Católica de Chile",
     url: "https://www.coursera.org/learn/gestionempresarialpyme",
-    tema: "oficios",
+    temas: ["oficios"],
     esGratuito: true,
     aclaracion: "El contenido del curso es gratuito en modalidad auditoría; el certificado de finalización tiene costo.",
     fechaVerificacion: "2026-08-21",
@@ -105,7 +124,7 @@ export const CATALOGO_EDUCACION: CursoEducacion[] = [
     titulo: "Cursos en línea SENCE",
     proveedor: "SENCE (Gobierno de Chile)",
     url: "https://sence.gob.cl/personas/cursos-en-linea",
-    tema: "oficios",
+    temas: ["oficios"],
     esGratuito: true,
     aclaracion: "Portal general — busca cursos disponibles con tu RUT y ClaveÚnica. Las convocatorias cambian, no hay curso fijo.",
     fechaVerificacion: "2026-08-21",
@@ -116,7 +135,7 @@ export const CATALOGO_EDUCACION: CursoEducacion[] = [
     titulo: "Academia Play — canal de historia, arte y cultura",
     proveedor: "YouTube",
     url: "https://www.youtube.com/@academiaplay",
-    tema: "arte",
+    temas: ["arte"],
     esGratuito: true,
     aclaracion: null,
     fechaVerificacion: "2026-08-21",
@@ -127,7 +146,7 @@ export const CATALOGO_EDUCACION: CursoEducacion[] = [
     titulo: "Aprende a usar WhatsApp",
     proveedor: "YouTube",
     url: "https://www.youtube.com/watch?v=0HIC__rf4LY",
-    tema: "digital_basico",
+    temas: ["digital_basico"],
     esGratuito: true,
     aclaracion: null,
     fechaVerificacion: "2026-08-21",
@@ -136,7 +155,7 @@ export const CATALOGO_EDUCACION: CursoEducacion[] = [
     titulo: "Catálogo de cursos — habilidades digitales, idiomas y más",
     proveedor: "Santander Open Academy",
     url: "https://www.santanderopenacademy.com",
-    tema: "digital_basico",
+    temas: ["digital_basico"],
     esGratuito: true,
     aclaracion: "Requiere registro gratuito en la plataforma. No es necesario ser cliente Santander.",
     fechaVerificacion: "2026-08-21",
@@ -144,5 +163,5 @@ export const CATALOGO_EDUCACION: CursoEducacion[] = [
 ];
 
 export function getCursosPorTema(tema: TemaEducacion): CursoEducacion[] {
-  return CATALOGO_EDUCACION.filter(c => c.tema === tema);
+  return CATALOGO_EDUCACION.filter(c => c.temas.includes(tema));
 }

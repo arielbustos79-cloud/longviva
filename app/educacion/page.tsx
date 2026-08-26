@@ -56,6 +56,10 @@ export default function EducacionPage() {
               <p className={s.cursoProveedor}>{curso.proveedor}</p>
               <h2 className={s.cursoTitulo}>{curso.titulo}</h2>
 
+              {curso.requiereRegistro && (
+                <span className={s.badgeRegistro}>Gratuito · Requiere registro</span>
+              )}
+
               {curso.aclaracion && (
                 <div className={s.cursoAclaracion}>
                   <p className={s.cursoAclaracionTexto}>💡 {curso.aclaracion}</p>
@@ -63,9 +67,13 @@ export default function EducacionPage() {
               )}
 
               <div className={s.cursoMeta}>
-                <span className={s.cursoFechaVerificacion}>
-                  Verificado gratis el {fechaCorta(curso.fechaVerificacion)}
-                </span>
+                {curso.mostrarFechaVerificacion !== false ? (
+                  <span className={s.cursoFechaVerificacion}>
+                    Verificado gratis el {fechaCorta(curso.fechaVerificacion)}
+                  </span>
+                ) : (
+                  <span />
+                )}
                 <a href={curso.url} target="_blank" rel="noopener noreferrer" className={s.cursoLink}>
                   Ver curso →
                 </a>

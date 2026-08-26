@@ -262,6 +262,9 @@ Card activada en landing (`app/page.tsx`) y dashboard (`app/dashboard/page.tsx`)
 
 **Mantenimiento (responsabilidad Ariel/equipo editorial):** Udemy re-verificar mensualmente (precios inestables), resto trimestral. LinkedIn Learning excluido de esta versión — trials genéricos inestables, evaluar solo con cursos puntuales liberados permanentemente.
 
+**PUCV agregado 25-08-2026** (multi-tema: tecnología, salud, finanzas, arte, digital_basico): `CursoEducacion.temas` pasó de campo único a array — todas las entradas anteriores migradas, sin romper `getCursosPorTema`. Nuevos campos: `requiereRegistro?` (badge "Gratuito · Requiere registro") y `mostrarFechaVerificacion?` (false para portales generales, no cursos individuales).
+⚠️ La URL que traía el brief (`/masterclass`) redirige a un evento puntual ya vencido (abril 2025) — justo lo que el propio brief pedía evitar. Se usa `/todos-los-eventos/` en su lugar, confirmado como listado en vivo (eventos reales sept-oct 2026 al verificar). Verificar siempre el destino real de una URL de portal antes de publicarla, no asumir que coincide con lo que dice el brief.
+
 ---
 
 ## Facebook como canal principal (01-08-2026)
